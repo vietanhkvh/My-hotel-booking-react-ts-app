@@ -8,7 +8,7 @@ import {
   isServer,
 } from '../utils/helpers';
 import 'antd/dist/antd.min.css';
-import { routes } from '../routes/routes';
+import { routesAppLeft } from '../routes/routes';
 import Nopage from '../pages/Nopage/Nopage';
 import DesktopLayout from '../components/desktop/layout/DesktopLayout/DesktopLayout';
 import MobileLayout from '../components/mobile/layout/MobileLayout';
@@ -28,7 +28,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path='/' element={isMobile ? <MobileLayout/> : <DesktopLayout />}>
-          {routes?.map((i, index) => {
+          {routesAppLeft?.map((i, index) => {
             const key = index + 1;
             return <Route key={key} path={i?.path} element={<i.component />} />;
           })}
