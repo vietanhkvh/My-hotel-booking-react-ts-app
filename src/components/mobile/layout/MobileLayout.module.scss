@@ -1,0 +1,17 @@
+.layout {
+    .site-layout-content {
+      min-height: 280px;
+      padding: 24px;
+      background: #fff;
+    }
+    .content{
+      padding: 0 10px
+    }
+    .footer{
+      text-align: center;
+    }
+  }
+.content {
+    min-height: calc(100vh - 400px - 395px);
+    height: calc(100vh - 10vh);
+}

@@ -1,0 +1,25 @@
+.headermob {
+//   background: #141414;
+  .header {
+      padding: 0 10px;
+      background: transparent;
+    .logo {
+      float: left;
+      width: 30px;
+      height: 31px;
+      margin: 16px 24px 16px 0;
+      background: black;
+    }
+  }
+  .menu-link{
+      display: flex;
+      justify-content: center;
+      .item-link{
+          
+      }
+  }
+}
+.ant-row-rtl .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
