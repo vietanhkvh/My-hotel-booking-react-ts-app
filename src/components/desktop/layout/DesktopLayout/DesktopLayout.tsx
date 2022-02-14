@@ -6,11 +6,21 @@ import styles from './DesktopLayout.module.scss';
 import HeaderDesk from '../../HeaderDesk/HeaderDesk';
 import { Layout, Breadcrumb, Row } from 'antd';
 import { Outlet } from 'react-router-dom';
+// import ImgHead from './imgs/los-cocos-room-header.png';
 const { Content, Footer } = Layout;
 const LayoutDesk = () => {
   return (
     <div className={styles['layout']}>
-      <HeaderDesk />
+      {/* <Row
+        style={{
+          backgroundImage: `url(/imgs/home_header.jpg)`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'top',
+          backgroundSize: 'cover',
+        }}
+      > */}
+        <HeaderDesk />
+      {/* </Row> */}
       <Content className={styles['content']}>
         {/* <Breadcrumb style={{ margin: '16px 0' }}>
       <Breadcrumb.Item>Home</Breadcrumb.Item>
@@ -40,9 +50,8 @@ const DesktopLayout = (props) => {
         icon: dataProfileDomain?.logo,
         // shareImg: 'https://mytour.vn/themes/images/logo-ss-facebook.png',
       }}
-      children={<LayoutDesk/>} 
+      children={<LayoutDesk />}
     />
-    
   );
 };
 

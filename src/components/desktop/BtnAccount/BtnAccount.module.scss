@@ -1,0 +1,18 @@
+.btn-account {
+  .container {
+    padding: 14px 0;
+    align-items: center;
+    padding-left: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    .text {
+      font-size: 16px;
+      line-height: 17px;
+    }
+  }
+  .container:hover{
+    background-color: 
+    // #1890ff;
+    rgb(204, 204, 204);
+  }
+}

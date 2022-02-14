@@ -1,18 +1,19 @@
 .layout {
   height: 100vh;
-  width: 100vw;
+  width: 98.9vw;
   padding: 0 50px;
-  .site-layout-content {
-    min-height: 280px;
-    background: #fff;
-    height: 100%;
+  .content {
+    margin: 20px 0;
+    min-height: calc(100vh - 400px - 395px);
+    height: calc(100vh - 20vh);
+    .site-layout-content {
+      min-height: 280px;
+      background: #fff;
+      height: 100%;
+    }
   }
 
   .footer {
     text-align: center;
-  }
-  .content {
-    min-height: calc(100vh - 400px - 395px);
-    height: calc(100vh - 20vh);
   }
 }

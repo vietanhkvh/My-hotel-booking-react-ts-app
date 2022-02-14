@@ -14,11 +14,12 @@ import DesktopLayout from '../components/desktop/layout/DesktopLayout/DesktopLay
 import MobileLayout from '../components/mobile/layout/MobileLayout';
 export default function App() {
   const [isMobile, setIsMobile] = React.useState(isMobileAndTabletCheck());
-  const getWindowSize = () => (window.innerWidth < 768) ? setIsMobile(true) : setIsMobile(false);
+  const getWindowSize = () =>
+    isMobileAndTabletCheck() ? setIsMobile(true) : setIsMobile(false);
 
   React.useEffect(() => {
-      window.addEventListener('resize', getWindowSize);
-      getWindowSize();
+    window.addEventListener('resize', getWindowSize);
+    getWindowSize();
   }, []);
   console.log('isMobile', isMobile);
   return (
@@ -27,7 +28,10 @@ export default function App() {
     // </PermissionProvider>
     <Router>
       <Routes>
-        <Route path='/' element={isMobile ? <MobileLayout/> : <DesktopLayout />}>
+        <Route
+          path='/'
+          element={isMobile ? <MobileLayout /> : <DesktopLayout />}
+        >
           {routesAppLeft?.map((i, index) => {
             const key = index + 1;
             return <Route key={key} path={i?.path} element={<i.component />} />;
