@@ -1,17 +1,10 @@
 import * as React from 'react';
 import './App.css';
-import PermissionProvider from '../modules/permission/PermissionProvider';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import {
-  checkIsMobile,
-  isMobileAndTabletCheck,
-  isServer,
-} from '../utils/helpers';
+import { isMobileAndTabletCheck } from '../utils/helpers';
 import 'antd/dist/antd.min.css';
-import { routesAppLeft } from '../routes/routes';
-import Nopage from '../pages/Nopage/Nopage';
-import DesktopLayout from '../components/desktop/layout/DesktopLayout/DesktopLayout';
-import MobileLayout from '../components/mobile/layout/MobileLayout';
+import MyRoutes from '../routes/MyRoutes';
+
 export default function App() {
   const [isMobile, setIsMobile] = React.useState(isMobileAndTabletCheck());
   const getWindowSize = () =>
@@ -27,7 +20,8 @@ export default function App() {
     //   <Component {...pageProps} />
     // </PermissionProvider>
     <Router>
-      <Routes>
+      <MyRoutes />
+      {/* <Routes>
         <Route
           path='/'
           element={isMobile ? <MobileLayout /> : <DesktopLayout />}
@@ -38,7 +32,7 @@ export default function App() {
           })}
           <Route path='*' element={<Nopage />} />
         </Route>
-      </Routes>
+      </Routes> */}
     </Router>
   );
 }

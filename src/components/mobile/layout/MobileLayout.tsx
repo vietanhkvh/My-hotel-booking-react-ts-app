@@ -23,9 +23,6 @@ const LayoutMobile = () => {
           <Outlet />
         </Row>
       </Content>
-      <Footer className={styles['footer']}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
     </div>
   );
 };
@@ -36,7 +33,7 @@ interface Props {
 }
 
 const MobileLayout = (props) => {
-  const { dataProfileDomain, children, route } = props;
+  const { dataProfileDomain } = props;
 
   // const showHeader = [routesPath.HOME].indexOf(route) > -1;
   // if (!showHeader) {

@@ -53,7 +53,7 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
               {routes.map((i) => {
                 return (
                   <Menu.Item key={i.title}>
-                    <Link to={`${i?.path}`}>
+                    <Link to={i?.path}>
                       <span
                         style={{
                           textTransform: 'capitalize',
@@ -96,7 +96,7 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
         </Row>
       </Header>
       <Row className={styles['searching']}>
-        <SearchingComponent/>
+        <SearchingComponent />
       </Row>
     </Row>
   );

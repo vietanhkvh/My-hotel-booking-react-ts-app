@@ -23,7 +23,7 @@ const SearchingComponent: FunctionComponent<SearchingComponentProps> = () => {
   };
   return (
     <Row className={styles['searching-component']}>
-      <Menu
+      {/* <Menu
         style={{
           borderRadius: '8px',
           display: 'flex',
@@ -40,7 +40,7 @@ const SearchingComponent: FunctionComponent<SearchingComponentProps> = () => {
         <Menu.Item key={'restaurant'}>
           <Text>Restaurant</Text>
         </Menu.Item>
-      </Menu>
+      </Menu> */}
       <Row className={styles['content']}>{handlerTab()}</Row>
     </Row>
   );

@@ -7,7 +7,7 @@ export const SUCCESS_CODE = 200;
 
 export const HOUR_MINUTE = 'HH:mm';
 export const HOUR_MINUTE_SECOND = 'HH:mm:ss';
-export const DATE_FORMAT = 'DD/MM/YYYY';
+export const DATE_FORMAT = 'DD-MM-YYYY';
 export const DATE_FORMAT_BACK_END = 'YYYY-MM-DD';
 export const DATE_FORMAT_ALL = `${DATE_FORMAT} ${HOUR_MINUTE}`;
 export const DATE_FORMAT_DETAIL = `${DATE_FORMAT_BACK_END} ${HOUR_MINUTE_SECOND}`;

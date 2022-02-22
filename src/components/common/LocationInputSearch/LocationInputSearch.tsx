@@ -2,40 +2,10 @@ import { CSSProperties, FunctionComponent, useState } from 'react';
 import styles from './LocationInputSearch.module.scss';
 import { Select } from 'antd';
 import axios from 'axios';
+import { some } from '@const/keyString';
+import { dataRaw } from './rawData';
 const { Option } = Select;
-let timeout;
-let currentValue;
-function fetch(value, callback) {
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = null;
-  }
-  currentValue = value;
 
-  function fake() {
-    // const str = qs.stringify({
-    //   code: 'utf-8',
-    //   q: value,
-    // });
-    // fetch(`https://suggest.taobao.com/sug?${str}`)
-    //   .then(response => response.json())
-    //   .then(d => {
-    //     if (currentValue === value) {
-    //       const { result } = d;
-    //       const data = [];
-    //       result.forEach(r => {
-    //         data.push({
-    //           value: r[0],
-    //           text: r[0],
-    //         });
-    //       });
-    //       callback(data);
-    //     }
-    //   });
-  }
-
-  timeout = setTimeout(fake, 300);
-}
 interface LocationInputSearchProps {
   /**
    * place holder
@@ -45,31 +15,59 @@ interface LocationInputSearchProps {
    * style css/scss object
    */
   style?: CSSProperties;
-
+  /**
+   * location string
+   */
+  location?: string;
+  /**
+   * set location
+   */
+  handleSetLocation?: (val:any) => void;
 }
 
-const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (props) => {
-  const {placeholder, style} = props
+const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (
+  props
+) => {
+  const { placeholder, style, handleSetLocation } = props;
+
   //state
-  const [data, setData] = useState([]);
-  const [value, setValue] = useState();
+  const [data, setData] = useState<some[]>(dataRaw);
+  const options = data.map((d:some, index) => <Option key={d?.value}>{d?.text}</Option>);
   //event
-  const handleSearch = (value) => {
-    if (value) {
-      fetch(value, (data) => setData(data));
-    } else {
-      setData(data);
+  const callApi = (value: any, callback: (data: any) => void) => {
+    //call api here, return a array, then replace dataRaw
+
+    if (currentValue === value) {
+      const data: some[] = [];
+      dataRaw.forEach((r:some) => {
+        data.push({
+          value: r?.value,
+          text: r?.text,
+        });
+      });
+      callback(data);
     }
   };
-  const handleChange = (value) => {
-    setValue(value);
+  let currentValue: any;
+  const fetch = (value: any, callback: (data: any) => void) => {
+    currentValue = value;
+    callApi(value, callback);
   };
-  const options = data.map((d, index) => <Option key={index}>33</Option>);
+  const handleSearch = (value: any) => {
+    if (value) {
+      fetch(value, (data: any) => setData(data));
+    } else {
+      setData([]);
+    }
+  };
+  const handleChange = (value: any) => {
+    handleSetLocation && handleSetLocation(value);
+  };
   return (
     <div className={styles['location-input-search']}>
       <Select
+        className={styles['input']}
         showSearch
-        value={value}
         placeholder={placeholder}
         style={style}
         defaultActiveFirstOption={false}
@@ -78,6 +76,7 @@ const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (props)
         onSearch={handleSearch}
         onChange={handleChange}
         notFoundContent={null}
+        size={'large'}
       >
         {options}
       </Select>

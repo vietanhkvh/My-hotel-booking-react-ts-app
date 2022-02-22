@@ -1,0 +1,16 @@
+.popup-number-guest {
+  .wrapper {
+    justify-content: space-between;
+    align-items: center;
+    div[class='ant-input-number-group-addon'] {
+      width: 70%;
+      text-align: start;
+    }
+    div[class='ant-input-number'] {  
+        color: rgb(24, 144, 255);
+        input{
+            text-align: center;
+        }
+      }
+  }
+}
