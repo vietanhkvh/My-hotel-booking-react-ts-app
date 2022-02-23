@@ -41,7 +41,6 @@ const PopupNumberGuest: FunctionComponent<PopupNumberGuestProps> = (props) => {
   return (
     <div className={styles['popup-number-guest']}>
       <Row className={styles['wrapper']}>
-        {/* <Text className={styles['title']}>Room</Text> */}
         <InputNumber
           className={styles['input-number']}
           addonBefore={<Text className={styles['title']}>Room</Text>}
@@ -53,7 +52,6 @@ const PopupNumberGuest: FunctionComponent<PopupNumberGuestProps> = (props) => {
       </Row>
       <Divider type='horizontal' />
       <Row className={styles['wrapper']}>
-        {/* <Text className={styles['title']}>Adult</Text> */}
         <InputNumber
           className={styles['input-number']}
           addonBefore={<Text className={styles['title']}>Adult</Text>}
@@ -65,7 +63,6 @@ const PopupNumberGuest: FunctionComponent<PopupNumberGuestProps> = (props) => {
       </Row>
       <Divider type='horizontal' />
       <Row className={styles['wrapper']}>
-        {/* <Text className={styles['title']}>Children</Text> */}
         <InputNumber
           className={styles['input-number']}
           addonBefore={<Text className={styles['title']}>Children</Text>}

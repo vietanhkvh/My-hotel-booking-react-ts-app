@@ -6,12 +6,11 @@ import Hotel from '../pages/Hotel/Hotel';
 import Restaurant from '../pages/Restaurant/Restaurant';
 import DesktopHomePage from '../components/desktop/home/DesktopHomePage';
 import MobileHomePage from '../components/mobile/home/MobileHomePage';
-import Profile from '../pages/Profile/Profile';
+import Home from '../pages/Home/Home';
 export const routesPath = {
   HOME: '',
   HOTEL:'/hotel',
-  RESTAURANT:'/restaurant',
-  PROFILE:'/profile'
+  RESTAURANT:'/restaurant'
 };
 
 
@@ -52,7 +51,7 @@ export const routerConfig = [
     path: routesPath.HOME,
     component: {
       desktop: {
-        page: DesktopHomePage,
+        page: Home,
         layout: DesktopLayout,
       },
       mobile: {
@@ -66,11 +65,10 @@ export const routerConfig = [
   {
     path: routesPath.HOTEL,
     component: {
-      // desktop: {
-      //   page: Hotel,
-      //   layout: DesktopLayout,
-      // },
-      desktop: Hotel,
+      desktop: {
+        page: Hotel,
+        layout: DesktopLayout,
+      },
       mobile: Hotel
     },
     needAuthor: false,
@@ -78,16 +76,10 @@ export const routerConfig = [
   },{
     path: routesPath.RESTAURANT,
     component: {
-      desktop: Restaurant,
-      mobile: Restaurant
-    },
-    needAuthor: false,
-    grantPermision: [],
-  }
-  ,{
-    path: routesPath.PROFILE,
-    component: {
-      desktop: Profile,
+      desktop: {
+        page: Restaurant,
+        layout: DesktopLayout,
+      },
       mobile: Restaurant
     },
     needAuthor: false,

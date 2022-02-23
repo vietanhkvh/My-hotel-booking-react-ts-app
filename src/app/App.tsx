@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { isMobileAndTabletCheck } from '../utils/helpers';
 import 'antd/dist/antd.min.css';
 import MyRoutes from '../routes/MyRoutes';
+import '../styles/globals.scss';
 
 export default function App() {
   const [isMobile, setIsMobile] = React.useState(isMobileAndTabletCheck());

@@ -1,11 +1,11 @@
 import { FunctionComponent } from "react";
-import styles from "./Deskhostlayout.module.scss";
-interface DeskhostlayoutProps {
+import styles from "./DeskHostLayout.module.scss";
+interface DeskHostLayoutProps {
   
 }
  
-const Deskhostlayout: FunctionComponent<DeskhostlayoutProps> = () => {
-  return <div className={styles['deskhostlayout']}>Deskhostlayout</div>;
+const DeskHostLayout: FunctionComponent<DeskHostLayoutProps> = () => {
+  return <div className={styles['desk-host-layout']}>DeskHostLayout</div>;
 }
  
-export default Deskhostlayout;
+export default DeskHostLayout;

@@ -13,3 +13,20 @@ export const DATE_FORMAT_ALL = `${DATE_FORMAT} ${HOUR_MINUTE}`;
 export const DATE_FORMAT_DETAIL = `${DATE_FORMAT_BACK_END} ${HOUR_MINUTE_SECOND}`;
 export const DATE_FORMAT_HOUR_DAY = `${HOUR_MINUTE} ${DATE_FORMAT}`;
 export const HOUR_MINUTE_CLOCK = 'HH:mm A';
+
+const commonStyle = {
+    padding: 15,
+    display: 'flex',
+    alignItems: 'center',
+    
+  };
+export const styleNotiSuccess = {
+    ...commonStyle,
+    backgroundColor: '#edf8f1',
+    color: '#48BB78',
+  };
+  export const styleNotiError = {
+    ...commonStyle,
+    backgroundColor: '#fff0f6',
+    color: '#FF3366',
+  };

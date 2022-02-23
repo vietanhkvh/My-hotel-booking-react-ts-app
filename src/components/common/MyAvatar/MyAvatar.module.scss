@@ -1,0 +1,35 @@
+.avatar {
+  /* Center the content */
+  display: inline-block;
+  vertical-align: middle;
+
+  /* Used to position the content */
+  position: relative;
+
+  /* Colors */
+  background-color: #00b6f3;
+  color: #fff;
+
+  /* Rounded border */
+  border-radius: 50%;
+    height: 25px;
+    width: 25px;
+  .avatar-letters {
+    /* Center the content */
+    color: #ffffff;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-transform: uppercase;
+  }
+  .avatar-letters-mob {
+    /* Center the content */
+    color: #ffffff;
+    left: 78%;
+    position: absolute;
+    top: 58%;
+    transform: translate(-50%, -50%);
+    text-transform: uppercase;
+  }
+}

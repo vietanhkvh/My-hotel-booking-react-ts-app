@@ -1,4 +1,6 @@
+import { styleNotiError, styleNotiSuccess } from '../components/constants';
 import { some } from '@const/keyString';
+import { notification } from 'antd';
 import DeviceDetector from 'ua-parser-js';
 
 const has = Object.prototype.hasOwnProperty;
@@ -257,3 +259,21 @@ export const checkIsSvgLink = (path) => {
   if (t[t.length - 1] === 'svg') return true;
   return false;
 };
+
+export const openNotificationWithIcon = (
+  type: string,
+  message: string,
+  description: string,
+  style?: any
+) => {
+  notification[type]({
+    message: message,
+    description: description,
+    style: type==='error'? styleNotiError : styleNotiSuccess,
+  });
+};
+notification.config({
+  placement: 'topRight',
+  duration: 0,
+  maxCount: 1,
+});

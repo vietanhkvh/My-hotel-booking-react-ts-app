@@ -1,16 +1,31 @@
 .popup-number-guest {
   .wrapper {
-    justify-content: space-between;
     align-items: center;
     div[class='ant-input-number-group-addon'] {
       width: 70%;
       text-align: start;
+      border: none;
+      background-color: #ffffff;
     }
-    div[class='ant-input-number'] {  
-        color: rgb(24, 144, 255);
-        input{
-            text-align: center;
-        }
+    div[class='ant-input-number'] {
+      color: rgb(24, 144, 255);
+      border: none;
+      div[class='ant-input-number-handler-wrap'] {
+        background: #fafafa;
+        opacity: 1;
       }
+      span[class='ant-input-number-handler ant-input-number-handler-up'] {
+        border: none;
+      }
+      span[class='ant-input-number-handler ant-input-number-handler-down'] {
+        border: none;
+      }
+      span[class='ant-input-number-handler ant-input-number-handler-down ant-input-number-handler-down-disabled'] {
+        border: none;
+      }
+      input {
+        text-align: center;
+      }
+    }
   }
 }

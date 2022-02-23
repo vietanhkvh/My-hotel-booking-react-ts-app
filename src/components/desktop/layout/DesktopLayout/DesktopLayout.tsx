@@ -3,25 +3,24 @@ import React from 'react';
 import LayoutCus from '../../../Layout';
 import useTrans from '../../../../hooks/useTrans';
 import styles from './DesktopLayout.module.scss';
-import HeaderDesk from '../../HeaderDesk/HeaderDesk';
 import { Layout, Breadcrumb, Row } from 'antd';
 import { Outlet } from 'react-router-dom';
-import Logo from '../../../../assest/images/logo-mob.png'
 // import ImgHead from './imgs/los-cocos-room-header.png';
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 const LayoutDesk = () => {
   return (
     <div className={styles['layout']}>
-      {/* <Content className={styles['content']}> */}
+      <Content className={styles['content']}>
         {/* <Breadcrumb style={{ margin: '16px 0' }}>
       <Breadcrumb.Item>Home</Breadcrumb.Item>
       <Breadcrumb.Item>List</Breadcrumb.Item>
       <Breadcrumb.Item>App</Breadcrumb.Item>
     </Breadcrumb> */}
-        {/* <Row className={styles['site-layout-content']}>
+        <Row className={styles['site-layout-content']}>
           <Outlet />
-        </Row> */}
-      {/* </Content> */}
+        </Row>
+      </Content>
+      
     </div>
   );
 };
@@ -35,7 +34,7 @@ const DesktopLayout = (props) => {
       contents={{
         title: 'Los Cocos',
         url: '',
-        description: 'react-app',
+        description: 'Book a room with lots of hot deals',
         icon: dataProfileDomain?.logo,
       }}
       children={<LayoutDesk />}
