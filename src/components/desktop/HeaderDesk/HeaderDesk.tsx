@@ -32,7 +32,6 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
   const userInfor = useSelector(
     (state: { user: userState }) => state.user?.userInfor
   );
-  console.log('userInfor', userInfor);
   /////////////////////////////handler
   const handleClickMenu = useCallback((e: any) => {
     setCurrentKey(e?.key);
