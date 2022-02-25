@@ -47,12 +47,8 @@ export default function LayoutCus({
           content={contents?.description}
         />
         <meta property='og:locale' content='en_GB' />
-      </Helmet>
-      <HeaderDesk />
+      </Helmet>     
       {children}
-      <Footer className={styles['footer']}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
     </div>
   );
 }

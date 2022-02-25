@@ -2,33 +2,17 @@
 import React from 'react';
 import LayoutCus from '../../../Layout';
 import useTrans from '../../../../hooks/useTrans';
-import styles from './DesktopLayout.module.scss';
-import { Layout, Breadcrumb, Row } from 'antd';
-import { Outlet } from 'react-router-dom';
-// import ImgHead from './imgs/los-cocos-room-header.png';
-const { Content } = Layout;
-const LayoutDesk = () => {
-  return (
-    <div className={styles['layout']}>
-      <Content className={styles['content']}>
-        {/* <Breadcrumb style={{ margin: '16px 0' }}>
-      <Breadcrumb.Item>Home</Breadcrumb.Item>
-      <Breadcrumb.Item>List</Breadcrumb.Item>
-      <Breadcrumb.Item>App</Breadcrumb.Item>
-    </Breadcrumb> */}
-        <Row className={styles['site-layout-content']}>
-          <Outlet />
-        </Row>
-      </Content>
-      
-    </div>
-  );
-};
-// const 
+import { useSelector } from 'react-redux';
+import { userState } from '@src/store/reducer/userReducer';
+import DesktopGuestLayout from '../../DesktopGuestLayout/DesktopGuestLayout';
+import DeskHostLayout from '../../DeskHostLayout/DeskHostLayout';
+
 const DesktopLayout = (props) => {
   const { route, children, dataProfileDomain } = props;
   const { t } = useTrans();
-
+  const userInfor = useSelector(
+    (state: { user: userState }) => state.user?.userInfor
+  );
   return (
     <LayoutCus
       contents={{
@@ -37,7 +21,16 @@ const DesktopLayout = (props) => {
         description: 'Book a room with lots of hot deals',
         icon: dataProfileDomain?.logo,
       }}
-      children={<LayoutDesk />}
+      children={
+        userInfor ? (
+          userInfor?.ID_Role==='GUE' ? 
+          <DesktopGuestLayout/>
+          :
+          <DeskHostLayout />
+          ) : (
+          <DesktopGuestLayout />
+        )
+      }
     />
   );
 };

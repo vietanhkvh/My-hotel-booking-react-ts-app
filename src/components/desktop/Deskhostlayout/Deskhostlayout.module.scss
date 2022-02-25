@@ -1,3 +1,23 @@
 .desk-host-layout {
-  
+  .logo {
+    height: 32px;
+    margin: 16px;
+    // background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .site-layout .site-layout-background {
+    background: #fff;
+    height: 68px;
+  }
+  [data-theme='dark'] .site-layout .site-layout-background {
+    // background: #141414;
+    background:#002140;
+    height: 68px;
+
+  }
+  .footer {
+    text-align: center;
+  }
 }

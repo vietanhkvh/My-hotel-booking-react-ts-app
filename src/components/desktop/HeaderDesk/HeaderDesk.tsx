@@ -114,7 +114,7 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
                   visible={isVisPopOver}
                   onVisibleChange={handleVisibleChange}
                   content={
-                    <BtnAccount isMobile={isMobile} handleOpen={handleOpen} />
+                    <BtnAccount userInfor={userInfor} isMobile={isMobile} handleOpen={handleOpen} />
                   }
                   placement='bottomRight'
                 >
