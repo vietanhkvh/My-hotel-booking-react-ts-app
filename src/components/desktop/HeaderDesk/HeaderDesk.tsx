@@ -14,6 +14,7 @@ import LoginModal from '../../common/LoginModal/LoginModal';
 import { useSelector } from 'react-redux';
 import { userState } from '../../../store/reducer/userReducer';
 import MyAvatar from '../../common/MyAvatar/MyAvatar';
+import clsx from 'clsx';
 
 const { Header } = Layout;
 
@@ -23,11 +24,12 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
   const { pathname } = useLocation();
   const keyActive = pathname.substring(1, pathname.length);
   ////////////////////state
-  const [currentKey, setCurrentKey] = useState('');
+  const [currentKey, setCurrentKey] = useState<string>('');
   const [isOpenLogin, setIsOpenLogin] = useState<boolean>(false);
   const [typeScreenModal, setTypeScreenModal] = useState<string>('LOGIN');
   const [isVisPopOver, setIsVisPopOver] = useState<boolean>(false);
-  const isMobile= false;
+  const isMobile = false;
+  const [navBarNew, setNavBarNew] = useState<boolean>(false);
   //redux
   const userInfor = useSelector(
     (state: { user: userState }) => state.user?.userInfor
@@ -68,9 +70,19 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
   const handleClose = useCallback(() => {
     setIsOpenLogin && setIsOpenLogin(false);
   }, [setIsOpenLogin]);
+  const handleSetNavBarNew = useCallback(() => {
+    window.scrollY >= 80 ? setNavBarNew(true) : setNavBarNew(false);
+  }, []);
+  window.addEventListener('scroll', handleSetNavBarNew);
   return (
     <Row className={styles['header']}>
-      <Header className={styles['header-container']}>
+      {/* <Header className={clsx(styles['header-container'], styles[navBarNew? 'is-scolled' :''])}> */}
+      <Header
+        className={clsx(
+          styles['header-container'],
+          styles[navBarNew ? 'is-scrolled' : '']
+        )}
+      >
         <div className={styles['logo']} onClick={hanldeClickLogo}>
           <Link to=''>
             <Image preview={false} src={LogoDesk} />
@@ -114,11 +126,15 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
                   visible={isVisPopOver}
                   onVisibleChange={handleVisibleChange}
                   content={
-                    <BtnAccount userInfor={userInfor} isMobile={isMobile} handleOpen={handleOpen} />
+                    <BtnAccount
+                      userInfor={userInfor}
+                      isMobile={isMobile}
+                      handleOpen={handleOpen}
+                    />
                   }
                   placement='bottomRight'
                 >
-                  <Row style={{ cursor: 'pointer', alignItems: 'center'  }}>
+                  <Row style={{ cursor: 'pointer', alignItems: 'center' }}>
                     {userInfor ? (
                       <MyAvatar
                         userName={userInfor?.FullName}
