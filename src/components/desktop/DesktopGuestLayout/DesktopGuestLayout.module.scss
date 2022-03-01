@@ -1,16 +1,17 @@
 .desktop-guest-layout {
   .content {
-    padding: 0 50px;
+    padding: 0px 95px;
     margin: 20px 0;
     // min-height: calc(100vh - 400px - 395px);
     // height: calc(100vh - 20vh);
     .site-layout-content {
       min-height: 280px;
-      background: #fff;
+      background: #f0f2f5;
       height: 100%;
     }
   }
   .footer {
+    background-color: #ffffff;
     text-align: center;
   }
 }

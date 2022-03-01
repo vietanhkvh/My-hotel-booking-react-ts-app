@@ -16,6 +16,24 @@ export interface userInfoInterface {
   Status?: number;
   // };
 }
+//const static interface for guest login | not login
+export interface hotelLocation {
+  city?: string;
+  quantity?: number;
+}
+export interface hotelSearching {
+  id_hotel?: string;
+  hotel_name?: string;
+  district?:string;
+  phone?:string;
+  min_price?:number;
+  image?:any;
+  rating_point?: number;
+  review_Number?:number;
+}
+export interface constInterface {
+  hotelLocations?: hotelLocation[] | [];
+}
 export interface AxiosRequestConfig<D = any> {
   url?: string;
   method?: Method;

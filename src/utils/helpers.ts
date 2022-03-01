@@ -260,6 +260,10 @@ export const checkIsSvgLink = (path) => {
   return false;
 };
 
+export const isMany = (num: number) => {
+  return num >= 2 ? 's' : '';
+};
+
 export const openNotificationWithIcon = (
   type: string,
   message: string,

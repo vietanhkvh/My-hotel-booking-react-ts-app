@@ -21,9 +21,6 @@ const DesktopGuestLayout: FunctionComponent<DesktopGuestLayoutProps> = () => {
           <Outlet />
         </Row>
       </Content>
-      <Footer className={styles['footer']}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
     </Layout>
   );
 };

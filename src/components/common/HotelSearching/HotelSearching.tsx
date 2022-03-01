@@ -1,16 +1,34 @@
 import { Button, Col, DatePicker, Image, Popover, Row, Typography } from 'antd';
-import { FunctionComponent, useCallback, useEffect, useState } from 'react';
-import LocationInputSearch from '../LocationInputSearch/LocationInputSearch';
+import {
+  Dispatch,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import clsx from 'clsx';
 import styles from './HotelSearching.module.scss';
+import LocationInputSearch from '../LocationInputSearch/LocationInputSearch';
 import Search from '../../../assest/icons/icons8-search.svg';
 import moment from 'moment';
 import PopupNumberGuest from '../PopupNumberGuest/PopupNumberGuest';
-import { DATE_FORMAT } from '../../constants';
+import { DATE_FORMAT, some, SUCCESS_CODE } from '../../constants';
+import { getSearchingResultLocation } from '../../../services/hotel.service';
+import { setHotelSearchingByLocation } from '../../../store/actions/constAction';
+import { constState } from '../../../store/reducer/constReducer';
+import { routesPath } from '../../../routes/routerConfig';
+
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
 interface HotelSearchingProps {}
 
 const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
+  const dispatch: Dispatch<any> = useDispatch();
+  
+  const navigate = useNavigate();
+  // console.log('hotelSearchingByLocation', hotelSearchingByLocation)
   ////////////////////////////state
   const [adults, setAdults] = useState<number>(1);
   const [rooms, setRooms] = useState<number>(1);
@@ -66,6 +84,33 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
       hanleSetDisSearch(false);
     }
   }, []);
+
+  const handleSubmitSearch = useCallback(
+    async (
+      location: string,
+      dataIn: any,
+      dateOut: any,
+      rooms: number,
+      adults: number,
+      children: number
+    ) => {
+      const payload: some = {
+        location: location, 
+      };
+      const respond = await getSearchingResultLocation(payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE) {
+          dispatch(setHotelSearchingByLocation(res?.data?.data));
+          navigate(routesPath.SEARCHING)
+        }
+      } catch (err: any) {
+        alert("Server doesn't respond")
+      }
+    },
+    [dispatch, navigate]
+  );
+
   /////////////////////useEffect
   useEffect(() => {
     hanldeSetDateDiff(dateIn, dateOut);
@@ -120,9 +165,10 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
           <Text className={styles['title']}>Guest</Text>
         </Row>
         <Popover
-          className={`${styles['select-guest']} ${
+          className={clsx(
+            styles['select-guest'],
             styles[visible ? 'actived' : '']
-          }`}
+          )}
           content={
             <PopupNumberGuest
               adults={adults}
@@ -139,8 +185,8 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
           placement='bottomRight'
           style={{ top: '15px' }}
         >
-          <Row className={styles['']} style={{ marginTop: 5 }}>
-            <Text className={'guest-number'}>
+          <Row style={{ marginTop: 5 }}>
+            <Text className={'guest-number'} style={{ fontSize: 16 }}>
               {rooms} room{isMany(rooms)}, {adults} adult{isMany(rooms)},{' '}
               {children} children
             </Text>
@@ -155,6 +201,16 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
         <Button
           className={styles['btn-search']}
           disabled={disSearch ? true : false}
+          onClick={() =>
+            handleSubmitSearch(
+              location,
+              dateIn,
+              dateOut,
+              rooms,
+              adults,
+              children
+            )
+          }
         >
           <Image preview={false} src={Search} width={'35px'} height={'35px'} />
         </Button>

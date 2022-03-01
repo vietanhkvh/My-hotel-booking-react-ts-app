@@ -1,7 +1,7 @@
 import { HandleLogin } from '../../../modules/login/LoginFuntion';
 import { Button, Col, Form, Input, Typography } from 'antd';
 import Paragraph from 'antd/lib/typography/Paragraph';
-import { FunctionComponent, useCallback } from 'react';
+import { Dispatch, FunctionComponent, useCallback } from 'react';
 import styles from './LoginForm.module.scss';
 import { some } from '../../constants';
 import { setUserInforAction } from '../../../store/actions/userAction';
@@ -45,7 +45,7 @@ const LoginForm: FunctionComponent<LoginFormProps> = (props) => {
     handleClose,
   } = props;
   ////////////////////////////state
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<any> = useDispatch();
   ////////////////////////////event
   const handleLoginFunction = useCallback(
     async (data: any) => {

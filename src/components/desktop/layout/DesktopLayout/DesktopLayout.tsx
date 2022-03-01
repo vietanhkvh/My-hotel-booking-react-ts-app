@@ -1,7 +1,7 @@
 // import { Col } from 'ant';
 import React from 'react';
 import LayoutCus from '../../../Layout';
-import useTrans from '../../../../hooks/useTrans';
+// import useTrans from '../../../../hooks/useTrans';
 import { useSelector } from 'react-redux';
 import { userState } from '@src/store/reducer/userReducer';
 import DesktopGuestLayout from '../../DesktopGuestLayout/DesktopGuestLayout';
@@ -9,7 +9,7 @@ import DeskHostLayout from '../../DeskHostLayout/DeskHostLayout';
 
 const DesktopLayout = (props) => {
   const { route, children, dataProfileDomain } = props;
-  const { t } = useTrans();
+  // const { t } = useTrans();
   const userInfor = useSelector(
     (state: { user: userState }) => state.user?.userInfor
   );

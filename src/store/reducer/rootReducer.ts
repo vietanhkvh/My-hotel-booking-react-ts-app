@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import articleReducer from '../reducer/articleReducer'
+import constReducer from './constReducer';
 import TestReducer from './testReducer';
 import userReducer from './userReducer';
 
@@ -7,7 +8,8 @@ import userReducer from './userReducer';
 const reducers = {
   articles: articleReducer,
   tests: TestReducer,
-  user: userReducer
+  user: userReducer,
+  const: constReducer
 };
 
 export default combineReducers(reducers);

@@ -3,7 +3,6 @@ import { Menu } from 'antd';
 import { FunctionComponent } from 'react';
 import styles from './MenuLink.module.scss';
 import { Link } from 'react-router-dom';
-import Icon from '@ant-design/icons';
 interface MenuLinkProps {
   //close the modal
   handleCancel: () => void;

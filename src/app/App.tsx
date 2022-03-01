@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { isMobileAndTabletCheck } from '../utils/helpers';
 import 'antd/dist/antd.min.css';
 import MyRoutes from '../routes/MyRoutes';

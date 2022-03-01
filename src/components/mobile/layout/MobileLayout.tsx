@@ -5,7 +5,7 @@ import LayoutCus from '../../Layout';
 import { Layout, Row } from 'antd';
 import { Outlet } from 'react-router-dom';
 import Headermob from '../Headermob/Headermob';
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 // import MobileHeader from './MobileHeader';
 // import { ShareInfor } from '@src/const/shareInfor';
 
@@ -32,7 +32,7 @@ interface Props {
   route: string;
 }
 
-const MobileLayout = (props) => {
+const MobileLayout = (props:Props) => {
   const { dataProfileDomain } = props;
 
   // const showHeader = [routesPath.HOME].indexOf(route) > -1;

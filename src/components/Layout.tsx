@@ -47,8 +47,11 @@ export default function LayoutCus({
           content={contents?.description}
         />
         <meta property='og:locale' content='en_GB' />
-      </Helmet>     
+      </Helmet>
       {children}
+      <Footer style={{ textAlign: 'center', backgroundColor: '#ffffff' }}>
+        Ant Design ©2018 Created by Ant UED
+      </Footer>
     </div>
   );
 }
