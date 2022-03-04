@@ -22,14 +22,28 @@ export interface hotelLocation {
   quantity?: number;
 }
 export interface hotelSearching {
-  id_hotel?: string;
-  hotel_name?: string;
-  district?:string;
-  phone?:string;
-  min_price?:number;
-  image?:any;
-  rating_point?: number;
-  review_Number?:number;
+  ID_Hotel?: string;
+  Hotel_Name?: string;
+  Street?:string;
+  Ward?:string;
+  District?:string;
+  City?:string;
+  Phone?:string;
+  Min_Price?:number;
+  Image?:any;
+  Rating_Point?: number;
+  Review_Number?:number;
+}
+export interface hotelRoom{
+  ID_Room?:string,
+  Room_Name?:string,
+  ID_Hotel?:string,
+  Bed_Number?:number,
+  Bathroom_Number?:number,
+  Coupon_Value?:number,
+  Final_Price?:number,
+  ID_Status?:number,
+  Type_Room_Name?:string
 }
 export interface constInterface {
   hotelLocations?: hotelLocation[] | [];

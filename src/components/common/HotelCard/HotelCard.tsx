@@ -7,14 +7,14 @@ import Hotel from '../../../assest/images/hotel.jpg';
 import { isMany } from '../../../utils/helpers';
 import { getCouponHotel } from '../../../services/coupon.service';
 import { some, SUCCESS_CODE } from '../../constants';
-import PhoneIC from '../../../assest/icons/phone-50.png'
+import PhoneIC from '../../../assest/icons/phone-50.png' 
 const { Meta } = Card;
 const { Text } = Typography;
 interface HotelCardProps {
   /**
    * id hotel
    */
-  idHotel?: string;
+  idHotel: string;
   /**
    * hotel name
    */
@@ -60,17 +60,17 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
   const navigate = useNavigate();
   ////////////////////////component
   const Title = (props) => {
-    const { name } = props;
+    const { name, idHotel } = props;
     return (
       <div className={styles['title-meta']}>
-        <Link to=''>
+        <Link to={`/hotel/${idHotel}`}>
           <div className={styles['hotel-name']}>{name}</div>
         </Link>
       </div>
     );
   };
   const Description = (props) => {
-    const { ratingP, district, reviewNumber } = props;
+    const { ratingP, district, reviewNumber, phone } = props;
     return (
       <Row className={styles['description']}>
         <Row className={styles['description-item']}>
@@ -157,7 +157,7 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
                 color: 'inherit',
               }}
             >
-              {fisrtPrice*(1-(percent*0.01))}$
+              ${fisrtPrice*(1-(percent*0.01))}
             </Text>
           </>
         ) : (
@@ -171,7 +171,7 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
                 color: 'inherit',
               }}
             >
-              {fisrtPrice}$
+              ${fisrtPrice}
             </Text>
           </>
         )}
@@ -180,8 +180,8 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
     );
   };
   ///////////////////////////event
-  const handleClickHotelCard = () => {
-    navigate('/');
+  const handleClickHotelCard = (idHotel:string) => {
+    navigate(`/hotel/${idHotel}`);
   };
   return (
     <div className={styles['hotel-card']}>
@@ -204,15 +204,16 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
         }
         bodyStyle={{ width: 'calc(100% - 286px)' }}
       >
-        <Row className={styles['price-detail']} onClick={handleClickHotelCard}>
+        <Row className={styles['price-detail']} onClick={()=>handleClickHotelCard(idHotel)}>
           <Col span={16}>
             <Meta
-              title={<Title name={name} />}
+              title={<Title name={name} idHotel={idHotel} />}
               description={
                 <Description
                   ratingP={rating}
                   district={district}
                   reviewNumber={reviewNumber}
+                  phone={phone}
                 />
               }
             />

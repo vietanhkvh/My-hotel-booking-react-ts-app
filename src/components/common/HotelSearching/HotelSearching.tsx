@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import styles from './HotelSearching.module.scss';
@@ -17,7 +17,6 @@ import PopupNumberGuest from '../PopupNumberGuest/PopupNumberGuest';
 import { DATE_FORMAT, some, SUCCESS_CODE } from '../../constants';
 import { getSearchingResultLocation } from '../../../services/hotel.service';
 import { setHotelSearchingByLocation } from '../../../store/actions/constAction';
-import { constState } from '../../../store/reducer/constReducer';
 import { routesPath } from '../../../routes/routerConfig';
 
 const { Text } = Typography;
@@ -26,7 +25,7 @@ interface HotelSearchingProps {}
 
 const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   const dispatch: Dispatch<any> = useDispatch();
-  
+
   const navigate = useNavigate();
   // console.log('hotelSearchingByLocation', hotelSearchingByLocation)
   ////////////////////////////state
@@ -88,24 +87,35 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   const handleSubmitSearch = useCallback(
     async (
       location: string,
-      dataIn: any,
+      dateIn: any,
       dateOut: any,
       rooms: number,
       adults: number,
       children: number
     ) => {
       const payload: some = {
-        location: location, 
+        location: location,
       };
       const respond = await getSearchingResultLocation(payload);
       try {
         const res = await respond;
         if (res?.data?.code === SUCCESS_CODE) {
+          const params: some = {
+            location: location,
+            dateIn: dateIn,
+            dateOut: dateOut,
+            rooms: rooms,
+            adults: adults,
+            children: children,
+          };
           dispatch(setHotelSearchingByLocation(res?.data?.data));
-          navigate(routesPath.SEARCHING)
+          navigate({
+            pathname: '/searching',
+            search: `?${createSearchParams(params)}`,
+          });
         }
       } catch (err: any) {
-        alert("Server doesn't respond")
+        alert("Server doesn't respond");
       }
     },
     [dispatch, navigate]

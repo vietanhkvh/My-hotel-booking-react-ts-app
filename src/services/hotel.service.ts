@@ -10,3 +10,10 @@ export const getSearchingResultLocation=(payload:some)=>{
 export const getSearchingResultRating=(payload:some)=>{
     return api.post('hotel-list-searching-rating?location='+payload?.location)
 }
+export const getHotelInforByID=(payload:some)=>{
+    return api.post('hotel-by-id?idHotel='+payload?.idHotel)
+}
+//room
+export const getHotelRoom=(payload:some)=>{
+    return api.get('hotel-room/'+payload?.idHotel)
+}

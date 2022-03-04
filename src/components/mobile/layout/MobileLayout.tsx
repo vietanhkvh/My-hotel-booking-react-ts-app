@@ -27,9 +27,9 @@ const LayoutMobile = () => {
   );
 };
 interface Props {
-  dataProfileDomain: some;
+  dataProfileDomain?: some;
   children?: any;
-  route: string;
+  route?: string;
 }
 
 const MobileLayout = (props:Props) => {
