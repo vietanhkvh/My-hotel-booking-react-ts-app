@@ -12,3 +12,9 @@ export const setHotelSearchingByLocation: (payload: any) => ActionInterface = (
   type: ConstActions.setHotelSearching,
   payload,
 });
+export const setHotelSearchingCondition: (payload: any) => ActionInterface = (
+  payload
+) => ({
+  type: ConstActions.setHotelSearchingCondition,
+  payload,
+});

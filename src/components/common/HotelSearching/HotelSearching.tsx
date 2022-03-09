@@ -6,7 +6,11 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import styles from './HotelSearching.module.scss';
@@ -14,9 +18,17 @@ import LocationInputSearch from '../LocationInputSearch/LocationInputSearch';
 import Search from '../../../assest/icons/icons8-search.svg';
 import moment from 'moment';
 import PopupNumberGuest from '../PopupNumberGuest/PopupNumberGuest';
-import { DATE_FORMAT, some, SUCCESS_CODE } from '../../constants';
+import {
+  DATE_FORMAT,
+  DATE_FORMAT_BACK_END,
+  some,
+  SUCCESS_CODE,
+} from '../../constants';
 import { getSearchingResultLocation } from '../../../services/hotel.service';
-import { setHotelSearchingByLocation } from '../../../store/actions/constAction';
+import {
+  setHotelSearchingByLocation,
+  setHotelSearchingCondition,
+} from '../../../store/actions/constAction';
 import { routesPath } from '../../../routes/routerConfig';
 
 const { Text } = Typography;
@@ -25,6 +37,7 @@ interface HotelSearchingProps {}
 
 const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   const dispatch: Dispatch<any> = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
   // console.log('hotelSearchingByLocation', hotelSearchingByLocation)
@@ -109,6 +122,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
             children: children,
           };
           dispatch(setHotelSearchingByLocation(res?.data?.data));
+          dispatch(setHotelSearchingCondition(params));
           navigate({
             pathname: '/searching',
             search: `?${createSearchParams(params)}`,
@@ -132,6 +146,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
       gutter={28}
       style={{ margin: '0' }}
     >
+      {/* {console.log('date in', moment(dateIn).format('YYYY-MM-DD') )} */}
       <Col span={8} className={styles['item-container']}>
         <Row className={styles['title-wrapper']}>
           <Text className={styles['title']}>Location</Text>

@@ -1,40 +1,68 @@
-import { routes } from '../../../routes/routes';
-import { Col, Image, Layout, Menu, Popover, Row, Space } from 'antd';
+import { Layout, Row, Image, Col, Menu, Space, Popover } from 'antd';
 import { FunctionComponent, useCallback, useState } from 'react';
-import styles from './HeaderDesk.module.scss';
 import { Link, useLocation } from 'react-router-dom';
-import LogoDesk from '../../../assest/images/logo-desk.png';
-import ButtonNav from '../ButtonNav/ButtonNav';
+import styles from './HeaderSpecial.module.scss';
 import UserIc from '../../../assest/icons/user-24.png';
 import DownA from '../../../assest/icons/down-arrow-16.png';
 import PhoneIc from '../../../assest/icons/phone-mob-16.png';
+import LogoDesk from '../../../assest/images/logo-desk.png';
+import { routes } from '../../../routes/routes';
+import ButtonNav from '../ButtonNav/ButtonNav';
 import BtnAccount from '../BtnAccount/BtnAccount';
-import SearchingComponent from '../SearchingComponent/SearchingComponent';
-import LoginModal from '../../common/LoginModal/LoginModal';
 import { useSelector } from 'react-redux';
-import { userState } from '../../../store/reducer/userReducer';
+import { userState } from '@src/store/reducer/userReducer';
 import MyAvatar from '../../common/MyAvatar/MyAvatar';
-import clsx from 'clsx';
+import LoginModal from '../../common/LoginModal/LoginModal';
+import SearchingComponent from '../SearchingComponent/SearchingComponent';
 
 const { Header } = Layout;
 
-interface HeaderProps {}
+interface HeaderSpecialProps {
+  /**
+   * have seaching?
+   */
+  isNoneSearching?: boolean;
+  /**
+   * is cofirm payment
+   */
+  isConfirmPayment?: boolean;
+  /**
+   * isOpenLogin
+   */
+  isOpenLogin?: boolean;
+  /**
+   * set is open login
+   */
+  setIsOpenLogin?: (val: boolean) => void;
+  /**
+   * handleClose
+   */
+  handleClose?: () => void;
+  /**
+   * typeScreenModal
+   */
+  typeScreenModal?: string;
+  /**
+   * setTypeScreenModal
+   */
+  setTypeScreenModal?: (val: string) => void;
+}
 
-const HeaderNav: FunctionComponent<HeaderProps> = () => {
+const HeaderSpecial: FunctionComponent<HeaderSpecialProps> = (props) => {
+  const { isNoneSearching = false, isConfirmPayment, isOpenLogin, setIsOpenLogin } = props;
   const { pathname } = useLocation();
   const keyActive = pathname.substring(1, pathname.length);
-  ////////////////////state
-  const [currentKey, setCurrentKey] = useState<string>('');
-  const [isOpenLogin, setIsOpenLogin] = useState<boolean>(false);
-  const [typeScreenModal, setTypeScreenModal] = useState<string>('LOGIN');
-  const [isVisPopOver, setIsVisPopOver] = useState<boolean>(false);
-  const isMobile = false;
-  const [navBarNew, setNavBarNew] = useState<boolean>(false);
-  //redux
+  ////////////////////////////////redux
   const userInfor = useSelector(
     (state: { user: userState }) => state.user?.userInfor
   );
-  /////////////////////////////handler
+  /////////////////////////////////state
+  const [currentKey, setCurrentKey] = useState<string>('');
+  // const [isOpenLogin, setIsOpenLogin] = useState<boolean>(false);
+  const [isVisPopOver, setIsVisPopOver] = useState<boolean>(false);
+  const [typeScreenModal, setTypeScreenModal] = useState<string>('LOGIN');
+  const isMobile = false;
+  /////////////////////////////////event
   const handleClickMenu = useCallback((e: any) => {
     setCurrentKey(e?.key);
   }, []);
@@ -47,18 +75,15 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
     },
     [setIsVisPopOver]
   );
-  //Login pop up
+  const setVisPopOver = useCallback(() => {
+    setIsVisPopOver && setIsVisPopOver(false);
+  }, [setIsVisPopOver]);
   const setTypeModal = useCallback(
     (value: string) => {
       setTypeScreenModal && setTypeScreenModal(value);
     },
     [setTypeScreenModal]
   );
-
-  const setVisPopOver = useCallback(() => {
-    setIsVisPopOver && setIsVisPopOver(false);
-  }, [setIsVisPopOver]);
-
   const handleOpen = useCallback(
     (type: string) => {
       setIsOpenLogin && setIsOpenLogin(true);
@@ -70,18 +95,9 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
   const handleClose = useCallback(() => {
     setIsOpenLogin && setIsOpenLogin(false);
   }, [setIsOpenLogin]);
-  const handleSetNavBarNew = useCallback(() => {
-    window.scrollY >= 80 ? setNavBarNew(true) : setNavBarNew(false);
-  }, []);
-  window.addEventListener('scroll', handleSetNavBarNew);
   return (
-    <Row className={styles['header']}>
-      <Header
-        className={clsx(
-          styles['header-container'],
-          styles[navBarNew ? 'is-scrolled' : '']
-        )}
-      >
+    <Row className={styles['header-special']}>
+      <Header className={styles['header-container']}>
         <div className={styles['logo']} onClick={hanldeClickLogo}>
           <Link to=''>
             <Image preview={false} src={LogoDesk} />
@@ -156,7 +172,10 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
           </Col>
         </Row>
       </Header>
-      <Row className={styles['searching']}>
+      <Row
+        className={styles['searching']}
+        style={{ display: isNoneSearching ? 'none' : '' }}
+      >
         <SearchingComponent />
       </Row>
       <LoginModal
@@ -171,4 +190,4 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
   );
 };
 
-export default HeaderNav;
+export default HeaderSpecial;

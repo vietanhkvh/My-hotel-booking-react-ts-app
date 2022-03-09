@@ -33,3 +33,6 @@ export const bannerArray:some[]=[
     },
 
 ]
+export const typeLuxury='LUX'
+export const typeMedium='MED'
+export const typeSingle='SIN'

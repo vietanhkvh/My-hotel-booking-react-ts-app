@@ -7,5 +7,6 @@ export const UserActions={
 export const ConstActions={
     setHotelLocation:'SET_HOTEL_LOCATION',
     setHotelSearching:'SET_HOTEL_SEARCHING',
+    setHotelSearchingCondition:'SET_HOTEL_SEARCHING_CONDITION',
     removeHotelSearching:'REMOVE_HOTEL_SEARCHING'
 }

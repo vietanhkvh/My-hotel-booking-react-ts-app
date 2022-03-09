@@ -17,3 +17,6 @@ export const getHotelInforByID=(payload:some)=>{
 export const getHotelRoom=(payload:some)=>{
     return api.get('hotel-room/'+payload?.idHotel)
 }
+export const getRoom=(payload:some)=>{
+    return api.get('room-by-id/'+payload?.idHotel+'/'+payload?.idRoom)
+}

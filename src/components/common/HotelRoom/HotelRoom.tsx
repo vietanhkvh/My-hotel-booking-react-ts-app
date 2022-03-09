@@ -1,4 +1,4 @@
-import { Col, Image, Row, Space, Typography } from 'antd';
+import { Button, Col, Divider, Image, Row, Space, Tag, Typography } from 'antd';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { hotelRoom } from '@const/interface';
 import styles from './HotelRoom.module.scss';
@@ -10,9 +10,11 @@ import DoubleBed from '../../../assest/icons/double-bed-20.png';
 import SingleBed from '../../../assest/icons/single-bed-20.png';
 import Group from '../../../assest/icons/group-16.png';
 import Expand from '../../../assest/icons/expand-20.png';
-import { getHotelRoom } from '../../../services/hotel.service';
-import { some, SUCCESS_CODE } from '../../constants';
+import { some } from '../../constants';
 import { isMany } from '../../../utils/helpers';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { constState } from '../../../store/reducer/constReducer';
 const { Text } = Typography;
 const ImagesMember = (props) => {
   const { images } = props;
@@ -29,43 +31,49 @@ const ImagesMember = (props) => {
 
 interface HotelRoomProps {
   /**
-   * id hotel
+   * hotel room infor
    */
-  idHotel?: string;
+  hotelRoom?: hotelRoom;
 }
 
 const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
-  const { idHotel } = props;
+  const { hotelRoom } = props;
+  const navigate = useNavigate();
+  const hotelSearchingCondition = useSelector(
+    (state: { const: constState }) => state?.const?.hotelSeachingCondition
+  );
   /////////////////state
-  const [hotelRoom, setHotelRoom] = useState<hotelRoom>();
+  // const [tag, setTag] = useState<{ color?: string; name?: string }>({
+  //   color: '#7541ff',
+  //   name: 'NOMARL',
+  // });
   const Price = (props) => {
     ///////////////////////////state
-    const { idHotel, fisrtPrice } = props;
-    const [percent, setPercent]= useState<number>();
+    const { couponValue, fisrtPrice, finalPrice, idStatus } = props;
+    // const [percent, setPercent] = useState<number>();
     /////////////////////////////event
-    // const hanldeGetCoupon = useCallback(async (idHotel: string) => {
-    //   const payload: some = {
-    //     idHotel: idHotel,
-    //   };
-    //   const respond = await getCouponHotel(payload);
-    //   try{
-    //     const res= await respond;
-    //     if(res?.data?.code===SUCCESS_CODE){
-    //       setPercent(res?.data?.data?.[0].Value);
-    //     }
-    //   }catch(err){
-    //     alert("Sever doesn't respond")
-    //   }
-    // }, []);
-    // useEffect(() => {
-    //   hanldeGetCoupon(idHotel);
-    // }, [hanldeGetCoupon, idHotel]);
+    const handleBtnCLick = () => {
+      const param: some = {
+        hotelID: hotelRoom?.ID_Hotel,
+        hotelRoom: hotelRoom?.ID_Room,
+        dateIn: hotelSearchingCondition?.dateIn,
+        dateOut: hotelSearchingCondition?.dateOut,
+        rooms: hotelSearchingCondition?.rooms,
+        adults: hotelSearchingCondition?.adults,
+        children: hotelSearchingCondition?.children,
+      };
+      navigate({
+        pathname: '/book',
+        search: `?${createSearchParams(param)}`,
+      });
+    };
     return (
       <div className={styles['price-wrapper']}>
-        {percent ? (
+        {console.log('hotelRoom', hotelRoom)}
+        {couponValue ? (
           <>
             <Row className={styles['percent-wrapper']}>
-              <Text className={styles['percent']}>-{percent}%</Text>
+              <Text className={styles['percent']}>-{couponValue}%</Text>
             </Row>
             <Text
               className={styles['item']}
@@ -82,7 +90,7 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
                 color: 'inherit',
               }}
             >
-              ${fisrtPrice*(1-(percent*0.01))}
+              ${finalPrice}
             </Text>
           </>
         ) : (
@@ -101,25 +109,34 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
           </>
         )}
         <Text className={styles['item']}>/room/day</Text>
+        <Button
+          className={styles['button']}
+          onClick={handleBtnCLick}
+          disabled={idStatus === 2 ? true : false}
+        >
+          Reserve
+        </Button>
       </div>
     );
   };
+
   //////////////////event
-  const getHotelRoomList = useCallback(async (idHotel: string | undefined) => {
-    const payload: some = {
-      idHotel: idHotel,
-    };
-    const respond = await getHotelRoom(payload);
-    try {
-      const res = respond;
-      if (res?.data?.code === SUCCESS_CODE) {
-        setHotelRoom(res?.data?.data);
-      }
-    } catch (err) {}
-  }, []);
+  const setColorTag = (idTypeRoom?: string) => {
+    switch (idTypeRoom) {
+      case 'LUX':
+        return { color: '#d7be69', name: 'Luxury' };
+      case 'MED':
+        return { color: '#41a1ff', name: 'Medium' };
+      case 'SIN':
+        return { color: '#70d092', name: 'Small' };
+      default:
+        return { color: '#d7be69', name: 'Default' };
+    }
+  };
   useEffect(() => {
-    getHotelRoomList(idHotel && idHotel);
-  }, [getHotelRoomList, idHotel]);
+    // getHotelRoomList(idHotel && idHotel);
+    // setColorTag(hotelRoom?.ID_Type_Room)
+  }, []);
   return (
     <div className={styles['hotel-room']}>
       <Row className={styles['images']}>
@@ -141,10 +158,13 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
         </Row>
       </Row>
       <Row className={styles['infor']}>
-        <Col span={16}>
-          <Text className={styles['title']}>{hotelRoom?.Room_Name}43243</Text>
+        <Col span={16} className={styles['room-infor']}>
+          <Tag color={setColorTag(hotelRoom?.ID_Type_Room)?.color}>
+            {setColorTag(hotelRoom?.ID_Type_Room)?.name}
+          </Tag>
+          <Text className={styles['title']}>{hotelRoom?.Room_Name}</Text>
           <Row className={styles['detail']}>
-            <Text className={styles['detail-item']}>
+            <Text className={styles['detail-item']} style={{ paddingLeft: 0 }}>
               <Image
                 src={
                   hotelRoom?.Bed_Number && hotelRoom?.Bed_Number >= 2
@@ -157,15 +177,22 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
             </Text>
             <Text className={styles['detail-item']}>
               <Image src={Group} preview={false} />
-              {hotelRoom?.Bed_Number} man{isMany(2)}
+              {hotelRoom?.Bed_Number} guest{isMany(2)}
             </Text>
-            <Text className={styles['detail-item']}>
-              <Image src={Expand} preview={false}/>
-              {hotelRoom?.Bed_Number && hotelRoom?.Bed_Number * 25}23m2
+            <Text className={styles['detail-item']} style={{ border: 'none' }}>
+              <Image src={Expand} preview={false} />
+              {hotelRoom?.Bed_Number && hotelRoom?.Bed_Number * 20}m2
             </Text>
           </Row>
         </Col>
-        <Col span={8}>fdfs</Col>
+        <Col span={8} className={styles['price']}>
+          <Price
+            couponValue={hotelRoom?.Coupon_Value}
+            fisrtPrice={hotelRoom?.Price}
+            finalPrice={hotelRoom?.Final_Price}
+            idStatus={hotelRoom?.ID_Status}
+          />
+        </Col>
       </Row>
     </div>
   );

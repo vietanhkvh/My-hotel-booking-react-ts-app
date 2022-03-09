@@ -48,7 +48,7 @@ const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (
   );
   //////////////////state
   const [data, setData] = useState<hotelLocation[] | undefined>(hotelLocation);
-  const options = data?.map((d: hotelLocation, index) => (
+  const options = data?.map((d: hotelLocation) => (
     <Option key={d?.city}>
       <LocationOption name={d?.city} quanity={d?.quantity} />
     </Option>
@@ -62,7 +62,6 @@ const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (
       const res: any = await respone;
       if (res?.data?.code === SUCCESS_CODE) {
         data = res?.data?.data;
-        console.log('res', respone?.data);
         dispatch(setHotelLocationAction(data));
       }
     } catch (err) {}
@@ -73,6 +72,7 @@ const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (
     const dataRaw = hotelLocation;
     const data: hotelLocation[] = [];
     value = new RegExp(value);
+    // const value1= new RegExp('/'+value+'/');
     dataRaw?.forEach((d: hotelLocation) => {
       if (value.test(d?.city)) {
         data.push({

@@ -24,26 +24,38 @@ export interface hotelLocation {
 export interface hotelSearching {
   ID_Hotel?: string;
   Hotel_Name?: string;
-  Street?:string;
-  Ward?:string;
-  District?:string;
-  City?:string;
-  Phone?:string;
-  Min_Price?:number;
-  Image?:any;
+  Street?: string;
+  Ward?: string;
+  District?: string;
+  City?: string;
+  Phone?: string;
+  Coupon_Value?: number;
+  Min_Price?: number;
+  Final_Price?: number;
   Rating_Point?: number;
-  Review_Number?:number;
+  Review_Number?: number;
+  ID_IMG?: number;
+  Image?: any;
 }
-export interface hotelRoom{
-  ID_Room?:string,
-  Room_Name?:string,
-  ID_Hotel?:string,
-  Bed_Number?:number,
-  Bathroom_Number?:number,
-  Coupon_Value?:number,
-  Final_Price?:number,
-  ID_Status?:number,
-  Type_Room_Name?:string
+export interface hotelRoom {
+  ID_Room?: string;
+  Room_Name?: string;
+  ID_Hotel?: string;
+  Bed_Number?: number;
+  Bathroom_Number?: number;
+  Price: number;
+  Coupon_Value?: number;
+  Final_Price: number;
+  ID_Status?: number;
+  ID_Type_Room?: string;
+}
+export interface hotelSeachingCondition {
+  location?: string;
+  dateIn?: any;
+  dateOut?: any;
+  rooms?: number;
+  adults?: number;
+  children?: number;
 }
 export interface constInterface {
   hotelLocations?: hotelLocation[] | [];

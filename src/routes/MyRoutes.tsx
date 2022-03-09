@@ -12,6 +12,7 @@ import Searching from '../pages/Searching/Searching';
 import HotelId from '../pages/Hotel/HotelId/HotelId';
 import Restaurant from '../pages/Restaurant/Restaurant';
 import Nopage from '../pages/Nopage/Nopage';
+import ConfirmPay from '../pages/ConfirmPay/ConfirmPay';
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
@@ -29,7 +30,7 @@ const MyRoutes = (props) => {
       window.removeEventListener('resize', check);
     };
   }, []);
-  
+
   return (
     <Routes>
       <Route
@@ -49,6 +50,8 @@ const MyRoutes = (props) => {
         <Route path='users' element={<Users />}>
           <Route path=':userId' element={<User />} />
         </Route>
+
+        <Route path={'*'} element={<Nopage />} />
         {/* {routerConfig.map((r: any) => {
         const { component, needAuthor, grantPermision, ...rest } = r;
         const mode = isMobileAndTabletCheck() ? 'mobile' : 'desktop';
@@ -85,6 +88,7 @@ const MyRoutes = (props) => {
         );
       })} */}
       </Route>
+          <Route path='book' element={<ConfirmPay />} />
     </Routes>
   );
 };

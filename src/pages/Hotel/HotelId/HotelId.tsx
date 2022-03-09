@@ -8,19 +8,23 @@ import LocationIC from '../../../assest/icons/location-50.png';
 import PhoneIC from '../../../assest/icons/phone-50.png';
 
 import styles from './HotelId.module.scss';
-import { getHotelInforByID } from '../../../services/hotel.service';
-import { hotelSearching } from '../../../const/interface';
+import {
+  getHotelInforByID,
+  getHotelRoom,
+} from '../../../services/hotel.service';
+import { hotelRoom, hotelSearching } from '../../../const/interface';
 import HotelImages from '../../../components/common/HotelImages/HotelImages';
 import HotelRoom from '../../../components/common/HotelRoom/HotelRoom';
 const { Meta } = Card;
-const { Text } = Typography;
+const { Text, Title } = Typography;
 interface HotelIdProps {}
 
 const HotelId: FunctionComponent<HotelIdProps> = (props) => {
-  ////////////////////////////////state
+  //////////////////////////////////////////////////////////////////state
   const { hotelId } = useParams();
   const [hotelInfor, setHotelInfor] = useState<hotelSearching>({});
-  const Title = (props) => {
+  const [hotelRooms, setHotelRooms] = useState<hotelRoom[]>([]);
+  const TitleCom = (props) => {
     const { name } = props;
     return (
       <div className={styles['title-meta']}>
@@ -82,35 +86,38 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
   };
   const Price = (props) => {
     ///////////////////////////state
-    const { idHotel, fisrtPrice } = props;
-    const [percent, setPercent] = useState<number>();
+    const { couponValue,minPrice ,finalPrice } = props;
+    // const [percent, setPercent] = useState<number>();
     /////////////////////////////event
-    const hanldeGetCoupon = useCallback(async (idHotel: string) => {
-      const payload: some = {
-        idHotel: idHotel,
-      };
-      const respond = await getCouponHotel(payload);
-      try {
-        const res = await respond;
-        if (res?.data?.code === SUCCESS_CODE) {
-          setPercent(res?.data?.data?.[0].Value);
-        }
-      } catch (err) {
-        alert("Sever doesn't respond");
-      }
-    }, []);
-    useEffect(() => {
-      hanldeGetCoupon(idHotel);
-    }, [hanldeGetCoupon, idHotel]);
+    // const hanldeGetCoupon = useCallback(async (idHotel: string) => {
+    //   const payload: some = {
+    //     idHotel: idHotel,
+    //   };
+    //   const respond = await getCouponHotel(payload);
+    //   try {
+    //     const res = await respond;
+    //     if (res?.data?.code === SUCCESS_CODE) {
+    //       setPercent(res?.data?.data?.[0].Value);
+    //     }
+    //   } catch (err) {
+    //     alert("Sever doesn't respond");
+    //   }
+    // }, []);
+
+    ///////////////////////////////////////////////////////////////event
+
+    // useEffect(() => {
+    //   hanldeGetCoupon(idHotel);
+    // }, [hanldeGetCoupon, idHotel]);
     return (
       <div className={styles['price-wrapper']}>
-        {percent ? (
+        {couponValue ? (
           <>
             <Row className={styles['percent-wrapper']}>
               <Text style={{ textDecorationLine: 'line-through' }}>
-                ${fisrtPrice}
+                ${minPrice}
               </Text>
-              <Text className={styles['percent']}>-{percent}%</Text>
+              <Text className={styles['percent']}>-{couponValue}%</Text>
             </Row>
 
             <Text
@@ -122,7 +129,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
                 color: 'inherit',
               }}
             >
-              ${fisrtPrice * (1 - percent * 0.01)}
+              ${finalPrice}
             </Text>
           </>
         ) : (
@@ -136,14 +143,14 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
                 color: 'inherit',
               }}
             >
-              ${fisrtPrice}
+              ${finalPrice}
             </Text>
           </>
         )}
       </div>
     );
   };
-  ////////////////////////////////////event
+  /////////////////////////////////////////////////////////////event
   const getHotelInfor = useCallback(async (hotelId: any) => {
     const payload = {
       idHotel: hotelId,
@@ -156,15 +163,29 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
       }
     } catch (error) {}
   }, []);
+  const getHotelRoomList = useCallback(async (idHotel: string | undefined) => {
+    console.log('idhotel', idHotel) 
+    const payload: some = {
+      idHotel: idHotel,
+    };
+    const respond = await getHotelRoom(payload);
+    try {
+      const res = respond;
+      if (res?.data?.code === SUCCESS_CODE) {
+        setHotelRooms(res?.data?.data);
+      }
+    } catch (err) {}
+  }, []);
   useEffect(() => {
     getHotelInfor(hotelId);
-  }, [getHotelInfor, hotelId]);
+    getHotelRoomList(hotelId);
+  }, [getHotelInfor, getHotelRoomList, hotelId]);
   return (
     <Row className={styles['hotel-id']}>
       <Row className={styles['hotel-card']}>
         <Col span={16}>
           <Meta
-            title={<Title name={hotelInfor?.Hotel_Name} />}
+            title={<TitleCom name={hotelInfor?.Hotel_Name} />}
             description={
               <Description
                 ratingP={hotelInfor?.Rating_Point}
@@ -180,13 +201,17 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
         </Col>
         <Col span={8} className={styles['price']}>
           <Price
-            idHotel={hotelInfor?.ID_Hotel}
-            fisrtPrice={hotelInfor?.Min_Price}
+            couponValue={hotelInfor?.Coupon_Value}
+            minPrice={hotelInfor?.Min_Price}
+            finalPrice={hotelInfor?.Final_Price}
           />
         </Col>
       </Row>
       <HotelImages />
-      <HotelRoom idHotel={hotelInfor?.ID_Hotel && hotelInfor?.ID_Hotel}/>
+      <Title level={5} style={{ marginTop: 20 }} >Rooms</Title>
+      {hotelRooms?.map((h) => (
+        <HotelRoom key={h?.ID_Room && h?.ID_Room} hotelRoom={h} />
+      ))}
     </Row>
   );
 };

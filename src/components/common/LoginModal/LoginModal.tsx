@@ -8,10 +8,6 @@ interface LoginModalProps {
    */
   isOpenLogin?: boolean;
   /**
-   * handleOpen Login
-   */
-  handleOpen?: (type: string) => void;
-  /**
    * handleClose
    */
   handleClose?: () => void;
@@ -40,7 +36,6 @@ interface LoginModalProps {
 const LoginModal: FunctionComponent<LoginModalProps> = (props) => {
   const {
     isOpenLogin,
-    handleOpen,
     handleClose,
     typeScreenModal,
     setTypeModal,

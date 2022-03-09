@@ -1,0 +1,38 @@
+.customer-infor-form {
+  width: 100%;
+  .infor-member {
+    width: 100%;
+    display: flex;
+    background: white;
+    margin-top: 12px;
+    border-radius: 8px;
+    .title-form{
+      width: 100%;
+    }
+    .radio-group {
+      width: 100%;
+    }
+    .button-pay {
+      display: flex;
+      align-items: flex-end;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 0;
+      .button {
+        display: flex;
+        align-items: center;
+        color: rgb(255, 255, 255);
+        border: none;
+        height: 48px;
+        width: auto;
+        padding: 14px 40px;
+        font-size: 16px;
+        min-height: 20px;
+        font-weight: 600;
+        border-radius: 8px;
+        text-transform: none;
+        background-color: rgb(255, 51, 102);
+      }
+    }
+  }
+}
