@@ -13,6 +13,7 @@ export interface userInfoInterface {
   Password?: string;
   FullName?: string;
   Email?: string;
+  Phone?:string;
   Status?: number;
   // };
 }
@@ -44,6 +45,7 @@ export interface hotelRoom {
   Bed_Number?: number;
   Bathroom_Number?: number;
   Price: number;
+  ID_Coupon?:number;
   Coupon_Value?: number;
   Final_Price: number;
   ID_Status?: number;

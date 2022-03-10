@@ -20,3 +20,6 @@ export const getHotelRoom=(payload:some)=>{
 export const getRoom=(payload:some)=>{
     return api.get('room-by-id/'+payload?.idHotel+'/'+payload?.idRoom)
 }
+export const editStatusRoom=(payload:some)=>{
+    return api.put('hotel-room/'+payload?.idRoom+'?idStatus='+payload?.idStatus)
+}

@@ -28,8 +28,6 @@ const MyApp: React.FC = () => {
     <main>
       <h1>My Articles</h1>
       <AddArticle saveArticle={saveArticle} />
-      {console.log('articles', articles)}
-      {console.log('tests', tests)}
       {articles?.articles?.map((article: IArticle) => (
         <Article
           key={article.id}

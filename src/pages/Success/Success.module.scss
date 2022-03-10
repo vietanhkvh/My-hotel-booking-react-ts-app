@@ -1,0 +1,75 @@
+.success {
+  width: 100%;
+  background-color: #edf2f7;
+  padding: 10px;
+  .success-item {
+    background-color: white;
+    margin: auto 100px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .item {
+      // ;
+    }
+    .button {
+      border-radius: 4px;
+      background-color: #ff3366;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .payment {
+      background-color: white;
+      width: 100%;
+      border: 1px solid #EDF2F7;
+      border-radius: 3px;
+      text-align: center; 
+      .hotel-name{
+        width: 100%;
+           
+      }
+      .payment-wrapper {
+        width: 100%;
+        justify-content: space-evenly;
+        padding: 10px 0;
+        border-radius: 6px;
+        .payment-item {
+          background-color: #edf2f7;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          border-radius: 10px;
+        }
+        .title{
+          font-weight: 600;
+        }
+        .payment-price{
+          width: 100%;
+          margin: auto 32px;
+          padding: 12px 28px;
+          .payment-price-item{
+            width: 100%;
+            justify-content: space-between;
+            margin: 5px auto;
+            .title{
+              font-weight: 600;
+            }
+            .total{
+              font-size: 18px;
+            }
+            .total-num{
+              text-align: center;
+            }
+          }
+          .payment-total{
+            border-top: 2px solid white;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+          }
+        }
+      }
+    }
+  }
+}

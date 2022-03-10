@@ -4,7 +4,7 @@ import CustomerInforForm from '../CustomerInforForm/CustomerInforForm';
 import styles from './CustomerInfor.module.scss';
 import { hotelSearching } from '../../../const/interface';
 import HotelImg from '../../../assest/images/hotel.jpg';
-import { DATE_FORMAT_BACK_END, DATE_FORMAT } from '../../constants';
+import { DATE_FORMAT } from '../../constants';
 const { Text, Title } = Typography;
 interface CustomerInforProps {
   /**
@@ -27,10 +27,14 @@ interface CustomerInforProps {
    * setIsOpenLogin
    */
   setIsOpenLogin?: (val: boolean) => void;
+  /**
+   * userInfor
+   */
+  userInfor?:any;
 }
 
 const CustomerInfor: FunctionComponent<CustomerInforProps> = (props) => {
-  const { hotelInfor, dateIn, dateOut, dateGap, setIsOpenLogin } = props;
+  const { hotelInfor, dateIn, dateOut, dateGap, userInfor } = props;
   /////////state
   /////////event
 
@@ -86,7 +90,7 @@ const CustomerInfor: FunctionComponent<CustomerInforProps> = (props) => {
         </Col>
       </Row>
       <Row className={styles['infor-member']}>
-        <CustomerInforForm setIsOpenLogin={setIsOpenLogin}/>
+        <CustomerInforForm userInfor={userInfor}/>
       </Row>
     </Col>
   );

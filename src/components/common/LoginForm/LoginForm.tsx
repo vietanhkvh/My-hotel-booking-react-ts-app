@@ -49,7 +49,6 @@ const LoginForm: FunctionComponent<LoginFormProps> = (props) => {
   ////////////////////////////event
   const handleLoginFunction = useCallback(
     async (data: any) => {
-      console.log('val', data.account, data.password);
       const request = HandleLogin(data.account, data.password);
       const response: some = await request;
       if (response.data?.data) {

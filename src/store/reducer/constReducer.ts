@@ -29,7 +29,6 @@ const constReducer: (
     case ConstActions.setHotelSearching:
       return { ...state, hotelSearchingByLocation: action.payload };
     case ConstActions.setHotelSearchingCondition:
-      console.log('action.payload', action.payload);
       return { ...state, hotelSeachingCondition: action.payload };
     default:
       return state;

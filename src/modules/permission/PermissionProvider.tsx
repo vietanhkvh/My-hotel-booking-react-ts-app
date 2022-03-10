@@ -22,7 +22,6 @@ function PermissionProvider(props) {
   //! check permission here
   // useCheckAuthorize();
   const isMobile = isMobileAndTabletCheck(); 
-  console.log('isMobile', isMobile)
   //?------- get use infor from redux store -------//
 
   //?--------- get token from url and check with local storage ------//

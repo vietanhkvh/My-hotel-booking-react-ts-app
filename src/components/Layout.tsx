@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import React from 'react';
 import styles from './Layout.module.scss';
 import { Layout } from 'antd';
-import HeaderDesk from './desktop/HeaderDesk/HeaderDesk';
 declare global {
   interface Window {
     vntCa: any;

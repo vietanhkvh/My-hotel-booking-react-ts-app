@@ -49,7 +49,7 @@ interface HeaderSpecialProps {
 }
 
 const HeaderSpecial: FunctionComponent<HeaderSpecialProps> = (props) => {
-  const { isNoneSearching = false, isConfirmPayment, isOpenLogin, setIsOpenLogin } = props;
+  const { isNoneSearching = false, isOpenLogin, setIsOpenLogin } = props;
   const { pathname } = useLocation();
   const keyActive = pathname.substring(1, pathname.length);
   ////////////////////////////////redux
@@ -99,7 +99,7 @@ const HeaderSpecial: FunctionComponent<HeaderSpecialProps> = (props) => {
     <Row className={styles['header-special']}>
       <Header className={styles['header-container']}>
         <div className={styles['logo']} onClick={hanldeClickLogo}>
-          <Link to=''>
+          <Link to='/'>
             <Image preview={false} src={LogoDesk} />
           </Link>
         </div>

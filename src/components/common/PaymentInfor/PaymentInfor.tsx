@@ -14,18 +14,19 @@ import { isMany } from '../../../utils/helpers';
 const { Text, Title } = Typography;
 interface PaymentInforProps {
   /**
+   * room
+   */
+  room?: hotelRoom | undefined;
+  /**
    * night number
    */
   dateGap: number;
 }
 
 const PaymentInfor: FunctionComponent<PaymentInforProps> = (props) => {
-  const { dateGap } = props;
+  const { dateGap, room } = props;
   ////////////////////////state
-  const [searchParam, setSearchParam] = useSearchParams();
-  const idRoom = searchParam.get('hotelRoom');
-  const idHotel = searchParam.get('hotelID');
-  const [room, setRoom] = useState<hotelRoom>();
+
   const taxes: number = 5;
   ////////////////////////event
   const calcRoomFee = () => {
@@ -35,25 +36,25 @@ const PaymentInfor: FunctionComponent<PaymentInforProps> = (props) => {
       ? (room?.Price * dateGap).toFixed(1)
       : '';
   };
-  const getRoomInfor = useCallback(
-    async (idHotel: string | null, idRoom: string | null) => {
-      const payload = {
-        idHotel: idHotel,
-        idRoom: idRoom,
-      };
-      const respond = await getRoom(payload);
-      try {
-        const res = await respond;
-        if (res?.data?.code === SUCCESS_CODE) {
-          setRoom(res?.data?.data?.[0]);
-        }
-      } catch (error) {}
-    },
-    []
-  );
-  useEffect(() => {
-    getRoomInfor(idHotel, idRoom);
-  }, [getRoomInfor, idHotel, idRoom]);
+  
+  // useEffect(() => {
+  //   getRoomInfor(idHotel, idRoom);
+  //   return () => {
+  //     setRoom({
+  //       ID_Room: '',
+  //       Room_Name: '',
+  //       ID_Hotel: '',
+  //       Bed_Number: 0,
+  //       Bathroom_Number: 0,
+  //       Price: 0,
+  //       Coupon_Value: 0,
+  //       Final_Price: 0,
+  //       ID_Status: 0,
+  //       ID_Type_Room: '',
+  //     });
+  //   };
+  // }, [getRoomInfor, idHotel, idRoom]);
+
   return (
     <Col span={9} className={styles['payment-infor']}>
       <Row className={styles['payment-item']}>
@@ -64,6 +65,10 @@ const PaymentInfor: FunctionComponent<PaymentInforProps> = (props) => {
           width={432}
           height={114}
         />
+        {/* {console.log(
+          'room-infor',
+          JSON.parse(localStorage.getItem('room-infor') || '')
+        )} */}
         {room?.Coupon_Value ? (
           <Row className={styles['coupon']}>-{room?.Coupon_Value}%</Row>
         ) : (

@@ -13,6 +13,7 @@ import HotelId from '../pages/Hotel/HotelId/HotelId';
 import Restaurant from '../pages/Restaurant/Restaurant';
 import Nopage from '../pages/Nopage/Nopage';
 import ConfirmPay from '../pages/ConfirmPay/ConfirmPay';
+import Success from '../pages/Success/Success';
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
@@ -89,6 +90,7 @@ const MyRoutes = (props) => {
       })} */}
       </Route>
           <Route path='book' element={<ConfirmPay />} />
+          <Route path='book-success' element={<Success />} /> 
     </Routes>
   );
 };
