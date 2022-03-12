@@ -278,6 +278,6 @@ export const openNotificationWithIcon = (
 };
 notification.config({
   placement: 'topRight',
-  duration: 0,
+  duration: 2,
   maxCount: 1,
 });

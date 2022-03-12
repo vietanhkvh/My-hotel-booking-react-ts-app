@@ -4,10 +4,12 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styles from './Home.module.scss';
 import AddArticle from '../../components/common/AddArticle/AddArticle';
 import Article from '../../components/common/Article/Article';
-import { Carousel, Image } from 'antd';
+import { Button, Carousel, Image, Row, Typography } from 'antd';
 import { bannerArray } from '../../const/data.const';
 import { some } from '../../const/keyString';
-
+import SlickImages from '../../components/common/SlickImages/SlickImages';
+import clsx from 'clsx';
+const {Title, Text}= Typography;
 const MyApp: React.FC = () => {
   const articles: any = useSelector(
     (state: ArticleState) => state?.articles,
@@ -45,25 +47,7 @@ interface HomeProps {
    */
   isMobile?: boolean;
 }
-function onChange(a: number) {
-  console.log(a);
-}
-const A = () => (
-  <>
-    <div>
-      <h3 className={styles['contentStyle']}>1</h3>
-    </div>
-    <div>
-      <h3 className={styles['contentStyle']}>2</h3>
-    </div>
-    <div>
-      <h3 className={styles['contentStyle']}>3</h3>
-    </div>
-    <div>
-      <h3 className={styles['contentStyle']}>4</h3>
-    </div>
-  </>
-);
+
 const Home: FunctionComponent<HomeProps> = (props) => {
   const { isMobile } = props;
   // const onChange = (a, b, c) => {
@@ -71,7 +55,17 @@ const Home: FunctionComponent<HomeProps> = (props) => {
   // };
   return (
     <div className={styles['home']}>
-     Home
+     <Row className={styles['home-item']}>
+       <SlickImages images={[]} type='banner' />
+     </Row>
+     <Row className={clsx(styles['function-1'],styles['home-item'])}>
+      <Title className={styles['text']}>Let your curiosity do the booking</Title>
+      <Button className={styles['button-75']}>I'm flexible</Button>
+     </Row>
+     <Row className={clsx(styles['function-2'],styles['home-item'])}>
+      <Title className={styles['text']}>About your host</Title>
+      <Button className={styles['button-75']}>Ask a supper host</Button>
+     </Row>
     </div>
   );
 };

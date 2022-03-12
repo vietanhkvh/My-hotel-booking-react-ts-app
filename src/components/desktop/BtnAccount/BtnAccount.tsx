@@ -3,6 +3,7 @@ import { FunctionComponent } from 'react';
 import styles from './BtnAccount.module.scss';
 import { some } from '../../constants';
 import { userInfoInterface } from '../../../const/interface';
+import { useNavigate } from 'react-router-dom';
 const { Text } = Typography;
 
 const adminList: some[] = [
@@ -64,9 +65,11 @@ interface BtnAccountProps {
 const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
   ///////////////////////state
   const { userInfor, isMobile, handleOpen } = props;
-
+  const navigate= useNavigate();
   ///////////////////////event
-
+  const hanlderClickHistory=()=>{
+    navigate('/history')
+  }
   const handleLogout = () => {
     localStorage.removeItem('token-key');
     localStorage.removeItem('persist:root');
@@ -111,9 +114,9 @@ const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
               >
                 <Text className={styles['text']}>Profile</Text>
               </Row>
-              <Row className={styles['container']}>
+              {/* <Row className={styles['container']}>
                 <Text className={styles['text']}>Switch to host</Text>
-              </Row>
+              </Row> */}
               <Row className={styles['container']} onClick={handleLogout}>
                 <Text className={styles['text']}>Log out</Text>
               </Row>
@@ -133,8 +136,8 @@ const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
               >
                 <Text className={styles['text']}>Profile</Text>
               </Row>
-              <Row className={styles['container']}>
-                <Text className={styles['text']}>Switch to traveling</Text>
+              <Row className={styles['container']} onClick={hanlderClickHistory}>
+                <Text className={styles['text']}>History</Text>
               </Row>
               <Row className={styles['container']} onClick={handleLogout}>
                 <Text className={styles['text']}>Log out</Text>

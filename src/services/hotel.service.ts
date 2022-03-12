@@ -1,25 +1,62 @@
-import { some } from "../const/keyString"
-import api from "../utils/api"
+import { some } from '../const/keyString';
+import api from '../utils/api';
 
-export const getLocationHotel=()=>{
-    return api.get('/hotel-location')
+//hotel
+export const getHotelTable = () => {
+  return api.get('/hotel');
+};
+export const getHotelTableForHost = (payload: some) => {
+  return api.get('/hotel/' + payload?.idAccount);
+};
+export const getLocationHotel = () => {
+  return api.get('/hotel-location');
+};
+export const getSearchingResultLocation = (payload: some) => {
+  return api.post(
+    'hotel-list-searching-location?location=' + payload?.location
+  );
+};
+export const getSearchingResultRating = (payload: some) => {
+  return api.post('hotel-list-searching-rating?location=' + payload?.location);
+};
+export const getHotelInforByID = (payload: some) => {
+  return api.post('hotel-by-id?idHotel=' + payload?.idHotel);
+};
+
+export const updateHotelInfor = (ID_Hotel: string, payload: some) => {
+  return api.put(
+    'hotel/' +
+      ID_Hotel +
+      '?hotelName=' +
+      payload?.Hotel_Name +
+      '&city=' +
+      payload?.City +
+      '&district=' +
+      payload?.District +
+      '&ward=' +
+      payload?.Ward +
+      '&street=' +
+      payload?.Street +
+      '&phone=' +
+      payload?.Phone
+  );
+};
+export const getIDHotelLastest=()=>{
+    return api.get('hotel-id-lastest')
 }
-export const getSearchingResultLocation=(payload:some)=>{
-    return api.post('hotel-list-searching-location?location='+payload?.location)
-}
-export const getSearchingResultRating=(payload:some)=>{
-    return api.post('hotel-list-searching-rating?location='+payload?.location)
-}
-export const getHotelInforByID=(payload:some)=>{
-    return api.post('hotel-by-id?idHotel='+payload?.idHotel)
+export const saveHotelInfor=(payload:some)=>{
+    return api.post("hotel?Hotel_Name="+payload?.hotelName+"&City="+payload?.city+"&District="+payload?.district+
+    "&Ward="+payload?.ward+"&Street="+payload?.street+"&Phone="+payload?.phone+"&ID_Status="+payload?.idStatus+"&ID_Account="+payload?.idAccount)
 }
 //room
-export const getHotelRoom=(payload:some)=>{
-    return api.get('hotel-room/'+payload?.idHotel)
-}
-export const getRoom=(payload:some)=>{
-    return api.get('room-by-id/'+payload?.idHotel+'/'+payload?.idRoom)
-}
-export const editStatusRoom=(payload:some)=>{
-    return api.put('hotel-room/'+payload?.idRoom+'?idStatus='+payload?.idStatus)
-}
+export const getHotelRoom = (payload: some) => {
+  return api.get('hotel-room/' + payload?.idHotel);
+};
+export const getRoom = (payload: some) => {
+  return api.get('room-by-id/' + payload?.idHotel + '/' + payload?.idRoom);
+};
+export const editStatusRoom = (payload: some) => {
+  return api.put(
+    'hotel-room/' + payload?.idRoom + '?idStatus=' + payload?.idStatus
+  );
+};

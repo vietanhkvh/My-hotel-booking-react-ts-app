@@ -55,7 +55,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
           </Row>
           <Row>
             <span className={styles['description-text']}>
-              ({reviewNumber} rate{isMany(reviewNumber ? reviewNumber : 0)})
+            ({reviewNumber>0 ? reviewNumber : 0 } rate{isMany(reviewNumber ? reviewNumber : 0)})
             </span>
           </Row>
         </Row>

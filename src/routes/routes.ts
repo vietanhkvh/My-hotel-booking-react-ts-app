@@ -8,6 +8,11 @@ import HotelIc from '../assest/icons/bed-mob-32.png';
 // import PhoneIc from '../assest/icons/phone-mob-16.png';
 import Hotel from '../pages/Hotel/Hotel';
 import { UserOutlined, HomeOutlined, PhoneOutlined } from '@ant-design/icons';
+import HotelRoomIC from '../assest/icons/hotel-room-100.png';
+import HotelManager from '../pages/Host/HotelManager/HotelManager';
+import RoomManager from '../pages/Host/RoomManager/RoomManager';
+import ImagesManager from '../pages/Host/ImagesManager/ImagesManager';
+import CouponsManager from '../pages/Host/CouponsManager/CouponsManager';
 
 export const routes: IRoute[] = [
   {
@@ -70,4 +75,49 @@ export const routesMenu: IRoute[] = [
     icon: PhoneOutlined,
   },
 ];
-
+export const routeGuest: IRoute[] = [
+  {
+    title: 'Hotel',
+    path: 'hotel-manager',
+    exact: true,
+    component: HotelManager,
+    icon: HomeOutlined,
+  },
+  {
+    title: 'Room',
+    path: 'room-manager',
+    exact: true,
+    component: RoomManager,
+    icon: HotelRoomIC,
+  },
+  {
+    title: 'Images',
+    path: 'image-manager',
+    exact: true,
+    component: ImagesManager,
+    icon: PhoneOutlined,
+    child: [
+      {
+        title: 'Hotel',
+        path: 'hotel-images',
+        exact: true,
+        component: ImagesManager,
+        icon: PhoneOutlined,
+      },
+      {
+        title: 'Room',
+        path: 'room-images',
+        exact: true,
+        component: ImagesManager,
+        icon: PhoneOutlined,
+      }
+    ],
+  },
+  {
+    title: 'Coupon',
+    path: 'coupon-manager',
+    exact: true,
+    component: CouponsManager,
+    icon: PhoneOutlined,
+  },
+];

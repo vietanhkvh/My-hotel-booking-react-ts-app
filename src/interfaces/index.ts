@@ -5,4 +5,5 @@ export interface IRoute{
     component: any,
     props?:any,
     icon?: any,
+    child?: IRoute[],
 }

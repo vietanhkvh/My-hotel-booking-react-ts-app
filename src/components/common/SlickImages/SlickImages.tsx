@@ -2,7 +2,7 @@ import { some } from '@const/keyString';
 import { Image, Row } from 'antd';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import Slider from 'react-slick';
-import { hotel, room } from './dataRaw';
+import { banner, hotel, room } from './dataRaw';
 import styles from './SlickImages.module.scss';
 interface SlickImagesProps {
   /**
@@ -29,6 +29,9 @@ const SlickImages: FunctionComponent<SlickImagesProps> = (props) => {
         break;
       case 'room':
         setImgs(room);
+        break;
+      case 'banner':
+        setImgs(banner);
         break;
       default:
         setImgs(hotel);

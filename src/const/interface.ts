@@ -7,7 +7,7 @@ export interface ActionInterface {
 }
 export interface userInfoInterface {
   // userInfor: {
-  ID_Account?: string;
+  ID_Account?: number;
   ID_Role?: string;
   UserName?: string;
   Password?: string;
@@ -66,4 +66,14 @@ export interface AxiosRequestConfig<D = any> {
   url?: string;
   method?: Method;
   baseURL?: string;
+}
+export interface hotel{
+  ID_Hotel?:string,
+  Hotel_Name?:string,
+  City?:string,
+  District?:string,
+  Ward?:string,
+  Street?:string,
+  Phone?:string,
+  ID_Status?:number
 }
