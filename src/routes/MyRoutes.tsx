@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { isMobileAndTabletCheck } from '../utils/helpers';
 import { Route, RouteObject, Routes } from 'react-router-dom';
-import { routerConfig } from './routerConfig';
+// import { routerConfig } from './routerConfig';
 import MobileLayout from '../components/mobile/layout/MobileLayout';
 import DesktopLayout from '../components/desktop/layout/DesktopLayout/DesktopLayout';
 import Home from '../pages/Home/Home';
@@ -19,6 +19,7 @@ import HotelManager from '../pages/Host/HotelManager/HotelManager';
 import RoomManager from '../pages/Host/RoomManager/RoomManager';
 import ImagesManager from '../pages/Host/ImagesManager/ImagesManager';
 import CouponsManager from '../pages/Host/CouponsManager/CouponsManager';
+import ImagesRoomManager from '../pages/Host/Imagesroommanager/Imagesroommanager';
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
@@ -44,6 +45,7 @@ const MyRoutes = (props) => {
         element={isMobile ? <MobileLayout /> : <DesktopLayout />}
       >
         {/* guest */}
+        <Route path={'/home'} element={<Home />} />
         <Route path={''} element={<Home />} />
 
         <Route path='hotel' element={<Hotel />}>
@@ -63,7 +65,7 @@ const MyRoutes = (props) => {
         <Route path='room-manager' element={<RoomManager />} />
 
         <Route path='hotel-images' element={<ImagesManager />} />
-        <Route path='room-images' element={<ImagesManager />} />
+        <Route path='room-images' element={<ImagesRoomManager/>} />
         <Route path='coupon-manager' element={<CouponsManager />} />
 
         <Route path={'*'} element={<Nopage />} />

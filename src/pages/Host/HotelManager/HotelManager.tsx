@@ -1,7 +1,6 @@
 import { SUCCESS_CODE } from '../../../components/constants';
 import { hotel } from '../../../const/interface';
 import {
-  getHotelTable,
   getHotelTableForHost,
   updateHotelInfor,
 } from '../../../services/hotel.service';
@@ -16,7 +15,7 @@ import {
   Popconfirm,
   Form,
 } from 'antd';
-import { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import { Dispatch, FunctionComponent, useCallback, useEffect, useState } from 'react';
 import {
   EditFilled,
   MinusOutlined,
@@ -25,10 +24,12 @@ import {
   PlusOutlined
 } from '@ant-design/icons';
 import styles from './HotelManager.module.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userState } from '@src/store/reducer/userReducer';
 import { openNotificationWithIcon } from '../../../utils/helpers';
 import HotelInforForm from '../../../components/common/HotelInforForm/HotelInforForm';
+import { setHotelManager } from '../../../store/actions/constAction';
+import MyEditTable from '../../../components/common/MyEditTable/MyEditTable';
 // import EditableCell from '../../../components/common/EditableCell/EditableCell';
 const { Text } = Typography;
 
@@ -82,6 +83,7 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
   const userInfor = useSelector(
     (state: { user: userState }) => state?.user?.userInfor
   );
+  const dispatch: Dispatch<any> = useDispatch();
   ////////////////////state
   const [hotelList, setHotelList] = useState<hotel[]>([]);
 
@@ -278,13 +280,13 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
     try {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
-        const message = 'Update successfull!';
+        const message = 'Update hotel successfull!';
         openNotificationWithIcon('success', '', message);
       } else {
-        openNotificationWithIcon('error', '', 'Update failed');
+        openNotificationWithIcon('error', '', 'Update hotel failed');
       }
     } catch (error) {
-      openNotificationWithIcon('error', '', 'Update failed');
+      openNotificationWithIcon('error', '', 'Update hotel failed');
     }
   }, []);
   const getHotelList = useCallback(async (idAccount: number | undefined) => {
@@ -297,12 +299,15 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE) {
         setHotelList(res?.data?.data);
+        dispatch(setHotelManager(res?.data?.data));
       }
     } catch (error) {}
-  }, []);
+  }, [dispatch]);
+
   useEffect(() => {
     getHotelList(userInfor?.ID_Account);
   }, [getHotelList, userInfor?.ID_Account]);
+  
   return (
     <div className={styles['hotel-manager']}>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
@@ -325,6 +330,7 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
         />
       </Form>
       <HotelInforForm visible={visible} setVisible={setVisible} getHotelList={getHotelList}/>
+      {/* <MyEditTable mergedColumns={mergedColumns} data={hotelList} cancel={cancel} /> */}
     </div>
   );
 };

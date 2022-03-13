@@ -8,5 +8,7 @@ export const ConstActions={
     setHotelLocation:'SET_HOTEL_LOCATION',
     setHotelSearching:'SET_HOTEL_SEARCHING',
     setHotelSearchingCondition:'SET_HOTEL_SEARCHING_CONDITION',
+    setHotelManager:'SET_HOTEL_MANAGER',
+    setTypesRoom:'SET_TYPES_ROOM',
     removeHotelSearching:'REMOVE_HOTEL_SEARCHING'
 }

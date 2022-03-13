@@ -1,17 +1,15 @@
-import { hotel, image } from '../../../const/interface';
 import {
   Button,
   Form,
-  Image,
-  Input,
-  InputNumber,
   Popconfirm,
   Row,
   Select,
   Space,
   Typography,
+  Image,
+  InputNumber,
+  Input,
 } from 'antd';
-import clsx from 'clsx';
 import {
   Dispatch,
   FunctionComponent,
@@ -19,21 +17,27 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import styles from './Imagesroommanager.module.scss';
 import {
   EditFilled,
   MinusOutlined,
   CloseOutlined,
   CheckOutlined,
 } from '@ant-design/icons';
-import styles from './ImagesManager.module.scss';
+import clsx from 'clsx';
+import { hotel, image, room } from '../../../const/interface';
 import MyEditTable from '../../../components/common/MyEditTable/MyEditTable';
-import { getHotelTableForHost } from '../../../services/hotel.service';
-import { setHotelManager } from '../../../store/actions/constAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { userState } from '@src/store/reducer/userReducer';
 import { SUCCESS_CODE } from '../../../components/constants';
-import { getImgHotel, updateImg } from '../../../services/common.service';
-import { userState } from '../../../store/reducer/userReducer';
+import {
+  getHotelTableForHost,
+  getRoomsHotel,
+} from '../../../services/hotel.service';
+import { setHotelManager } from '../../../store/actions/constAction';
+import { getImgRoom, updateImg } from '../../../services/common.service';
 import { openNotificationWithIcon } from '../../../utils/helpers';
+import ImageForm from '../../../components/common/ImageForm/ImageForm';
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -92,37 +96,46 @@ const EditableCell: React.FC<EditableCellProps> = ({
   );
 };
 
-interface ImagesManagerProps {}
+interface ImagesRoomManagerProps {}
 
-const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
+const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
   const userInfor = useSelector(
     (state: { user: userState }) => state?.user?.userInfor
   );
   const dispatch: Dispatch<any> = useDispatch();
-  ///////////////////////states
 
-  const [form] = Form.useForm();
+  /////////////////////////state
 
   const [imgs, setImgs] = useState<any[]>([]);
 
-  // const [typesRoom, setTypesRoom] = useState<typeRooms[]>();
+  const [hotels, setHotels] = useState<hotel[]>([]);
 
   const [idHotel, setIDHotel] = useState<string>('');
 
-  const [hotels, setHotels] = useState<hotel[]>([]);
+  const [rooms, setRooms] = useState<room[]>([]);
+
+  const [idRoom, setIDRoom] = useState<string>('');
+
+  const [form] = Form.useForm();
 
   const [editingKey, setEditingKey] = useState<number>();
 
   const [visible, setVisible] = useState<boolean>(false);
 
   const isEditing = (record: image) => record.ID_IMG === editingKey;
-
-  ///////////////////////event
-  function onChange(value) {
+  ////////////////////////event
+  function onChangeHotel(value) {
     console.log(`selected ${value}`);
-    getImgs(value);
+    getRooms(value);
     setIDHotel(value);
   }
+
+  function onChangeRoom(value) {
+    console.log(`selected ${value}`);
+    getImgs(value);
+    setIDRoom(value);
+  }
+
   function onSearch(val) {
     console.log('search:', val);
   }
@@ -132,6 +145,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
   const handleAdd = () => {
     showModal();
   };
+
   //////////api
   const getHotelList = useCallback(
     async (idAccount: number | undefined) => {
@@ -150,41 +164,60 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
     [dispatch]
   );
 
-  const getImgs = useCallback(async (idHotel: string) => {
+  const getRooms = useCallback(async (idHotel: string) => {
     const payload = {
       idHotel: idHotel,
     };
-    const respond = await getImgHotel(payload);
+    const respond = await getRoomsHotel(payload);
     try {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE) {
-        setImgs(res?.data?.data);
+        setRooms(res?.data?.data);
       }
     } catch (error) {}
   }, []);
 
+  const getImgs = useCallback(
+    async (idRoom: string) => {
+      const payload = {
+        idRoom: idRoom,
+      };
+      const respond = await getImgRoom(payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE) {
+          setImgs(res?.data?.data);
+        }
+      } catch (error) {}
+    },
+    [idHotel]
+  );
+
+  const updateImgHotel = useCallback(
+    async (idImg: number, imgInfor: any) => {
+      const payload = {
+        idImg: idImg,
+        imgUrl: imgInfor?.Image,
+      };
+      const respond = await updateImg(payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
+          openNotificationWithIcon('success', '', 'Update image successfull!');
+          getImgs(idRoom);
+          return 1;
+        } else {
+          openNotificationWithIcon('error', '', 'Update image failed!');
+          return 2;
+        }
+      } catch (error) {}
+    },
+    [getImgs, idRoom]
+  );
+
   useEffect(() => {
     getHotelList(userInfor?.ID_Account);
   }, [getHotelList, userInfor?.ID_Account]);
-
-  const updateImgHotel = useCallback(async (idImg: number, imgInfor: any) => {
-    const payload = {
-      idImg: idImg,
-      imgUrl: imgInfor?.Image,
-    };
-    const respond = await updateImg(payload);
-    try {
-      const res = await respond;
-      if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
-        openNotificationWithIcon('success', '', 'Update image successfull!');
-        getImgs(idHotel);
-        return 1;
-      } else {
-        openNotificationWithIcon('error', '', 'Update image failed!');
-        return 2;
-      }
-    } catch (error) {}
-  }, [getImgs, idHotel]);
   ////////////////////////////////component
   const edit = (record: Partial<image>) => {
     form.setFieldsValue({
@@ -211,7 +244,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
           ...row,
         });
         console.log('img', row);
-        if(await updateImgHotel(ID_IMG, row)===1){
+        if ((await updateImgHotel(ID_IMG, row)) === 1) {
           setImgs(newData);
         }
         setEditingKey(undefined);
@@ -238,7 +271,9 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
       dataIndex: 'Image',
       key: 'Image',
       render: (_: any, record: image) => {
-        return <Text>{record?.Image}</Text>;
+        return (
+          <Text>{record?.Image ? record?.Image : "Don't have image link"}</Text>
+        );
       },
       editable: true,
       width: '30%',
@@ -258,7 +293,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
                 fallback={'Can display image!'}
               />
             ) : (
-              <Text>Don't have image yet.</Text>
+              <Text>Don't have image.</Text>
             )}
           </Row>
         );
@@ -312,27 +347,46 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
     };
   });
   return (
-    <div className={styles['images-manager']}>
+    <div className={styles['images-room-manager']}>
       <Row className={styles['function-wrapper']}>
-        <Select
-          className={clsx(styles['select-room'], styles['item'])}
-          showSearch
-          // defaultValue={hotelManager?.[0]?.ID_Hotel||''}
-          placeholder='Select a hotel'
-          optionFilterProp='children'
-          onChange={onChange}
-          onSearch={onSearch}
-        >
-          {hotels?.map((h) => (
-            <Option key={h.ID_Hotel} value={h?.ID_Hotel}>
-              {h?.Hotel_Name}
-            </Option>
-          ))}
-        </Select>
+        <Space size={'middle'}>
+          <Select
+            className={clsx(styles['select-room'], styles['item'])}
+            showSearch
+            placeholder='Select a hotel'
+            optionFilterProp='children'
+            onChange={onChangeHotel}
+            onSearch={onSearch}
+          >
+            {hotels?.map((h) => (
+              <Option key={h.ID_Hotel} value={h?.ID_Hotel}>
+                {h?.Hotel_Name}
+              </Option>
+            ))}
+          </Select>
+
+          <Select
+            className={clsx(styles['select-room'], styles['item'])}
+            showSearch
+            placeholder='Select a room'
+            optionFilterProp='children'
+            disabled={idHotel ? false : true}
+            onChange={onChangeRoom}
+            onSearch={onSearch}
+          >
+            {rooms?.map((r) => (
+              <Option key={r.ID_Room} value={r?.ID_Room}>
+                {r?.Room_Name}
+              </Option>
+            ))}
+          </Select>
+        </Space>
+      </Row>
+      <Row className={styles['function-wrapper']}>
         <Button
           className={clsx(styles['btn-add'], styles['item'])}
           onClick={handleAdd}
-          disabled={idHotel ? false : true}
+          disabled={idRoom ? false : true}
           type='primary'
         >
           Add new image
@@ -345,8 +399,15 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
         form={form}
         EditableCell={EditableCell}
       />
+      <ImageForm
+        visible={visible}
+        setVisible={setVisible}
+        getImgs={getImgs}
+        idRoom={idRoom}
+        idHotel={idHotel}
+      />
     </div>
   );
 };
 
-export default ImagesManager;
+export default ImagesRoomManager;

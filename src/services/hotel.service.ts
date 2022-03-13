@@ -41,13 +41,29 @@ export const updateHotelInfor = (ID_Hotel: string, payload: some) => {
       payload?.Phone
   );
 };
-export const getIDHotelLastest=()=>{
-    return api.get('hotel-id-lastest')
-}
-export const saveHotelInfor=(payload:some)=>{
-    return api.post("hotel?Hotel_Name="+payload?.hotelName+"&City="+payload?.city+"&District="+payload?.district+
-    "&Ward="+payload?.ward+"&Street="+payload?.street+"&Phone="+payload?.phone+"&ID_Status="+payload?.idStatus+"&ID_Account="+payload?.idAccount)
-}
+export const getIDHotelLastest = () => {
+  return api.get('hotel-id-lastest');
+};
+export const saveHotelInfor = (payload: some) => {
+  return api.post(
+    'hotel?Hotel_Name=' +
+      payload?.hotelName +
+      '&City=' +
+      payload?.city +
+      '&District=' +
+      payload?.district +
+      '&Ward=' +
+      payload?.ward +
+      '&Street=' +
+      payload?.street +
+      '&Phone=' +
+      payload?.phone +
+      '&ID_Status=' +
+      payload?.idStatus +
+      '&ID_Account=' +
+      payload?.idAccount
+  );
+};
 //room
 export const getHotelRoom = (payload: some) => {
   return api.get('hotel-room/' + payload?.idHotel);
@@ -57,6 +73,47 @@ export const getRoom = (payload: some) => {
 };
 export const editStatusRoom = (payload: some) => {
   return api.put(
-    'hotel-room/' + payload?.idRoom + '?idStatus=' + payload?.idStatus
+    'room-status/' + payload?.idRoom + '?idStatus=' + payload?.idStatus
+  );
+};
+export const getRoomsHotel = (payload: some) => {
+  return api.get('rooms/' + payload?.idHotel);
+};
+export const updateRoomInfor = (idRoom: string, payload: some) => {
+  return api.put(
+    'hotel-room/' +
+      idRoom +
+      '?roomName=' +
+      payload?.roomName +
+      '&bedNumber=' +
+      payload?.bedNumber +
+      '&bathNumber=' +
+      payload?.bathNumber +
+      '&price=' +
+      payload?.price +
+      '&idType='+payload?.idType
+  );
+};
+
+export const getIDRoomLastest = () => {
+  return api.get('room-id-lastest');
+};
+
+export const saveRoomInfor = (payload: some) => {
+  return api.post(
+    'hotel-room?idHotel=' +
+      payload?.idHotel +
+      '&roomName=' +
+      payload?.roomName +
+      '&bedNumber=' +
+      payload?.bedNumber +
+      '&bathNumber=' +
+      payload?.bathNumber +
+      '&price=' +
+      payload?.price +
+      '&idType=' +
+      payload?.idType +
+      '&idStatus=' +
+      payload?.idStatus
   );
 };

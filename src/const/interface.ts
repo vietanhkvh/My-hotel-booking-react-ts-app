@@ -68,6 +68,7 @@ export interface AxiosRequestConfig<D = any> {
   baseURL?: string;
 }
 export interface hotel{
+  key?:string,
   ID_Hotel?:string,
   Hotel_Name?:string,
   City?:string,
@@ -75,5 +76,26 @@ export interface hotel{
   Ward?:string,
   Street?:string,
   Phone?:string,
-  ID_Status?:number
+  ID_Status?:number,
+  ID_Account?:number
+}
+export interface room {
+  ID_Room?: string;
+  Room_Name?: string;
+  ID_Hotel?: string;
+  Bed_Number?: number;
+  Bathroom_Number?: number;
+  Price: number;
+  ID_Status?: number;
+  ID_Type_Room?: string;
+}
+export interface typeRooms{
+  ID_Type_Room?:string,
+  Type_Room_Name?: string
+}
+export interface image{
+  ID_Hotel?: string,
+  ID_IMG?:number;
+  ID_Room?:string,
+  Image?:any
 }

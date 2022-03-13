@@ -18,3 +18,15 @@ export const setHotelSearchingCondition: (payload: any) => ActionInterface = (
   type: ConstActions.setHotelSearchingCondition,
   payload,
 });
+export const setHotelManager: (payload: any) => ActionInterface = (
+  payload
+) => ({
+  type: ConstActions.setHotelManager,
+  payload,
+});
+export const setTypesRoom: (payload: any) => ActionInterface = (
+  payload
+) => ({
+  type: ConstActions.setTypesRoom,
+  payload,
+});

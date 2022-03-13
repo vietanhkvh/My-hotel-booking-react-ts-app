@@ -73,7 +73,8 @@ const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
   const handleLogout = () => {
     localStorage.removeItem('token-key');
     localStorage.removeItem('persist:root');
-    window.location.reload();
+    navigate('/')
+    window.location.reload()
   };
 
   const handleShowUpMenu = (
