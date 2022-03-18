@@ -17,14 +17,14 @@ import CouponsManager from '../pages/Host/CouponManager/CouponManager';
 export const routes: IRoute[] = [
   {
     title: 'hotel',
-    path: 'hotel',
+    path: '/hotel',
     exact: true,
     component: Hotel,
     icon: HotelIc,
   },
   {
     title: 'restaurant',
-    path: 'restaurant',
+    path: '/restaurant',
     exact: true,
     component: Restaurant,
     icon: RestaurantIc,

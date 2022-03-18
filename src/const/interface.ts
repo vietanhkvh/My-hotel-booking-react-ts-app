@@ -118,4 +118,8 @@ export interface payment {
   Date_In?: any;
   Date_out?: any;
   Status?: number;
+  ID_Room?: string,
+  ID_Rating?:number,
+  Rate_Counting?:number,
+  Rate_Detail?: string,
 }

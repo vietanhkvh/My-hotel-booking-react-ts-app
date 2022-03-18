@@ -12,7 +12,7 @@ const Hotel: FunctionComponent<HotelProps> = () => {
         {/* {hotelSearchingByLocation?.map((hotel:some) => (
             <Link to={`/hotel/${hotel.ID_Hotel}`}>{hotel.Hotel_Name}</Link>
         ))} */}
-        {/* <SlickImages images={[]} type='hotel' /> */}
+        <SlickImages images={[]} type='banner' />
         {/* <LocationHotel/> */}
       <Outlet />
     </div>

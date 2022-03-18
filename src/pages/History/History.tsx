@@ -10,23 +10,24 @@ import {
   getPaymentAccountAll,
   updatePaymentSts,
 } from '../../services/payments.service';
-import { MinusOutlined } from '@ant-design/icons';
-import { SUCCESS_CODE } from '../../components/constants';
+import { MinusOutlined, StarOutlined } from '@ant-design/icons';
+import { DATE_FORMAT_BACK_END, SUCCESS_CODE } from '../../components/constants';
 import MyEditTable from '../../components/common/MyEditTable/MyEditTable';
 import { openNotificationWithIcon } from '../../utils/helpers';
 import moment from 'moment';
-import NoPayment from '../../assest/icons/icon_empty_order_hotel.svg' 
+import NoPayment from '../../assest/icons/icon_empty_order_hotel.svg';
+import { editStatusRoom } from '../../services/hotel.service';
+import RatingForm from '../../components/common/RatingForm/RatingForm';
 const { Option } = Select;
 const { Text, Title } = Typography;
-const NoData=()=>{
-
-  return(
+const NoData = () => {
+  return (
     <Row className={styles['no-data']}>
-     <Title level={4}> Don't have payment yet</Title>
-    <Image src={NoPayment} preview={false} width={150} height={150}/>
+      <Title level={4}> Don't have payment yet</Title>
+      <Image src={NoPayment} preview={false} width={150} height={150} />
     </Row>
-  )
-}
+  );
+};
 interface HistoryProps {}
 
 const History: FunctionComponent<HistoryProps> = () => {
@@ -35,7 +36,11 @@ const History: FunctionComponent<HistoryProps> = () => {
   );
   const [isOpenLogin, setIsOpenLogin] = useState<boolean>(false);
   const [payment, setPayment] = useState<payment[]>([]);
+  const [idPaymentClick, setIdPaymentClick] = useState<string>();
   const [idStatus, setIDStatus] = useState<number>(0);
+
+  const [visible, setVisible] = useState<boolean>(false);
+
   const today = moment();
   const columns = [
     {
@@ -111,24 +116,41 @@ const History: FunctionComponent<HistoryProps> = () => {
       key: 'action',
       render: (_: any, record: payment) => (
         <Space>
-          {console.log('today.diff(record?.Date_In '+record?.ID_Payment,today.diff(record?.Date_In, 'days'))}
-          {record?.Status === 2 && today.diff(record?.Date_In,'days') === 0 ? (
+          {record?.Status === 2 && today.diff(record?.Date_In, 'days') === 0 ? (
             <Button
               icon={<MinusOutlined />}
               onClick={() =>
                 handleChangeSts(record?.ID_Payment, record?.Final_Total)
               }
             />
-          ) : <>no action</>}
+          ) : (
+            <></>
+          )}
+          
+          {record?.ID_Rating !== null ? (
+            ''
+          ) : (
+            today.diff(record?.Date_In, 'days') >= 1 ?
+            <Button
+              icon={<StarOutlined />}
+              onClick={() =>
+                handlerClickRate(record?.ID_Payment)
+              }
+            />
+            :''
+          )}
         </Space>
       ),
     },
   ];
   //////////////event
-
+  const handlerClickRate=(idPayment?:string)=>{
+    setVisible(true)
+    setIdPaymentClick(idPayment)
+  }
   const handleChangeSts = (idPayment?: string, totalPay?: number) => {
     const feeCancel = totalPay ? Math.ceil(totalPay * 0.3) : 0;
-    console.log('feeCancel', feeCancel)
+    console.log('feeCancel', feeCancel);
     updateSts(idPayment, feeCancel);
   };
   const onChange = (value: any) => {
@@ -143,9 +165,9 @@ const History: FunctionComponent<HistoryProps> = () => {
         idStatus: idStatus,
       };
       const respond =
-        (await idStatus === 0
+        (await idStatus) === 0
           ? getPaymentAccountAll(payload)
-          : getPaymentAccount(payload));
+          : getPaymentAccount(payload);
       try {
         const res = await respond;
         if (res?.data?.code === SUCCESS_CODE) {
@@ -155,6 +177,7 @@ const History: FunctionComponent<HistoryProps> = () => {
     },
     []
   );
+
   const updateSts = useCallback(
     async (idPayment?: string, totalPay?: number) => {
       const payload = {
@@ -168,6 +191,7 @@ const History: FunctionComponent<HistoryProps> = () => {
         if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
           const message = 'Cancel payment successfull!';
           openNotificationWithIcon('success', '', message);
+          // updateStsRoom(,1)
           getPayment(userInfor?.ID_Account, idStatus);
         } else {
           openNotificationWithIcon('error', '', 'Cancel payment failed!');
@@ -176,11 +200,12 @@ const History: FunctionComponent<HistoryProps> = () => {
     },
     [getPayment, idStatus, userInfor?.ID_Account]
   );
+
   useEffect(() => {
     getPayment(userInfor?.ID_Account, idStatus);
   }, [getPayment, idStatus, userInfor?.ID_Account]);
   ///////////////////////////component child
- 
+
   return (
     <div className={styles['history']}>
       <HeaderSpecial
@@ -203,13 +228,21 @@ const History: FunctionComponent<HistoryProps> = () => {
             <Option value={3}>{'Cancle & refund'}</Option>
           </Select>
         </Row>
-        {
-          payment?.length ?
+        {payment?.length ? (
           <Row className={styles['table-wrapper']}>
-          <MyEditTable data={payment} mergedColumns={columns} />
+            <MyEditTable data={payment} mergedColumns={columns} />
           </Row>
-          : <NoData/>  
-        }
+        ) : (
+          <NoData />
+        )}
+        <RatingForm
+          visible={visible}
+          setVisible={setVisible}
+          getPayment={getPayment}
+          ID_Account={userInfor?.ID_Account}
+          idStatus={idStatus}
+          idPayment={idPaymentClick}
+        />
       </Row>
     </div>
   );

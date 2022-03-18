@@ -52,7 +52,8 @@ export const registerAccount = (payload: some) => {
       payload?.email +
       '&Phone=' +
       payload?.phone +
-      '&Status='+payload?.status
+      '&Status=' +
+      payload?.status
   );
 };
 //type room
@@ -77,5 +78,19 @@ export const saveImg = (payload: some) => {
       payload?.idRoom +
       '&Image=' +
       payload?.imgUrl
+  );
+};
+//rating
+export const getRatingInfor = (payload: some) => {
+  return api.get('rating-account/' + payload?.idPayment);
+};
+export const saveRating = (payload: some) => {
+  return api.post(
+    'rating?idPayment=' +
+      payload?.idPayment +
+      '&rateCounting=' +
+      payload?.rateCounting +
+      '&rateDetail=' +
+      payload?.rateDetail
   );
 };
