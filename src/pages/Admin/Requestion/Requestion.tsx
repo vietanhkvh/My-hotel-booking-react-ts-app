@@ -134,7 +134,7 @@ const Requestion: FunctionComponent<RequestionProps> = () => {
           }
         } catch (error) {}
       },
-      [getAccountRole, updateAccountStatus]
+      [updateAccountStatus]
     );
     ////////////////////event
     const handlerAcceptReq=(idAccount?:number,idRole?:string)=>{

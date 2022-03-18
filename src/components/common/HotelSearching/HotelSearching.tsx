@@ -9,7 +9,6 @@ import {
 import {
   createSearchParams,
   useNavigate,
-  useSearchParams,
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
@@ -29,7 +28,6 @@ import {
   setHotelSearchingByLocation,
   setHotelSearchingCondition,
 } from '../../../store/actions/constAction';
-import { routesPath } from '../../../routes/routerConfig';
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;

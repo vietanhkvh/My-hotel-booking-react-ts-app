@@ -91,28 +91,6 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
   const Price = (props) => {
     ///////////////////////////state
     const { couponValue,minPrice ,finalPrice } = props;
-    // const [percent, setPercent] = useState<number>();
-    /////////////////////////////event
-    // const hanldeGetCoupon = useCallback(async (idHotel: string) => {
-    //   const payload: some = {
-    //     idHotel: idHotel,
-    //   };
-    //   const respond = await getCouponHotel(payload);
-    //   try {
-    //     const res = await respond;
-    //     if (res?.data?.code === SUCCESS_CODE) {
-    //       setPercent(res?.data?.data?.[0].Value);
-    //     }
-    //   } catch (err) {
-    //     alert("Sever doesn't respond");
-    //   }
-    // }, []);
-
-    ///////////////////////////////////////////////////////////////event
-
-    // useEffect(() => {
-    //   hanldeGetCoupon(idHotel);
-    // }, [hanldeGetCoupon, idHotel]);
     return (
       <div className={styles['price-wrapper']}>
         {couponValue ? (
