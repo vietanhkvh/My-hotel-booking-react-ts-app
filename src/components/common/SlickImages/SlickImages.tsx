@@ -8,7 +8,7 @@ interface SlickImagesProps {
   /**
    * image array
    */
-  images: any[];
+  images: some[];
   /**
    * type display
    */
@@ -17,45 +17,48 @@ interface SlickImagesProps {
 
 const SlickImages: FunctionComponent<SlickImagesProps> = (props) => {
   const { images, type } = props;
-  const [imgs, setImgs]=useState<any[]>([]);
-  const imgDefault = useCallback((type: string) => {
-    if(images && images?.length > 0){
-      setImgs(imgs)
-    }
-    else{
-    switch (type) {
-      case 'hotel':
-        setImgs(hotel);
-        break;
-      case 'room':
-        setImgs(room);
-        break;
-      case 'banner':
-        setImgs(banner);
-        break;
-      default:
-        setImgs(hotel);
-        break;
-    }
-  }
-  },[images, imgs]);
-  useEffect(()=>{
-    imgDefault(type)
-  },[imgDefault, type])
+  const [imgs, setImgs] = useState<any[]>([]);
+  const imgDefault = useCallback(
+    (type: string) => {
+      if (images && images?.length > 3) {
+        setImgs(images);
+      } else {
+        switch (type) {
+          case 'hotel':
+            setImgs(hotel);
+            break;
+          case 'room':
+            setImgs(room);
+            break;
+          case 'banner':
+            setImgs(banner);
+            break;
+          default:
+            setImgs(hotel);
+            break;
+        }
+      }
+    },
+    [images]
+  );
+  useEffect(() => {
+    imgDefault(type);
+  }, [imgDefault, type]);
   const settings = {
     dots: true,
     dotsClass: 'slick-dots slick-thumb',
     infinite: true,
     slidesToShow: 3,
     slidesToScroll: 1,
-    customPaging: (i) => (
+    customPaging: (i) =>(
       <a key={i}>
         <Image
+        // key={imgs[i].ID_IMG}
           preview={false}
           src={
-            images && images?.length > 0
-              ? images[i]
-              : imgs?.[i]?.image
+            images && images?.length > 3
+              ? images?.[i]?.Image
+              : imgs?.[i]?.Image
           }
           width={60}
           height={45}
@@ -69,9 +72,10 @@ const SlickImages: FunctionComponent<SlickImagesProps> = (props) => {
   };
   return (
     <Row className={styles['slick-images']}>
+      {console.log('images', images)}
       <Slider {...settings} className={styles['slider']}>
-        { imgs.map((d: some) => (
-          <Image key={d?.id} src={d?.image} width={380} height={195} />
+        {imgs.map((d: some) => (
+          <Image key={d?.ID_IMG} src={d?.Image} width={380} height={195} />
         ))}
       </Slider>
     </Row>

@@ -12,14 +12,6 @@ const Users: FunctionComponent<UsersProps> = (props) => {
   return (
     <div className={styles['users']}>
       <h2>Users</h2>
-
-      <ul>
-        {users?.map((user) => (
-          <li key={user.id}>
-            <Link to={`/users/${user.id}`}>{user.fullName}</Link>
-          </li>
-        ))}
-      </ul>
       <Outlet />
     </div>
   );

@@ -61,7 +61,7 @@ const CustomerInfor: FunctionComponent<CustomerInforProps> = (props) => {
                 hotelInfor?.Rating_Point && hotelInfor?.Rating_Point
               }
             />
-            <Text>({hotelInfor?.Rating_Point})</Text>
+            <Text>({hotelInfor?.Rating_Point? hotelInfor?.Rating_Point: 0})</Text>
           </Row>
           <Row className={styles['date']}>
             <Col span={8} className={styles['date-item']}>

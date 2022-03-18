@@ -12,3 +12,12 @@ export const savePayments_D=(payload:some)=>{
 export const getPaymentInfor=(payload:some)=>{
     return api.get('payment-detail/'+payload?.idPayment+'/'+payload?.idPaymentD)
 }
+export const getPaymentAccount=(payload:some)=>{
+    return api.get('payments-account/'+payload?.idAccount+'/'+payload?.idStatus)
+}
+export const getPaymentAccountAll=(payload:some)=>{
+    return api.get('payments/'+payload?.idAccount)
+}
+export const updatePaymentSts=(payload:some)=>{
+        return api.put("payments/"+payload?.idPayment+"?idStatus="+payload?.idStatus+'&finalTotal='+payload?.finalTotal)
+}

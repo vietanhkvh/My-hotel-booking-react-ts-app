@@ -37,13 +37,11 @@ interface HotelSearchingProps {}
 
 const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   const dispatch: Dispatch<any> = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
   // console.log('hotelSearchingByLocation', hotelSearchingByLocation)
   ////////////////////////////state
   const [adults, setAdults] = useState<number>(1);
-  const [rooms, setRooms] = useState<number>(1);
   const [children, setChildren] = useState<number>(0);
   const [location, setLocation] = useState<string>('');
 
@@ -77,9 +75,6 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   const hanldeSetAdults = (num: number) => {
     setAdults(num);
   };
-  const hanldeSetRooms = (num: number) => {
-    setRooms(num);
-  };
   const hanldeSetChildren = (num: number) => {
     setChildren(num);
   };
@@ -102,12 +97,12 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
       location: string,
       dateIn: any,
       dateOut: any,
-      rooms: number,
       adults: number,
       children: number
     ) => {
       const payload: some = {
         location: location,
+        guestNum: (adults+children)
       };
       const respond = await getSearchingResultLocation(payload);
       try {
@@ -117,7 +112,6 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
             location: location,
             dateIn: dateIn,
             dateOut: dateOut,
-            rooms: rooms,
             adults: adults,
             children: children,
           };
@@ -197,10 +191,8 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
           content={
             <PopupNumberGuest
               adults={adults}
-              rooms={rooms}
               child={children}
               handleSetAdults={hanldeSetAdults}
-              handleSetRooms={hanldeSetRooms}
               handleSetChildren={hanldeSetChildren}
             />
           }
@@ -212,7 +204,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
         >
           <Row style={{ marginTop: 5 }}>
             <Text className={'guest-number'} style={{ fontSize: 16 }}>
-              {rooms} room{isMany(rooms)}, {adults} adult{isMany(rooms)},{' '}
+              {adults} adult{isMany(adults)},{' '}
               {children} children
             </Text>
           </Row>
@@ -231,7 +223,6 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
               location,
               dateIn,
               dateOut,
-              rooms,
               adults,
               children
             )

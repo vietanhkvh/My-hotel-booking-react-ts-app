@@ -1,6 +1,7 @@
 import { Modal } from 'antd';
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import LoginForm from '../LoginForm/LoginForm';
+import RegisterForm from '../RegisterForm/RegisterForm';
 import styles from './LoginModal.module.scss';
 interface LoginModalProps {
   /**
@@ -14,7 +15,7 @@ interface LoginModalProps {
   /**
    * typeScreenModal
    */
-  typeScreenModal: string;
+  typeScreenModal?: string;
   /**
    * setTypeScreenModal
    */
@@ -44,17 +45,16 @@ const LoginModal: FunctionComponent<LoginModalProps> = (props) => {
     inPopper,
   } = props;
   //////////////////////////state
-
+  // const [typeScreen, setTypeScreen] = useState<string>("LOGIN");
   //////////////////////////event
-  useEffect(() => {
-    setTypeModal && setTypeModal(typeScreenModal && typeScreenModal);
-  }, [setTypeModal, typeScreenModal]);
+  // useEffect(() => {
+  //   setTypeScreen();
+  // }, []);
 
   return (
     <div className={styles['login-modal']}>
       <Modal
-       className={styles['modal']}
-        title={'Log in'}
+        className={styles['modal']}
         centered
         visible={isOpenLogin}
         onCancel={() => {
@@ -67,21 +67,16 @@ const LoginModal: FunctionComponent<LoginModalProps> = (props) => {
         width={'100%'}
         style={{ textAlign: 'center', maxWidth: 407 }}
       >
-        {/* {typeScreen === "LOGIN" ? ( */}
-        <LoginForm
-        setTypeModal={setTypeModal}
-        setIsOpenLogin={setIsOpenLogin}
-        // handleClose={handleClose}
-        />
-        {/* ) : typeScreen === "FORGOT" ? (
-    <Desktopforgot setTypeModal={setTypeModal} />
-  ) : (
-    <Desktoplogup
-      step={step}
-      setStep={setStep}
-      setTypeModal={setTypeModal}
-    />
-  )} */}
+        {console.log('typeScreenModal', typeScreenModal)}
+        {typeScreenModal === 'LOGIN' ? (
+          <LoginForm
+            setTypeModal={setTypeModal}
+            setIsOpenLogin={setIsOpenLogin}
+            handleClose={handleClose}
+          />
+        ) : (
+          <RegisterForm setTypeModal={setTypeModal} handleClose={handleClose} />
+        )}
       </Modal>
     </div>
   );

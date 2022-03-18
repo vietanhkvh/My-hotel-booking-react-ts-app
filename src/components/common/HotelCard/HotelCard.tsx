@@ -1,6 +1,6 @@
 import { Card, Col, Image, Rate, Row, Typography } from 'antd';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { createSearchParams, Link, useNavigate } from 'react-router-dom';
 import styles from './HotelCard.module.scss';
 import LocationIC from '../../../assest/icons/location-50.png';
 import Hotel from '../../../assest/images/hotel.jpg';
@@ -8,6 +8,8 @@ import { isMany } from '../../../utils/helpers';
 import { getCouponHotel } from '../../../services/coupon.service';
 import { some, SUCCESS_CODE } from '../../constants';
 import PhoneIC from '../../../assest/icons/phone-50.png' 
+import { useSelector } from 'react-redux';
+import { constState } from '@src/store/reducer/constReducer';
 const { Meta } = Card;
 const { Text } = Typography;
 interface HotelCardProps {
@@ -43,6 +45,10 @@ interface HotelCardProps {
    * rating point
    */
   rating: number;
+  /**
+   * params
+   */
+  params: any;
 }
 
 const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
@@ -56,8 +62,10 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
     image,
     reviewNumber,
     rating,
+    params
   } = props;
   const navigate = useNavigate();
+  
   ////////////////////////component
   const Title = (props) => {
     const { name, idHotel } = props;
@@ -181,7 +189,11 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
   };
   ///////////////////////////event
   const handleClickHotelCard = (idHotel:string) => {
-    navigate(`/hotel/${idHotel}`);
+    
+    navigate({
+      pathname:`/hotel/${idHotel}`,
+      search: `?${createSearchParams(params)}`
+    });
   };
   return (
     <div className={styles['hotel-card']}>

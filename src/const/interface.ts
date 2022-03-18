@@ -13,7 +13,7 @@ export interface userInfoInterface {
   Password?: string;
   FullName?: string;
   Email?: string;
-  Phone?:string;
+  Phone?: string;
   Status?: number;
   // };
 }
@@ -45,7 +45,7 @@ export interface hotelRoom {
   Bed_Number?: number;
   Bathroom_Number?: number;
   Price: number;
-  ID_Coupon?:number;
+  ID_Coupon?: number;
   Coupon_Value?: number;
   Final_Price: number;
   ID_Status?: number;
@@ -67,17 +67,17 @@ export interface AxiosRequestConfig<D = any> {
   method?: Method;
   baseURL?: string;
 }
-export interface hotel{
-  key?:string,
-  ID_Hotel?:string,
-  Hotel_Name?:string,
-  City?:string,
-  District?:string,
-  Ward?:string,
-  Street?:string,
-  Phone?:string,
-  ID_Status?:number,
-  ID_Account?:number
+export interface hotel {
+  key?: string;
+  ID_Hotel?: string;
+  Hotel_Name?: string;
+  City?: string;
+  District?: string;
+  Ward?: string;
+  Street?: string;
+  Phone?: string;
+  ID_Status?: number;
+  ID_Account?: number;
 }
 export interface room {
   ID_Room?: string;
@@ -89,13 +89,33 @@ export interface room {
   ID_Status?: number;
   ID_Type_Room?: string;
 }
-export interface typeRooms{
-  ID_Type_Room?:string,
-  Type_Room_Name?: string
+export interface typeRooms {
+  ID_Type_Room?: string;
+  Type_Room_Name?: string;
 }
-export interface image{
-  ID_Hotel?: string,
-  ID_IMG?:number;
-  ID_Room?:string,
-  Image?:any
+export interface image {
+  ID_Hotel?: string;
+  ID_IMG?: number;
+  ID_Room?: string;
+  Image?: any;
+}
+export interface coupon {
+  ID_Coupon?: number;
+  ID_Hotel?: string;
+  Name?: string;
+  Value?: number;
+  State_Date?: any;
+  End_Date?: any;
+  ID_Status?: number;
+}
+export interface payment {
+  ID_Payment?: string;
+  ID_Account?: string;
+  Guest_Number?: number;
+  First_Total?: number;
+  ID_Coupon?: number;
+  Final_Total?: number;
+  Date_In?: any;
+  Date_out?: any;
+  Status?: number;
 }

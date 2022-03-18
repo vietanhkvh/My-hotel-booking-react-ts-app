@@ -1,8 +1,10 @@
 import { SUCCESS_CODE } from '../../../components/constants';
 import { hotel } from '../../../const/interface';
 import {
+  getHotelManager,
   getHotelTableForHost,
   updateHotelInfor,
+  updateHotelStatus,
 } from '../../../services/hotel.service';
 import {
   Badge,
@@ -14,24 +16,33 @@ import {
   InputNumber,
   Popconfirm,
   Form,
+  Row,
+  Select,
 } from 'antd';
-import { Dispatch, FunctionComponent, useCallback, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import {
   EditFilled,
   MinusOutlined,
   CloseOutlined,
   CheckOutlined,
-  PlusOutlined
+  PlusOutlined,
 } from '@ant-design/icons';
 import styles from './HotelManager.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { userState } from '@src/store/reducer/userReducer';
-import { openNotificationWithIcon } from '../../../utils/helpers';
+import { isDisableBtnAdd, openNotificationWithIcon } from '../../../utils/helpers';
 import HotelInforForm from '../../../components/common/HotelInforForm/HotelInforForm';
 import { setHotelManager } from '../../../store/actions/constAction';
 import MyEditTable from '../../../components/common/MyEditTable/MyEditTable';
 // import EditableCell from '../../../components/common/EditableCell/EditableCell';
 const { Text } = Typography;
+const { Option } = Select;
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
@@ -86,7 +97,7 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
   const dispatch: Dispatch<any> = useDispatch();
   ////////////////////state
   const [hotelList, setHotelList] = useState<hotel[]>([]);
-
+  const [idStatus, setIDStatus] = useState<number>(0);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string>('');
   //modal hotel form state
@@ -170,6 +181,7 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
       key: 'action',
       render: (_: any, record: hotel) => {
         const editable = isEditing(record);
+        const re = record;
         return editable ? (
           <span>
             <Button
@@ -188,14 +200,31 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
               disabled={editingKey !== ''}
               onClick={() => edit(record)}
             />
-            {record?.ID_Status===1?<Button icon={<MinusOutlined />}/>: <Button icon={<PlusOutlined />}/>}
-            
+            {record?.ID_Status === 1 ? (
+              <Button
+                icon={<MinusOutlined />}
+                onClick={() => handleChangeSts(re?.ID_Hotel || '', 3)}
+              />
+            ) : (
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => handleChangeSts(re?.ID_Hotel || '', 4)}
+              />
+            )}
           </Space>
         );
       },
     },
   ];
   ///////////////////event
+  const onChange = (value: any) => {
+    console.log(`selected ${value}`);
+    setIDStatus(value);
+    getHotelList(userInfor?.ID_Account, value);
+  };
+  const handleChangeSts = (idHotel: string, idStatus: number) => {
+    updateSts(idHotel, idStatus);
+  };
 
   const edit = (record: Partial<hotel>) => {
     form.setFieldsValue({
@@ -229,8 +258,8 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
           ...row,
         });
         setHotelList(newData);
-        console.log('row', row)
-        updateHotel(ID_Hotel,row);
+        console.log('row', row);
+        updateHotel(ID_Hotel, row);
         setEditingKey('');
       } else {
         newData.push(row);
@@ -262,11 +291,11 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
     setVisible(true);
   };
   const handleAdd = () => {
-    showModal()
+    showModal();
   };
 
   ///////////////////////api
-  const updateHotel = useCallback(async (ID_Hotel:string,hotelInfor: any) => {
+  const updateHotel = useCallback(async (ID_Hotel: string, hotelInfor: any) => {
     const payload = {
       ID_Hotel: hotelInfor?.ID_Hotel,
       Hotel_Name: hotelInfor?.Hotel_Name,
@@ -276,7 +305,7 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
       Street: hotelInfor?.Street,
       Phone: hotelInfor?.Phone,
     };
-    const respond = await updateHotelInfor(ID_Hotel,payload);
+    const respond = await updateHotelInfor(ID_Hotel, payload);
     try {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
@@ -289,30 +318,83 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
       openNotificationWithIcon('error', '', 'Update hotel failed');
     }
   }, []);
-  const getHotelList = useCallback(async (idAccount: number | undefined) => {
+
+  const updateSts = useCallback(async (idHotel: string, idStatus: number) => {
     const payload = {
-      idAccount: idAccount,
+      idHotel: idHotel,
+      idStatus: idStatus,
     };
-    const respond = await getHotelTableForHost(payload);
-    // const respond = await getHotelTable();
+    const respond = await updateHotelStatus(payload);
     try {
       const res = await respond;
-      if (res?.data?.code === SUCCESS_CODE) {
-        setHotelList(res?.data?.data);
-        dispatch(setHotelManager(res?.data?.data));
+      if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
+        const message =
+          'Sent request for hotel with ID: ' + idHotel + ' successfull!';
+        openNotificationWithIcon('success', '', message);
+      } else {
+        openNotificationWithIcon(
+          'error',
+          '',
+          'Sent request for hotel with ID: ' + idHotel + ' failed'
+        );
       }
     } catch (error) {}
-  }, [dispatch]);
-
+  }, []);
+  const getHotelList = useCallback(
+    async (idAccount: number | undefined, idStatus?: number) => {
+      console.log('idStatus', idStatus);
+      const payload = {
+        idAccount: idAccount,
+        idStatus: idStatus,
+      };
+      const respond =
+        (await idStatus) === 0
+          ? getHotelTableForHost(payload)
+          : getHotelManager(payload);
+      // const respond = await getHotelTable();
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE) {
+          setHotelList(res?.data?.data);
+          dispatch(setHotelManager(res?.data?.data));
+        }
+      } catch (error) {}
+    },
+    [dispatch]
+  );
+  // const isDisableBtnAdd = (idStatus: number, editingKey: string) => {
+  //   if (idStatus !== null) {
+  //     if (editingKey === '') return false;
+  //     else return true;
+  //   }
+  //   return true;
+  // };
   useEffect(() => {
-    getHotelList(userInfor?.ID_Account);
-  }, [getHotelList, userInfor?.ID_Account]);
-  
+    getHotelList(userInfor?.ID_Account, idStatus);
+  }, [getHotelList, idStatus, userInfor?.ID_Account]);
+
   return (
     <div className={styles['hotel-manager']}>
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+      <Row className={styles['select']}>
+        <Select
+          onChange={onChange}
+          style={{ width: 120 }}
+          defaultValue={idStatus}
+          autoFocus={true}
+        >
+          <Option value={0}>All</Option>
+          <Option value={1}>Active</Option>
+          <Option value={2}>Non-Active</Option>
+        </Select>
+        <Button
+          className={styles['btn-add']}
+          onClick={handleAdd}
+          type='primary'
+          disabled={isDisableBtnAdd(idStatus, editingKey)}
+        >
           Add a hotel
         </Button>
+      </Row>
       <Form form={form} component={false}>
         <Table
           columns={mergedColumns}
@@ -329,7 +411,12 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
           }}
         />
       </Form>
-      <HotelInforForm visible={visible} setVisible={setVisible} getHotelList={getHotelList}/>
+      <HotelInforForm
+        visible={visible}
+        setVisible={setVisible}
+        idStatus={idStatus}
+        getHotelList={getHotelList}
+      />
       {/* <MyEditTable mergedColumns={mergedColumns} data={hotelList} cancel={cancel} /> */}
     </div>
   );

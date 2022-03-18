@@ -46,7 +46,7 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
   const { userInfor } = props;
   const navigate = useNavigate();
   /////////////////////////////states
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [user, setUser] = useState<any>({});
   const roomInfor = JSON.parse(localStorage.getItem('room-infor') || '');
   const hotelInfor = JSON.parse(localStorage.getItem('hotel-infor') || '');
@@ -222,17 +222,7 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
             >
               <Radio.Group name='radiogroup' onChange={onChange} value={value}>
                 <Space direction='vertical'>
-                  <Radio value={1}>
-                    <Image
-                      style={{ lineHeight: '20px' }}
-                      src={Cash}
-                      preview={false}
-                      width={20}
-                      height={20}
-                    />
-                    <Text style={{ paddingLeft: 10 }}>Pay before check in</Text>
-                  </Radio>
-                  <Radio value={2}>
+                <Radio value={2}>
                     <Image
                       src={CreditCard}
                       preview={false}
@@ -243,6 +233,17 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
                       Pay with credit card
                     </Text>
                   </Radio>
+                  <Radio value={1}>
+                    <Image
+                      style={{ lineHeight: '20px' }}
+                      src={Cash}
+                      preview={false}
+                      width={20}
+                      height={20}
+                    />
+                    <Text style={{ paddingLeft: 10 }}>Pay before check in</Text>
+                  </Radio>
+                  
                 </Space>
               </Radio.Group>
             </Form.Item>

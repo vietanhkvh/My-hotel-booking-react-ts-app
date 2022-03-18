@@ -14,7 +14,7 @@ import LogoMob from '../../../assest/images/logo-mob.png';
 // import MenuHost from '../MenuHost/MenuHost';
 import RoomIC from '../../../assest/icons/hotel-room-100.png';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 interface DeskHostLayoutProps {}
 

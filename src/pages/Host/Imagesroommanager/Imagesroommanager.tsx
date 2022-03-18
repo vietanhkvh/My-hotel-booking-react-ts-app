@@ -20,7 +20,7 @@ import {
 import styles from './Imagesroommanager.module.scss';
 import {
   EditFilled,
-  MinusOutlined,
+  DeleteOutlined,
   CloseOutlined,
   CheckOutlined,
 } from '@ant-design/icons';
@@ -29,7 +29,7 @@ import { hotel, image, room } from '../../../const/interface';
 import MyEditTable from '../../../components/common/MyEditTable/MyEditTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { userState } from '@src/store/reducer/userReducer';
-import { SUCCESS_CODE } from '../../../components/constants';
+import { some, SUCCESS_CODE } from '../../../components/constants';
 import {
   getHotelTableForHost,
   getRoomsHotel,
@@ -38,7 +38,8 @@ import { setHotelManager } from '../../../store/actions/constAction';
 import { getImgRoom, updateImg } from '../../../services/common.service';
 import { openNotificationWithIcon } from '../../../utils/helpers';
 import ImageForm from '../../../components/common/ImageForm/ImageForm';
-
+import { isDisableBtnAdd } from '../../../utils/helpers';
+import { deleteImage } from '../../../services/images.service';
 const { Text } = Typography;
 const { Option } = Select;
 
@@ -123,6 +124,7 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
   const [visible, setVisible] = useState<boolean>(false);
 
   const isEditing = (record: image) => record.ID_IMG === editingKey;
+  
   ////////////////////////event
   function onChangeHotel(value) {
     console.log(`selected ${value}`);
@@ -177,21 +179,18 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
     } catch (error) {}
   }, []);
 
-  const getImgs = useCallback(
-    async (idRoom: string) => {
-      const payload = {
-        idRoom: idRoom,
-      };
-      const respond = await getImgRoom(payload);
-      try {
-        const res = await respond;
-        if (res?.data?.code === SUCCESS_CODE) {
-          setImgs(res?.data?.data);
-        }
-      } catch (error) {}
-    },
-    [idHotel]
-  );
+  const getImgs = useCallback(async (idRoom?: string) => {
+    const payload = {
+      idRoom: idRoom,
+    };
+    const respond = await getImgRoom(payload);
+    try {
+      const res = await respond;
+      if (res?.data?.code === SUCCESS_CODE) {
+        setImgs(res?.data?.data);
+      }
+    } catch (error) {}
+  }, []);
 
   const updateImgHotel = useCallback(
     async (idImg: number, imgInfor: any) => {
@@ -214,6 +213,35 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
     },
     [getImgs, idRoom]
   );
+  const deleteImgs = useCallback(async (idImg?: number, idRoom?:string) => {
+    const payload: some = {
+      idImg: idImg,
+    };
+    const respond = await deleteImage(payload);
+    try {
+      const res = respond;
+      if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
+        const message = 'Remove image with id: ' + idImg + ' successfull!';
+        openNotificationWithIcon('success', '', message);
+        getImgs(idRoom);
+      } else {
+        openNotificationWithIcon(
+          'error',
+          '',
+          'Remove image with id: ' + idImg + ' failed'
+        );
+      }
+    } catch (error) {
+      openNotificationWithIcon(
+        'error',
+        '',
+        'Remove image with id: ' + idImg + ' failed'
+      );
+    }
+  }, [getImgs, idRoom]);
+  const hanlderDeleteImg=useCallback((idImg?:number, idRoom?:string)=>{
+    deleteImgs(idImg, idRoom)
+  },[deleteImgs])
 
   useEffect(() => {
     getHotelList(userInfor?.ID_Account);
@@ -324,7 +352,7 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
               disabled={editingKey !== undefined}
               onClick={() => edit(record)}
             />
-            <Button icon={<MinusOutlined />} />
+            <Button icon={<DeleteOutlined />} onClick={()=>hanlderDeleteImg(record?.ID_IMG, record?.ID_Room)}/>
           </Space>
         );
       },
@@ -346,6 +374,7 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
       }),
     };
   });
+
   return (
     <div className={styles['images-room-manager']}>
       <Row className={styles['function-wrapper']}>
@@ -370,7 +399,6 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
             showSearch
             placeholder='Select a room'
             optionFilterProp='children'
-            disabled={idHotel ? false : true}
             onChange={onChangeRoom}
             onSearch={onSearch}
           >
@@ -386,7 +414,7 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
         <Button
           className={clsx(styles['btn-add'], styles['item'])}
           onClick={handleAdd}
-          disabled={idRoom ? false : true}
+          disabled={isDisableBtnAdd(idRoom, editingKey)}
           type='primary'
         >
           Add new image
@@ -403,8 +431,9 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
         visible={visible}
         setVisible={setVisible}
         getImgs={getImgs}
-        idRoom={idRoom}
         idHotel={idHotel}
+        idRoom={idRoom}
+        type='room'
       />
     </div>
   );

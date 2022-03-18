@@ -12,7 +12,7 @@ import HotelRoomIC from '../assest/icons/hotel-room-100.png';
 import HotelManager from '../pages/Host/HotelManager/HotelManager';
 import RoomManager from '../pages/Host/RoomManager/RoomManager';
 import ImagesManager from '../pages/Host/ImagesManager/ImagesManager';
-import CouponsManager from '../pages/Host/CouponsManager/CouponsManager';
+import CouponsManager from '../pages/Host/CouponManager/CouponManager';
 
 export const routes: IRoute[] = [
   {

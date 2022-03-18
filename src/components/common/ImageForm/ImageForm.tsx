@@ -7,13 +7,14 @@ import { Button, Form, Input, Modal, Row } from 'antd';
 interface ImageFormProps {
   visible?: boolean;
   setVisible?: (val: boolean) => void;
-  idHotel?:string;
+  idHotel?: string;
   idRoom?: string;
   getImgs?: (val: string) => void;
+  type?: string;
 }
 
 const ImageForm: FunctionComponent<ImageFormProps> = (props) => {
-  const { visible, setVisible, idHotel, idRoom, getImgs } = props;
+  const { visible, setVisible, idHotel, idRoom, getImgs,type } = props;
   //////////////////////state
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   //////////////////////////event
@@ -42,22 +43,22 @@ const ImageForm: FunctionComponent<ImageFormProps> = (props) => {
   const saveImage = useCallback(
     async (values: any) => {
       const payload = {
-        idHotel:idHotel,
-        idRoom:idRoom,
-        imgUrl: values?.Image
+        idHotel: idHotel,
+        idRoom: idRoom,
+        imgUrl: values?.Image,
       };
       const respond = await saveImg(payload);
       try {
         const res = await respond;
         if (res?.data?.code === SUCCESS_CODE) {
           openNotificationWithIcon('success', '', 'Add new image successfull1');
-          getImgs && getImgs(idRoom || '');
+          type==='hotel'? getImgs&&getImgs(idHotel||'') : getImgs&&getImgs(idRoom||'');
         } else if (res?.data?.code !== SUCCESS_CODE || res?.data?.data) {
           openNotificationWithIcon('error', '', 'Add new image failed!');
         }
       } catch (error) {}
     },
-    [getImgs, idRoom]
+    [getImgs, idHotel, idRoom, type]
   );
   return (
     <div className={styles['image-form']}>

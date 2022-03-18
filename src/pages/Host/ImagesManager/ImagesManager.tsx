@@ -22,7 +22,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import {
   EditFilled,
-  MinusOutlined,
+  DeleteOutlined,
   CloseOutlined,
   CheckOutlined,
 } from '@ant-design/icons';
@@ -30,10 +30,12 @@ import styles from './ImagesManager.module.scss';
 import MyEditTable from '../../../components/common/MyEditTable/MyEditTable';
 import { getHotelTableForHost } from '../../../services/hotel.service';
 import { setHotelManager } from '../../../store/actions/constAction';
-import { SUCCESS_CODE } from '../../../components/constants';
+import { some, SUCCESS_CODE } from '../../../components/constants';
 import { getImgHotel, updateImg } from '../../../services/common.service';
 import { userState } from '../../../store/reducer/userReducer';
-import { openNotificationWithIcon } from '../../../utils/helpers';
+import { isDisableBtnAdd, openNotificationWithIcon } from '../../../utils/helpers';
+import ImageForm from '../../../components/common/ImageForm/ImageForm';
+import { deleteImage } from '../../../services/images.service';
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -150,7 +152,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
     [dispatch]
   );
 
-  const getImgs = useCallback(async (idHotel: string) => {
+  const getImgs = useCallback(async (idHotel?: string) => {
     const payload = {
       idHotel: idHotel,
     };
@@ -167,24 +169,57 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
     getHotelList(userInfor?.ID_Account);
   }, [getHotelList, userInfor?.ID_Account]);
 
-  const updateImgHotel = useCallback(async (idImg: number, imgInfor: any) => {
-    const payload = {
+  const updateImgHotel = useCallback(
+    async (idImg: number, imgInfor: any) => {
+      const payload = {
+        idImg: idImg,
+        imgUrl: imgInfor?.Image,
+      };
+      const respond = await updateImg(payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
+          openNotificationWithIcon('success', '', 'Update image successfull!');
+          getImgs(idHotel);
+          return 1;
+        } else {
+          openNotificationWithIcon('error', '', 'Update image failed!');
+          return 2;
+        }
+      } catch (error) {}
+    },
+    [getImgs, idHotel]
+  );
+  const deleteImgs = useCallback(async (idImg?: number, idHotel?:string) => {
+    const payload: some = {
       idImg: idImg,
-      imgUrl: imgInfor?.Image,
     };
-    const respond = await updateImg(payload);
+    const respond = await deleteImage(payload);
     try {
-      const res = await respond;
+      const res = respond;
       if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
-        openNotificationWithIcon('success', '', 'Update image successfull!');
+        const message = 'Remove image with id: ' + idImg + ' successfull!';
+        openNotificationWithIcon('success', '', message);
         getImgs(idHotel);
-        return 1;
       } else {
-        openNotificationWithIcon('error', '', 'Update image failed!');
-        return 2;
+        openNotificationWithIcon(
+          'error',
+          '',
+          'Remove image with id: ' + idImg + ' failed'
+        );
       }
-    } catch (error) {}
-  }, [getImgs, idHotel]);
+    } catch (error) {
+      openNotificationWithIcon(
+        'error',
+        '',
+        'Remove image with id: ' + idImg + ' failed'
+      );
+    }
+  }, [getImgs]);
+
+  const hanlderDeleteImg=useCallback((idImg?:number, idHotel?:string)=>{
+    deleteImgs(idImg,idHotel)
+  },[deleteImgs])
   ////////////////////////////////component
   const edit = (record: Partial<image>) => {
     form.setFieldsValue({
@@ -211,7 +246,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
           ...row,
         });
         console.log('img', row);
-        if(await updateImgHotel(ID_IMG, row)===1){
+        if ((await updateImgHotel(ID_IMG, row)) === 1) {
           setImgs(newData);
         }
         setEditingKey(undefined);
@@ -253,8 +288,8 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
             {record?.Image ? (
               <Image
                 src={record?.Image}
-                width={200}
-                height={200}
+                width={100}
+                height={100}
                 fallback={'Can display image!'}
               />
             ) : (
@@ -289,7 +324,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
               disabled={editingKey !== undefined}
               onClick={() => edit(record)}
             />
-            <Button icon={<MinusOutlined />} />
+            <Button icon={<DeleteOutlined />} onClick={()=>hanlderDeleteImg(record?.ID_IMG, record?.ID_Hotel)}/>
           </Space>
         );
       },
@@ -311,6 +346,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
       }),
     };
   });
+
   return (
     <div className={styles['images-manager']}>
       <Row className={styles['function-wrapper']}>
@@ -332,7 +368,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
         <Button
           className={clsx(styles['btn-add'], styles['item'])}
           onClick={handleAdd}
-          disabled={idHotel ? false : true}
+          disabled={isDisableBtnAdd(idHotel,editingKey)}
           type='primary'
         >
           Add new image
@@ -344,6 +380,14 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
         cancel={cancel}
         form={form}
         EditableCell={EditableCell}
+      />
+      <ImageForm
+        visible={visible}
+        setVisible={setVisible}
+        getImgs={getImgs}
+        idHotel={idHotel}
+        idRoom={''}
+        type='hotel'
       />
     </div>
   );

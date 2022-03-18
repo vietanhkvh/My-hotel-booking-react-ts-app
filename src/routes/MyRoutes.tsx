@@ -18,8 +18,11 @@ import History from '../pages/History/History';
 import HotelManager from '../pages/Host/HotelManager/HotelManager';
 import RoomManager from '../pages/Host/RoomManager/RoomManager';
 import ImagesManager from '../pages/Host/ImagesManager/ImagesManager';
-import CouponsManager from '../pages/Host/CouponsManager/CouponsManager';
 import ImagesRoomManager from '../pages/Host/Imagesroommanager/Imagesroommanager';
+import CouponManager from '../pages/Host/CouponManager/CouponManager';
+import Accounts from '../pages/Admin/HostUser/HostUser';
+import ActiveRequestion from '../pages/Admin/ActiveRequestion/ActiveRequestion';
+import Requestion from '../pages/Admin/Requestion/Requestion';
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
@@ -66,8 +69,14 @@ const MyRoutes = (props) => {
 
         <Route path='hotel-images' element={<ImagesManager />} />
         <Route path='room-images' element={<ImagesRoomManager/>} />
-        <Route path='coupon-manager' element={<CouponsManager />} />
+        <Route path='coupon-manager' element={<CouponManager />} />
 
+        {/* Admin */}
+        <Route path='host-manager' element={<Accounts type='HOS' />} />
+        <Route path='guest-manager' element={<Accounts type='GUE'/>} />
+        <Route path='de-active-requestion' element={<ActiveRequestion />} />
+        <Route path='host-requestion' element={<Requestion />} />
+        
         <Route path={'*'} element={<Nopage />} />
         {/* {routerConfig.map((r: any) => {
         const { component, needAuthor, grantPermision, ...rest } = r;

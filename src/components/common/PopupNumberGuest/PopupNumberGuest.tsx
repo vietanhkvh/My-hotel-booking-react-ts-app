@@ -20,10 +20,6 @@ interface PopupNumberGuestProps {
    */
   handleSetAdults?: (num: number) => void;
   /**
-   * set rooms num
-   */
-  handleSetRooms?: (num: number) => void;
-  /**
    * set child num
    */
   handleSetChildren?: (num: number) => void;
@@ -32,10 +28,8 @@ interface PopupNumberGuestProps {
 const PopupNumberGuest: FunctionComponent<PopupNumberGuestProps> = (props) => {
   const {
     adults,
-    rooms,
     child,
     handleSetAdults,
-    handleSetRooms,
     handleSetChildren,
   } = props;
   return (
@@ -43,19 +37,9 @@ const PopupNumberGuest: FunctionComponent<PopupNumberGuestProps> = (props) => {
       <Row className={styles['wrapper']}>
         <InputNumber
           className={styles['input-number']}
-          addonBefore={<Text className={styles['title']}>Room</Text>}
-          min={1}
-          defaultValue={1}
-          value={rooms}
-          onChange={(value) => handleSetRooms && handleSetRooms(value)}
-        />
-      </Row>
-      <Divider type='horizontal' />
-      <Row className={styles['wrapper']}>
-        <InputNumber
-          className={styles['input-number']}
           addonBefore={<Text className={styles['title']}>Adult</Text>}
           min={1}
+          max={50}
           defaultValue={2}
           value={adults}
           onChange={(value) => handleSetAdults && handleSetAdults(value)}
@@ -67,6 +51,7 @@ const PopupNumberGuest: FunctionComponent<PopupNumberGuestProps> = (props) => {
           className={styles['input-number']}
           addonBefore={<Text className={styles['title']}>Children</Text>}
           min={0}
+          max={50}
           defaultValue={0}
           value={child}
           onChange={(value) => handleSetChildren && handleSetChildren(value)}

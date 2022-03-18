@@ -20,11 +20,12 @@ import { openNotificationWithIcon } from '../../../utils/helpers';
 interface HotelInforFormProps {
   visible?: boolean;
   setVisible?: (val: boolean) => void;
-  getHotelList?: (val?:number)=> void;
+  getHotelList?: (val?:number, val1?:any )=> void;
+  idStatus?:number;
 }
 
 const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
-  const { visible, setVisible, getHotelList } = props;
+  const { visible, setVisible, getHotelList, idStatus } = props;
   const userInfor = useSelector(
     (state: { user: userState }) => state.user?.userInfor
   );
@@ -71,7 +72,7 @@ const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
       const res = await respond
       if(res?.data?.code===SUCCESS_CODE){
         openNotificationWithIcon('success', '', 'Add new hotel successfull1');
-        getHotelList&&getHotelList(userInfor?.ID_Account)
+        getHotelList&&getHotelList(userInfor?.ID_Account, idStatus )
       }
       else{
         openNotificationWithIcon('error', '', 'Add new hotel failed!');
@@ -80,7 +81,7 @@ const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
     } catch (error) {
       
     }
-  },[])
+  },[getHotelList, idStatus, userInfor?.ID_Account])
   const getHotelIDLastest=useCallback(async()=>{
     const respond= await getIDHotelLastest();
     try {
@@ -134,7 +135,7 @@ const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
                 initialValue={2}
                 // rules={[{ required: true, message: "Please input hotel's ward!" }]}
               >
-                <InputNumber readOnly />
+                <Input readOnly />
               </Form.Item>
             </Space>
           </Row>

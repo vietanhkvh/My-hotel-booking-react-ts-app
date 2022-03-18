@@ -7,7 +7,7 @@ import { some } from '../../constants';
 import { setUserInforAction } from '../../../store/actions/userAction';
 import { useDispatch } from 'react-redux';
 import { openNotificationWithIcon } from '../../../utils/helpers';
-const { Text } = Typography;
+const { Text,Title } = Typography;
 interface LoginFormProps {
   /**
    * typeScreenModal
@@ -76,6 +76,7 @@ const LoginForm: FunctionComponent<LoginFormProps> = (props) => {
 
   return (
     <div className={styles['login-form']}>
+      <Title className={styles['title']} level={4}>Log in</Title>
       <Form
         name='basic'
         labelCol={{ span: 8 }}

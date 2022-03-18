@@ -65,18 +65,23 @@ interface BtnAccountProps {
 const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
   ///////////////////////state
   const { userInfor, isMobile, handleOpen } = props;
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   ///////////////////////event
-  const hanlderClickHistory=()=>{
-    navigate('/history')
-  }
+  const hanlderClickHistory = () => {
+    navigate('/history');
+  };
   const handleLogout = () => {
     localStorage.removeItem('token-key');
     localStorage.removeItem('persist:root');
-    navigate('/')
-    window.location.reload()
+    navigate('/');
+    window.location.reload();
   };
-
+  const handlerInfor = (idUser?: number) => {
+    navigate(`/users/${idUser}`);
+  };
+  const handlerSignUp = () => {
+    if (!isMobile) handleOpen && handleOpen('REGISTER');
+  };
   const handleShowUpMenu = (
     userInfor: null | undefined | userInfoInterface
   ) => {
@@ -88,11 +93,9 @@ const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
             <>
               <Row
                 className={styles['container']}
-                // onClick={() =>
-                //   isMobile
-                //     ? 'router.push(routesPath.login)'
-                //     : handleOpen && handleOpen('LOGIN')
-                // }
+                onClick={() => {
+                  handlerInfor(userInfor?.ID_Account);
+                }}
               >
                 <Text className={styles['text']}>Profile</Text>
               </Row>
@@ -107,11 +110,9 @@ const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
             <>
               <Row
                 className={styles['container']}
-                // onClick={() =>
-                //   isMobile
-                //     ? 'router.push(routesPath.login)'
-                //     : handleOpen && handleOpen('LOGIN')
-                // }
+                onClick={() => {
+                  handlerInfor(userInfor?.ID_Account);
+                }}
               >
                 <Text className={styles['text']}>Profile</Text>
               </Row>
@@ -129,15 +130,16 @@ const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
             <>
               <Row
                 className={styles['container']}
-                // onClick={() =>
-                //   isMobile
-                //     ? 'router.push(routesPath.login)'
-                //     : handleOpen && handleOpen('LOGIN')
-                // }
+                onClick={() => {
+                  handlerInfor(userInfor?.ID_Account);
+                }}
               >
                 <Text className={styles['text']}>Profile</Text>
               </Row>
-              <Row className={styles['container']} onClick={hanlderClickHistory}>
+              <Row
+                className={styles['container']}
+                onClick={hanlderClickHistory}
+              >
                 <Text className={styles['text']}>History</Text>
               </Row>
               <Row className={styles['container']} onClick={handleLogout}>
@@ -151,11 +153,9 @@ const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
             <>
               <Row
                 className={styles['container']}
-                onClick={() =>
-                  isMobile
-                    ? 'router.push(routesPath.login)'
-                    : handleOpen && handleOpen('LOGIN')
-                }
+                onClick={() => {
+                  handlerInfor(userInfor?.ID_Account);
+                }}
               >
                 <Text className={styles['text']}>Profile</Text>
               </Row>
@@ -179,7 +179,7 @@ const BtnAccount: FunctionComponent<BtnAccountProps> = (props) => {
           >
             <Text className={styles['text']}>Log in</Text>
           </Row>
-          <Row className={styles['container']}>
+          <Row className={styles['container']} onClick={handlerSignUp}>
             <Text className={styles['text']}>Sign up</Text>
           </Row>
         </>

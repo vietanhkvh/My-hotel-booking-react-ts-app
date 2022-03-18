@@ -10,22 +10,53 @@ import DoubleBed from '../../../assest/icons/double-bed-20.png';
 import SingleBed from '../../../assest/icons/single-bed-20.png';
 import Group from '../../../assest/icons/group-16.png';
 import Expand from '../../../assest/icons/expand-20.png';
-import { some } from '../../constants';
+import { some, SUCCESS_CODE } from '../../constants';
 import { isMany } from '../../../utils/helpers';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { constState } from '../../../store/reducer/constReducer';
+import { getImgRoom } from '../../../services/common.service';
 const { Text } = Typography;
 const ImagesMember = (props) => {
   const { images } = props;
-  return (
-    <Space size={2}>
-      {images?.map((i: any, index: number) => (
-        <Col span={8} key={index}>
-          <Image src={Room2} width={66} height={49} />
-        </Col>
-      ))}
-    </Space>
+  return images?.length >= 4 ? (
+    <>
+     <Row className={styles['images-main']}>
+        <Image src={images?.[0]?.Image} width={202} height={151} />
+      </Row>
+    <Row className={styles['images-member']}>
+      <Space size={2}>
+        {images?.slice(0, 4).map((i: any, index: number) =>
+          index !== 0 ? (
+            <Col span={8} key={index}>
+              <Image src={i.Image} width={66} height={49} />
+            </Col>
+          ) : (
+            ''
+          )
+        )}
+      </Space>
+    </Row>
+    </>
+  ) : (
+    <>
+      <Row className={styles['images-main']}>
+        <Image src={Room1} width={202} height={151} />
+      </Row>
+      <Row className={styles['images-member']}>
+        <Space size={2}>
+          <Col span={8}>
+            <Image src={Room2} width={66} height={49} />
+          </Col>
+          <Col span={8}>
+            <Image src={Room3} width={66} height={49} />
+          </Col>
+          <Col span={8}>
+            <Image src={Room4} width={66} height={49} />
+          </Col>
+        </Space>
+      </Row>
+    </>
   );
 };
 
@@ -42,15 +73,11 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
   const hotelSearchingCondition = useSelector(
     (state: { const: constState }) => state?.const?.hotelSeachingCondition
   );
-  /////////////////state
-  // const [tag, setTag] = useState<{ color?: string; name?: string }>({
-  //   color: '#7541ff',
-  //   name: 'NOMARL',
-  // });
+  ///////////////component child
   const Price = (props) => {
     ///////////////////////////state
     const { couponValue, fisrtPrice, finalPrice, idStatus } = props;
-    // const [percent, setPercent] = useState<number>();
+
     /////////////////////////////event
     const handleBtnCLick = () => {
       const param: some = {
@@ -119,8 +146,9 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
       </div>
     );
   };
-
-  //////////////////event
+  ///state
+  const [images, setImages] = useState<some[]>([]);
+  ///event
   const setColorTag = (idTypeRoom?: string) => {
     switch (idTypeRoom) {
       case 'LUX':
@@ -133,29 +161,28 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
         return { color: '#d7be69', name: 'Default' };
     }
   };
-  useEffect(() => {
-    // getHotelRoomList(idHotel && idHotel);
-    // setColorTag(hotelRoom?.ID_Type_Room)
+  //////////////////api
+  const getImgsRoom = useCallback(async (idRoom?: string) => {
+    const payload: some = {
+      idRoom: idRoom,
+    };
+    const respond = await getImgRoom(payload);
+    try {
+      const res = respond;
+      if (res?.data?.code === SUCCESS_CODE) {
+        setImages(res?.data?.data);
+      }
+    } catch (err) {}
   }, []);
+
+  useEffect(() => {
+    getImgsRoom(hotelRoom?.ID_Room);
+  }, [getImgsRoom, hotelRoom?.ID_Room]);
   return (
     <div className={styles['hotel-room']}>
+      {console.log('images', images)}
       <Row className={styles['images']}>
-        <Row className={styles['images-main']}>
-          <Image src={Room1} width={202} height={151} />
-        </Row>
-        <Row className={styles['images-member']}>
-          <Space size={2}>
-            <Col span={8}>
-              <Image src={Room2} width={66} height={49} />
-            </Col>
-            <Col span={8}>
-              <Image src={Room3} width={66} height={49} />
-            </Col>
-            <Col span={8}>
-              <Image src={Room4} width={66} height={49} />
-            </Col>
-          </Space>
-        </Row>
+        <ImagesMember images={images}/>
       </Row>
       <Row className={styles['infor']}>
         <Col span={16} className={styles['room-infor']}>

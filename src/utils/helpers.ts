@@ -278,6 +278,13 @@ export const openNotificationWithIcon = (
 };
 notification.config({
   placement: 'topRight',
-  duration: 2,
+  duration: 4,
   maxCount: 1,
 });
+export const isDisableBtnAdd=(val1:any, editingKey:any )=>{
+  if(val1 !== null){
+    if( editingKey === undefined || editingKey === '') return false
+    else return true
+  }
+  return true
+}

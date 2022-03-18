@@ -1,5 +1,6 @@
+import UserInfor from '../../components/common/UserInfor/UserInfor';
 import { FunctionComponent } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import styles from './User.module.scss';
 interface UserProps {
   /**
@@ -9,12 +10,10 @@ interface UserProps {
 }
 
 const User: FunctionComponent<UserProps> = (props) => {
-  const { userId } = useParams();
+  const { idUser } = useParams();
   return (
     <div className={styles['user']}>
-      <h2>User: {userId}</h2>
-
-      <Link to='/users'>Back to Users</Link>
+      <UserInfor/>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { getCouponHotel } from '../../../services/coupon.service';
 import { isMany } from '../../../utils/helpers';
 import { Card, Col, Image, Rate, Row, Typography } from 'antd';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import LocationIC from '../../../assest/icons/location-50.png';
 import PhoneIC from '../../../assest/icons/phone-50.png';
 
@@ -20,9 +20,13 @@ const { Text, Title } = Typography;
 interface HotelIdProps {}
 
 const HotelId: FunctionComponent<HotelIdProps> = (props) => {
-  //////////////////////////////////////////////////////////////////state
+  ///////////////////////////////////////state
   const { hotelId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const guestNum = parseInt(searchParams.get('adults')||"") + parseInt(searchParams.get('children')||"")
+  
   const [hotelInfor, setHotelInfor] = useState<hotelSearching>({});
+  const [hotelInfors, setHotelInfors] = useState<hotelSearching[]>([]);
   const [hotelRooms, setHotelRooms] = useState<hotelRoom[]>([]);
   const TitleCom = (props) => {
     const { name } = props;
@@ -160,6 +164,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE) {
         setHotelInfor(res?.data?.data?.[0]);
+        setHotelInfors(res?.data?.data);
       }
     } catch (error) {}
   }, []);
@@ -167,6 +172,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
     console.log('idhotel', idHotel) 
     const payload: some = {
       idHotel: idHotel,
+      guestNum: guestNum
     };
     const respond = await getHotelRoom(payload);
     try {
@@ -175,7 +181,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
         setHotelRooms(res?.data?.data);
       }
     } catch (err) {}
-  }, []);
+  }, [guestNum]);
   useEffect(() => {
     getHotelInfor(hotelId);
     getHotelRoomList(hotelId);
@@ -207,7 +213,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
           />
         </Col>
       </Row>
-      <HotelImages />
+      <HotelImages hotelInfors={hotelInfors}/>
       <Title level={5} style={{ marginTop: 20 }} >Rooms</Title>
       {hotelRooms?.map((h) => (
         <HotelRoom key={h?.ID_Room && h?.ID_Room} hotelRoom={h} />

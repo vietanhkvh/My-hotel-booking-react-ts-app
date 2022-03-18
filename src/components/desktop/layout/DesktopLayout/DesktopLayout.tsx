@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { userState } from '@src/store/reducer/userReducer';
 import DesktopGuestLayout from '../../DesktopGuestLayout/DesktopGuestLayout';
 import DeskHostLayout from '../../DeskHostLayout/DeskHostLayout';
+import DesktopAdminLayout from '../../DesktopAdminLayout/DesktopAdminLayout';
 
 const DesktopLayout = (props) => {
   const { route, children, dataProfileDomain } = props;
@@ -26,7 +27,9 @@ const DesktopLayout = (props) => {
           userInfor?.ID_Role==='GUE' ? 
           <DesktopGuestLayout/>
           :
-          <DeskHostLayout />
+          (userInfor?.ID_Role==='HOS'?<DeskHostLayout /> :
+            <DesktopAdminLayout/>
+          )
           ) : (
           <DesktopGuestLayout />
         )

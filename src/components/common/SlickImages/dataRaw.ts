@@ -20,79 +20,79 @@ import Banner5 from '../../../assest/images/banner5.jpg';
 import Banner6 from '../../../assest/images/banner6.jpg';
 export const room = [
   {
-    id: 1,
-    image: Room1,
+    ID_IMG: 1,
+    Image: Room1,
   },
   {
-    id: 2,
-    image: Room2,
+    ID_IMG: 2,
+    Image: Room2,
   },
   {
-    id: 3,
-    image: Room3,
+    ID_IMG: 3,
+    Image: Room3,
   },
   {
-    id: 4,
-    image: Room4,
+    ID_IMG: 4,
+    Image: Room4,
   },
   {
-    id: 5,
-    image: Room5,
+    ID_IMG: 5,
+    Image: Room5,
   },
   {
-    id: 6,
-    image: Room6,
+    ID_IMG: 6,
+    Image: Room6,
   },
 ];
 export const hotel=[
   {
-    id: 1,
-    image: Hotel1,
+    ID_IMG: 1,
+    Image: Hotel1,
   },
   {
-    id: 2,
-    image: Hotel2,
+    ID_IMG: 2,
+    Image: Hotel2,
   },
   {
-    id: 3,
-    image: Hotel3,
+    ID_IMG: 3,
+    Image: Hotel3,
   },
   {
-    id: 4,
-    image: Hotel4,
+    ID_IMG: 4,
+    Image: Hotel4,
   },
   {
-    id: 5,
-    image: Hotel5,
+    ID_IMG: 5,
+    Image: Hotel5,
   },
   {
-    id: 6,
-    image: Hotel6,
+    ID_IMG: 6,
+    Image: Hotel6,
   },
 ] 
 export const banner=[
   {
-    id: 1,
-    image: Banner1,
+    ID_IMG: 1,
+    Image: Banner1,
   },
   {
-    id: 2,
-    image: Banner2,
+    ID_IMG: 2,
+    Image: Banner2,
   },
   {
-    id: 3,
-    image: Banner3,
+    ID_IMG: 3,
+    Image: Banner3,
   },
   {
-    id: 4,
-    image: Banner4,
+    ID_IMG: 4,
+    Image: Banner4,
   },
   {
-    id: 5,
-    image: Banner5,
+    ID_IMG: 5,
+    Image: Banner5,
   },
   {
-    id: 6,
-    image: Banner6,
+    ID_IMG: 6,
+    Image: Banner6,
   },
 ]

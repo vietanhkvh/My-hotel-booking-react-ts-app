@@ -28,6 +28,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { hotel, room, typeRooms } from '../../../const/interface';
 import {
+  editStatusRoom,
   getHotelTableForHost,
   getRoomsHotel,
   updateRoomInfor,
@@ -35,7 +36,10 @@ import {
 import { SUCCESS_CODE } from '../../../components/constants';
 // import MyTable from '../../../components/common/MyTable/MyTable';
 import MyEditTable from '../../../components/common/MyEditTable/MyEditTable';
-import { openNotificationWithIcon } from '../../../utils/helpers';
+import {
+  isDisableBtnAdd,
+  openNotificationWithIcon,
+} from '../../../utils/helpers';
 import clsx from 'clsx';
 import { getTypesRoom } from '../../../services/common.service';
 import {
@@ -79,7 +83,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
       case 'select':
         return (
           <Select
-            defaultValue={typesRoom?.[0]?.ID_Type_Room}
             style={{ width: 120 }}
           >
             {typesRoom?.map((t, index) => (
@@ -113,7 +116,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
           ]}
         >
           {inputNode}
-          {/* {console.log('inputNode', inputNode)} */}
         </Form.Item>
       ) : (
         children
@@ -137,8 +139,6 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
   const [form] = Form.useForm();
 
   const [rooms, setRoom] = useState<room[]>([]);
-
-  const [typesRoom, setTypesRoom] = useState<typeRooms[]>();
 
   const [idHotel, setIDHotel] = useState<string>('');
 
@@ -211,13 +211,39 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
       if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
         const message = 'Update room successfull!';
         openNotificationWithIcon('success', '', message);
+        getRooms(idHotel);
       } else {
         openNotificationWithIcon('error', '', 'Update room failed');
       }
     } catch (error) {
       openNotificationWithIcon('error', '', 'Update room failed');
     }
-  }, []);
+  }, [getRooms, idHotel]);
+
+  const updateStsRoom=useCallback(async (idRoom?: string, idStatus?:number ) => {
+    const payload = {
+      idRoom: idRoom,
+      idStatus: idStatus,
+    };
+
+    const respond = await editStatusRoom( payload);
+    try {
+      const res = await respond;
+      if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
+        const message = 'Update status room with id: '+idRoom+' successfull!';
+        openNotificationWithIcon('success', '', message);
+        getRooms(idHotel)
+      } else {
+        openNotificationWithIcon('error', '', 'Update status room with id: '+idRoom+' failed');
+      }
+    } catch (error) {
+      openNotificationWithIcon('error', '', 'Update status room with id: '+idRoom+' failed');
+    }
+  }, [getRooms, idHotel]);
+
+  const handlerSts=(idRoom?:string, idStatus?:number)=>{
+    updateStsRoom(idRoom, idStatus);
+  }
 
   const getType = useCallback(async () => {
     const respond = await getTypesRoom();
@@ -225,10 +251,10 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE) {
         dispatch(setTypesRoom(res?.data?.data));
-        setTypesRoom(res?.data?.data)
       }
     } catch (error) {}
   }, [dispatch]);
+
   useEffect(() => {
     getType();
     getHotelList(userInfor?.ID_Account);
@@ -264,7 +290,6 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
           ...row,
         });
         setRoom(newData);
-        console.log('room', row);
         updateRoom(ID_Room, row);
         setEditingKey('');
       } else {
@@ -273,7 +298,6 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
         setEditingKey('');
       }
     } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
     }
   };
 
@@ -364,9 +388,9 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
               onClick={() => edit(record)}
             />
             {record?.ID_Status === 1 ? (
-              <Button icon={<MinusOutlined />} />
+              <Button icon={<MinusOutlined />} onClick={()=>handlerSts(record?.ID_Room, 2)}/>
             ) : (
-              <Button icon={<PlusOutlined />} />
+              <Button icon={<PlusOutlined />}  onClick={()=>handlerSts(record?.ID_Room, 1)}/>
             )}
           </Space>
         );
@@ -421,7 +445,7 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
         <Button
           className={clsx(styles['btn-add'], styles['item'])}
           onClick={handleAdd}
-          disabled={idHotel ? false : true}
+          disabled={isDisableBtnAdd(idHotel, editingKey)}
           type='primary'
         >
           Add new room
