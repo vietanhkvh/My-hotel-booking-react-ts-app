@@ -11,12 +11,11 @@ import {
   updatePaymentSts,
 } from '../../services/payments.service';
 import { MinusOutlined, StarOutlined } from '@ant-design/icons';
-import { DATE_FORMAT_BACK_END, SUCCESS_CODE } from '../../components/constants';
+import {  SUCCESS_CODE } from '../../components/constants';
 import MyEditTable from '../../components/common/MyEditTable/MyEditTable';
 import { openNotificationWithIcon } from '../../utils/helpers';
 import moment from 'moment';
 import NoPayment from '../../assest/icons/icon_empty_order_hotel.svg';
-import { editStatusRoom } from '../../services/hotel.service';
 import RatingForm from '../../components/common/RatingForm/RatingForm';
 const { Option } = Select;
 const { Text, Title } = Typography;
@@ -49,6 +48,23 @@ const History: FunctionComponent<HistoryProps> = () => {
       key: 'ID_Payment',
       render: (ID_Payment) => <Text>{ID_Payment}</Text>,
       editable: false,
+      ellipsis: true,
+    },
+    {
+      title: 'Hotel name',
+      dataIndex: 'Hotel_Name',
+      key: 'Hotel_Name',
+      render: (Hotel_Name) => <Text>{Hotel_Name}</Text>,
+      editable: false,
+      ellipsis: true,
+    },
+    {
+      title: 'Room name',
+      dataIndex: 'Room_Name',
+      key: 'Room_Name',
+      render: (Room_Name) => <Text>{Room_Name}</Text>,
+      editable: false,
+      ellipsis: true,
     },
     {
       title: 'Guest number',
@@ -56,20 +72,23 @@ const History: FunctionComponent<HistoryProps> = () => {
       key: 'Guest_Number',
       render: (text) => <Text>{text}</Text>,
       editable: true,
+      ellipsis: true,
     },
     {
       title: 'First Total',
       dataIndex: 'First_Total',
       key: 'First_Total',
-      render: (text) => <Text>{text}</Text>,
+      render: (text) => <Text>${text}</Text>,
       editable: true,
+      ellipsis: true,
     },
     {
       title: 'Final total',
       dataIndex: 'Final_Total',
       key: 'Final_Total',
-      render: (text) => <Text>{text}</Text>,
+      render: (text) => <Text>${text}</Text>,
       editable: true,
+      ellipsis: true,
     },
     {
       title: 'Date In',
@@ -77,6 +96,7 @@ const History: FunctionComponent<HistoryProps> = () => {
       key: 'Date_In',
       render: (text) => <Text>{text}</Text>,
       editable: true,
+      ellipsis: true,
     },
     {
       title: 'Date out',
@@ -84,6 +104,7 @@ const History: FunctionComponent<HistoryProps> = () => {
       key: 'Date_out',
       render: (text) => <Text>{text}</Text>,
       editable: true,
+      ellipsis: true,
     },
     {
       title: 'Status',
@@ -171,6 +192,7 @@ const History: FunctionComponent<HistoryProps> = () => {
       try {
         const res = await respond;
         if (res?.data?.code === SUCCESS_CODE) {
+          console.log('his', res?.data?.data)
           setPayment(res?.data?.data);
         }
       } catch (error) {}

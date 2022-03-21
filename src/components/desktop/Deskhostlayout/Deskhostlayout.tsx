@@ -8,6 +8,7 @@ import {
   FileImageOutlined,
   KeyOutlined,
   HomeOutlined,
+  DollarOutlined
 } from '@ant-design/icons';
 import LogoDesk from '../../../assest/images/logo-desk.png';
 import LogoMob from '../../../assest/images/logo-mob.png';
@@ -68,7 +69,7 @@ const DeskHostLayout: FunctionComponent<DeskHostLayoutProps> = () => {
               </Link>
             </Menu.Item>
             <Menu.Item key='room-manager' icon={<KeyOutlined />}>
-            <Link to={'room-manager'}>
+              <Link to={'room-manager'}>
                 <span
                   style={{
                     textTransform: 'capitalize',
@@ -80,40 +81,53 @@ const DeskHostLayout: FunctionComponent<DeskHostLayoutProps> = () => {
                 </span>
               </Link>
             </Menu.Item>
+            <Menu.Item key='payment-manager' icon={<DollarOutlined />}>
+              <Link to={'payment-manager'}>
+                <span
+                  style={{
+                    textTransform: 'capitalize',
+                    fontSize: 16,
+                    fontWeight: 600,
+                  }}
+                >
+                  Payment
+                </span>
+              </Link>
+            </Menu.Item>
             <SubMenu
               key='images-manager'
               icon={<FileImageOutlined />}
               title='Images'
             >
               <Menu.Item key='hotel-images'>
-              <Link to={'hotel-images'}>
-                <span
-                  style={{
-                    textTransform: 'capitalize',
-                    fontSize: 14,
-                    fontWeight: 600,
-                  }}
-                >
-                  Hotel
-                </span>
-              </Link>
-                </Menu.Item>
+                <Link to={'hotel-images'}>
+                  <span
+                    style={{
+                      textTransform: 'capitalize',
+                      fontSize: 14,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Hotel
+                  </span>
+                </Link>
+              </Menu.Item>
               <Menu.Item key='room-images'>
-              <Link to={'room-images'}>
-                <span
-                  style={{
-                    textTransform: 'capitalize',
-                    fontSize: 14,
-                    fontWeight: 600,
-                  }}
-                >
-                  Room
-                </span>
-              </Link>
-                </Menu.Item>
+                <Link to={'room-images'}>
+                  <span
+                    style={{
+                      textTransform: 'capitalize',
+                      fontSize: 14,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Room
+                  </span>
+                </Link>
+              </Menu.Item>
             </SubMenu>
             <Menu.Item key='coupon-manager' icon={<PercentageOutlined />}>
-            <Link to={'coupon-manager'}>
+              <Link to={'coupon-manager'}>
                 <span
                   style={{
                     textTransform: 'capitalize',
@@ -140,10 +154,7 @@ const DeskHostLayout: FunctionComponent<DeskHostLayoutProps> = () => {
               <Breadcrumb.Item>Manager</Breadcrumb.Item>
               <Breadcrumb.Item>{keyActive}</Breadcrumb.Item>
             </Breadcrumb>
-            <div
-              className={styles['site-layout-background']}
-              
-            >
+            <div className={styles['site-layout-background']}>
               <Outlet />
             </div>
           </Content>

@@ -192,6 +192,7 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
     try {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE) {
+        console.log('rooms',res?.data?.data)
         setRoom(res?.data?.data);
       }
     } catch (error) {}
@@ -390,7 +391,11 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
             {record?.ID_Status === 1 ? (
               <Button icon={<MinusOutlined />} onClick={()=>handlerSts(record?.ID_Room, 2)}/>
             ) : (
-              <Button icon={<PlusOutlined />}  onClick={()=>handlerSts(record?.ID_Room, 1)}/>
+              <Button 
+              icon={<PlusOutlined />}
+              disabled={ record?.ID_Status === 2 && record?.ID_Payment ? false : true}
+              onClick={()=>handlerSts(record?.ID_Room, 1)}
+              />
             )}
           </Space>
         );

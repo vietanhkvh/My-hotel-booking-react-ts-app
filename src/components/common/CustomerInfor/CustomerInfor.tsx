@@ -34,7 +34,7 @@ interface CustomerInforProps {
 }
 
 const CustomerInfor: FunctionComponent<CustomerInforProps> = (props) => {
-  const { hotelInfor, dateIn, dateOut, dateGap, userInfor } = props;
+  const { hotelInfor, dateIn, dateOut, dateGap, userInfor,setIsOpenLogin } = props;
   /////////state
   /////////event
 
@@ -90,7 +90,7 @@ const CustomerInfor: FunctionComponent<CustomerInforProps> = (props) => {
         </Col>
       </Row>
       <Row className={styles['infor-member']}>
-        <CustomerInforForm userInfor={userInfor}/>
+        <CustomerInforForm userInfor={userInfor} setIsOpenLogin={setIsOpenLogin}/>
       </Row>
     </Col>
   );

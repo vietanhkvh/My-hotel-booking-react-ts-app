@@ -18,6 +18,9 @@ export const getPaymentAccount=(payload:some)=>{
 export const getPaymentAccountAll=(payload:some)=>{
     return api.get('payments/'+payload?.idAccount)
 }
+export const getPaymentHostByHotel=(payload:some)=>{
+    return api.get('payments-host/'+payload?.idHotel)
+}
 export const updatePaymentSts=(payload:some)=>{
         return api.put("payments/"+payload?.idPayment+"?idStatus="+payload?.idStatus+'&finalTotal='+payload?.finalTotal)
 }

@@ -72,7 +72,7 @@ const ConfirmPay: FunctionComponent<ConfirmPayProps> = (props) => {
   }, []);
   const loginBeforePay = useCallback(() => {
     if (!userInfor) {
-      setIsOpenLogin && setIsOpenLogin(true);
+      setIsOpenLogin(true);
     } else {
       setUser(userInfor);
     }
@@ -128,6 +128,7 @@ const ConfirmPay: FunctionComponent<ConfirmPayProps> = (props) => {
               dateOut={dateOut}
               dateGap={dateGap}
               userInfor={user}
+              setIsOpenLogin={setIsOpenLogin}
             />
             <PaymentInfor dateGap={dateGap} room={room} />
           </Row>

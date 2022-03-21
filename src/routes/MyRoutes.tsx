@@ -23,6 +23,7 @@ import CouponManager from '../pages/Host/CouponManager/CouponManager';
 import Accounts from '../pages/Admin/HostUser/HostUser';
 import ActiveRequestion from '../pages/Admin/ActiveRequestion/ActiveRequestion';
 import Requestion from '../pages/Admin/Requestion/Requestion';
+import PaymentManager from '../pages/Host/PaymentManager/PaymentManager';
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
@@ -66,6 +67,7 @@ const MyRoutes = (props) => {
         {/* host */}
         <Route path='hotel-manager' element={<HotelManager />} />
         <Route path='room-manager' element={<RoomManager />} />
+        <Route path='payment-manager' element={<PaymentManager />} />
 
         <Route path='hotel-images' element={<ImagesManager />} />
         <Route path='room-images' element={<ImagesRoomManager/>} />

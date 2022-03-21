@@ -36,7 +36,10 @@ import {
 import styles from './HotelManager.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { userState } from '@src/store/reducer/userReducer';
-import { isDisableBtnAdd, openNotificationWithIcon } from '../../../utils/helpers';
+import {
+  isDisableBtnAdd,
+  openNotificationWithIcon,
+} from '../../../utils/helpers';
 import HotelInforForm from '../../../components/common/HotelInforForm/HotelInforForm';
 import { setHotelManager } from '../../../store/actions/constAction';
 import MyEditTable from '../../../components/common/MyEditTable/MyEditTable';
@@ -319,27 +322,6 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
     }
   }, []);
 
-  const updateSts = useCallback(async (idHotel: string, idStatus: number) => {
-    const payload = {
-      idHotel: idHotel,
-      idStatus: idStatus,
-    };
-    const respond = await updateHotelStatus(payload);
-    try {
-      const res = await respond;
-      if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
-        const message =
-          'Sent request for hotel with ID: ' + idHotel + ' successfull!';
-        openNotificationWithIcon('success', '', message);
-      } else {
-        openNotificationWithIcon(
-          'error',
-          '',
-          'Sent request for hotel with ID: ' + idHotel + ' failed'
-        );
-      }
-    } catch (error) {}
-  }, []);
   const getHotelList = useCallback(
     async (idAccount: number | undefined, idStatus?: number) => {
       console.log('idStatus', idStatus);
@@ -361,6 +343,31 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
       } catch (error) {}
     },
     [dispatch]
+  );
+  const updateSts = useCallback(
+    async (idHotel: string, idStatus: number) => {
+      const payload = {
+        idHotel: idHotel,
+        idStatus: idStatus,
+      };
+      const respond = await updateHotelStatus(payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
+          const message =
+            'Sent request for hotel with ID: ' + idHotel + ' successfull!';
+          openNotificationWithIcon('success', '', message);
+          getHotelList(userInfor?.ID_Account, 2);
+        } else {
+          openNotificationWithIcon(
+            'error',
+            '',
+            'Sent request for hotel with ID: ' + idHotel + ' failed'
+          );
+        }
+      } catch (error) {}
+    },
+    [getHotelList, userInfor?.ID_Account]
   );
   // const isDisableBtnAdd = (idStatus: number, editingKey: string) => {
   //   if (idStatus !== null) {

@@ -38,12 +38,16 @@ interface CustomerInforFormProps {
    * dateOut
    */
   dateOut?: any;
+  /**
+   * setIsOpenLogin
+   */
+   setIsOpenLogin?: (val: boolean) => void;
 }
 
 const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
   props
 ) => {
-  const { userInfor } = props;
+  const { userInfor, setIsOpenLogin } = props;
   const navigate = useNavigate();
   /////////////////////////////states
   const [value, setValue] = useState(2);
@@ -122,7 +126,14 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
   );
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    finishPayment(values?.paymentMethod, roomInfor, userInfor?.ID_Account);
+    if(userInfor){
+      console.log('userInfor',1)
+      finishPayment(values?.paymentMethod, roomInfor, userInfor?.ID_Account);
+    }
+    else {
+      console.log('userInfor',2)
+      setIsOpenLogin&&setIsOpenLogin(true)
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {

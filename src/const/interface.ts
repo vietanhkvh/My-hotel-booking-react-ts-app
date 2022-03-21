@@ -88,6 +88,7 @@ export interface room {
   Price: number;
   ID_Status?: number;
   ID_Type_Room?: string;
+  ID_Payment?:string;
 }
 export interface typeRooms {
   ID_Type_Room?: string;
@@ -111,6 +112,8 @@ export interface coupon {
 export interface payment {
   ID_Payment?: string;
   ID_Account?: string;
+  Hotel_Name?:string;
+  Room_Name?:string;
   Guest_Number?: number;
   First_Total?: number;
   ID_Coupon?: number;
