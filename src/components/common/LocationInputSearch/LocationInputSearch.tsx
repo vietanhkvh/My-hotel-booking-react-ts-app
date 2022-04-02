@@ -41,7 +41,7 @@ interface LocationInputSearchProps {
 const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (
   props
 ) => {
-  const { placeholder, style, handleSetLocation } = props;
+  const { placeholder, style, handleSetLocation, location } = props;
   const dispatch: Dispatch<any> = useDispatch();
   const hotelLocation = useSelector(
     (state: { const: constState }) => state?.const?.hotelLocation
@@ -105,9 +105,10 @@ const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (
         showSearch
         placeholder={placeholder}
         style={style}
+        defaultValue={location&&location}
         defaultActiveFirstOption={false}
         showArrow={false}
-        filterOption={false}
+        filterOption={true}
         onSearch={handleSearch}
         onChange={handleChange}
         notFoundContent={null}

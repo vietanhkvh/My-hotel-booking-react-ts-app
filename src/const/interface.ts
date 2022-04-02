@@ -36,12 +36,14 @@ export interface hotelSearching {
   Rating_Point?: number;
   Review_Number?: number;
   ID_IMG?: number;
-  Image?: any;
+  Imgs?: any;//array images string
+  Image?:any;// one image
 }
 export interface hotelRoom {
   ID_Room?: string;
   Room_Name?: string;
   ID_Hotel?: string;
+  Hotel_Name?: string;
   Bed_Number?: number;
   Bathroom_Number?: number;
   Price: number;
@@ -88,7 +90,7 @@ export interface room {
   Price: number;
   ID_Status?: number;
   ID_Type_Room?: string;
-  ID_Payment?:string;
+  ID_Payment?: string;
 }
 export interface typeRooms {
   ID_Type_Room?: string;
@@ -108,12 +110,14 @@ export interface coupon {
   State_Date?: any;
   End_Date?: any;
   ID_Status?: number;
+  ID_Type_Room?: string;
 }
 export interface payment {
   ID_Payment?: string;
+  ID_Payment_D?: string;
   ID_Account?: string;
-  Hotel_Name?:string;
-  Room_Name?:string;
+  Hotel_Name?: string;
+  Room_Name?: string;
   Guest_Number?: number;
   First_Total?: number;
   ID_Coupon?: number;
@@ -121,8 +125,26 @@ export interface payment {
   Date_In?: any;
   Date_out?: any;
   Status?: number;
-  ID_Room?: string,
-  ID_Rating?:number,
-  Rate_Counting?:number,
-  Rate_Detail?: string,
+  ID_Room?: string;
+  ID_Rating?: number;
+  Rate_Counting?: number;
+  Rate_Detail?: string;
+}
+export interface cartItem {
+  ID_Hotel?: string;
+  Hotel_Name?: string;
+  ID_Room?: string;
+  Room_Name?: string;
+  Bed_Number?: number;
+  ID_Coupon?: number;
+  Coupon_Value?: number;
+  Price?: number;
+  Final_Price?: number;
+  Rating_Point?: number;
+  Review_Number?: number;
+  ID_Type_Room?: string;
+  Image_Room?: any;
+  Image_Hotel?: any;
+  Date_In?: any;
+  Date_Out?: any;
 }

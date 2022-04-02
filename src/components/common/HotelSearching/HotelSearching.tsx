@@ -9,6 +9,7 @@ import {
 import {
   createSearchParams,
   useNavigate,
+  useSearchParams,
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
@@ -37,7 +38,15 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   const dispatch: Dispatch<any> = useDispatch();
 
   const navigate = useNavigate();
-  // console.log('hotelSearchingByLocation', hotelSearchingByLocation)
+  const [searchParams] = useSearchParams();
+
+  const [params] = useState<any>({
+    location: searchParams.get('location'),
+    dateIn: searchParams.get('dateIn'),
+    dateOut: searchParams.get('dateOut'),
+    adults: searchParams.get('adults'),
+    children: searchParams.get('children'),
+  });
   ////////////////////////////state
   const [adults, setAdults] = useState<number>(1);
   const [children, setChildren] = useState<number>(0);
@@ -66,9 +75,13 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
     setDateIn(date?.[0]);
     setDateOut(date?.[1]);
   };
-  const hanldeSetDateDiff = (dateIn: any, dateOut: any) => {
-    const daygap = dateOut?.diff(dateIn, 'days');
-    daygap === undefined ? setDateDiff(0) : setDateDiff(daygap);
+  const hanldeSetDateDiff = (dateIn: any, dateOut: any, params: any) => {
+    if (params?.dateIn)
+      setDateDiff(moment(params?.dateOut).diff(moment(params?.dateIn), 'days'));
+    else {
+      const daygap = dateOut?.diff(dateIn, 'days');
+      daygap === undefined ? setDateDiff(0) : setDateDiff(daygap);
+    }
   };
   const hanldeSetAdults = (num: number) => {
     setAdults(num);
@@ -100,7 +113,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
     ) => {
       const payload: some = {
         location: location,
-        guestNum: (adults+children)
+        guestNum: adults + children,
       };
       const respond = await getSearchingResultLocation(payload);
       try {
@@ -129,9 +142,9 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
 
   /////////////////////useEffect
   useEffect(() => {
-    hanldeSetDateDiff(dateIn, dateOut);
+    hanldeSetDateDiff(dateIn, dateOut, params);
     hanldeDisSearch(location, dateDiff);
-  }, [dateDiff, dateIn, dateOut, hanldeDisSearch, location]);
+  }, [dateDiff, dateIn, dateOut, hanldeDisSearch, location, params]);
   return (
     <Row
       className={styles['hotel-searching']}
@@ -146,6 +159,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
         <LocationInputSearch
           placeholder={'Thành phố, khách sạn, điểm đến'}
           handleSetLocation={hanldeSetLocation}
+          location={params?.location? params?.location : ''}
         />
       </Col>
 
@@ -158,10 +172,19 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
           </Text>
         </Row>
         <Row>
+          {console.log('params', params)}
           <RangePicker
             allowEmpty={[false, false]}
-            defaultValue={[moment(), moment().add('1', 'days')]}
-            defaultPickerValue={[moment(), moment().add('1', 'days')]}
+            defaultValue={
+              params?.dateIn
+                ? [moment(params?.dateIn), moment(params?.dateOut)]
+                : [moment(), moment().add('1', 'days')]
+            }
+            defaultPickerValue={
+              params?.dateIn
+                ? [moment(params?.dateIn), moment(params?.dateOut)]
+                : [moment(), moment().add('1', 'days')]
+            }
             disabledDate={disabledDate}
             bordered={false}
             picker='date'
@@ -202,8 +225,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
         >
           <Row style={{ marginTop: 5 }}>
             <Text className={'guest-number'} style={{ fontSize: 16 }}>
-              {adults} adult{isMany(adults)},{' '}
-              {children} children
+              {adults} adult{isMany(adults)}, {children} children
             </Text>
           </Row>
         </Popover>
@@ -217,13 +239,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
           className={styles['btn-search']}
           disabled={disSearch ? true : false}
           onClick={() =>
-            handleSubmitSearch(
-              location,
-              dateIn,
-              dateOut,
-              adults,
-              children
-            )
+            handleSubmitSearch(location, dateIn, dateOut, adults, children)
           }
         >
           <Image preview={false} src={Search} width={'35px'} height={'35px'} />

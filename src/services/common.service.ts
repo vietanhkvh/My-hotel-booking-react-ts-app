@@ -38,6 +38,9 @@ export const updateAccountRole = (payload: some) => {
     'account-role/' + payload?.idAccount + '?idRole=' + payload?.idRole
   );
 };
+export const checkDupUserN = (payload: some) => {
+  return api.get('dup-username-account/' + payload?.userName);
+};
 export const registerAccount = (payload: some) => {
   return api.post(
     'account?ID_Role=' +
@@ -86,11 +89,27 @@ export const getRatingInfor = (payload: some) => {
 };
 export const saveRating = (payload: some) => {
   return api.post(
-    'rating?idPayment=' +
-      payload?.idPayment +
+    'rating?idPaymentD=' +
+      payload?.idPaymentD +
       '&rateCounting=' +
       payload?.rateCounting +
       '&rateDetail=' +
       payload?.rateDetail
+  );
+};
+//email
+export const sendEmailBooking = (payload: some) => {
+  return api.post(
+    'send-email-payment?email=' +
+      payload?.email +
+      '&idPayment=' +
+      payload?.idPayment +
+      '&detail=' +
+      payload?.detail
+  );
+};
+export const sendEmailOtp = (payload: some) => {
+  return api.post(
+    'send-email-otp?email=' + payload?.email + '&otpCode=' + payload?.otp
   );
 };

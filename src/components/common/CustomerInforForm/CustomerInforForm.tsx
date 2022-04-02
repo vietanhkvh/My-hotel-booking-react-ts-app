@@ -9,21 +9,36 @@ import {
   Image,
   Button,
 } from 'antd';
-import { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import CreditCard from '../../../assest/icons/credit-card-64.png';
 import Cash from '../../../assest/icons/cash-40.png';
 import styles from './CustomerInforForm.module.scss';
-import { hotelRoom } from '../../../const/interface';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { constState } from '@src/store/reducer/constReducer';
-import { DATE_FORMAT_BACK_END, some, SUCCESS_CODE } from '../../constants';
 import {
+  DATE_FORMAT,
+  some,
+  SUCCESS_CODE,
+} from '../../constants';
+import {
+  saveMultiplePD,
   savePayments,
-  savePayments_D,
 } from '../../../services/payments.service';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import moment from 'moment';
-import { editStatusRoom } from '../../../services/hotel.service';
+import { setCarts } from '../../../store/actions/constAction';
+import { openNotificationWithIcon } from '../../../utils/helpers';
+import { sendEmailBooking } from '../../../services/common.service';
 const { Text, Title } = Typography;
 interface CustomerInforFormProps {
   /**
@@ -41,7 +56,7 @@ interface CustomerInforFormProps {
   /**
    * setIsOpenLogin
    */
-   setIsOpenLogin?: (val: boolean) => void;
+  setIsOpenLogin?: (val: boolean) => void;
 }
 
 const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
@@ -49,30 +64,88 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
 ) => {
   const { userInfor, setIsOpenLogin } = props;
   const navigate = useNavigate();
+
   /////////////////////////////states
   const [value, setValue] = useState(2);
   const [user, setUser] = useState<any>({});
-  const roomInfor = JSON.parse(localStorage.getItem('room-infor') || '');
-  const hotelInfor = JSON.parse(localStorage.getItem('hotel-infor') || '');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const roomInfor = {
+    Final_Price: searchParams.get('finalPrice'),
+  };
   const hotelSearchingCondition = useSelector(
     (state: { const: constState }) => state?.const?.hotelSeachingCondition
   );
-  const dateIn = moment(hotelSearchingCondition?.dateIn);
-  const dateOut = moment(hotelSearchingCondition?.dateOut);
+  const carts = useSelector(
+    (state: { const: constState }) => state?.const?.carts
+  );
+  const dispatch: Dispatch<any> = useDispatch();
+
+  // const dateIn = moment(hotelSearchingCondition?.dateIn);
+  // const dateOut = moment(hotelSearchingCondition?.dateOut);
   ///////////////////////////////event
-  const finishPaymentDe = useCallback(
-    async (idPayment: string, idRoom: string) => {
+  const getName = (paymentInfor: any) => {
+    let detail: string = '';
+    if (paymentInfor?.length !== 1) {
+      paymentInfor?.forEach(
+        (p: any) =>
+          (detail +=
+            p?.Hotel_Name +
+            ' - ' +
+            p?.Room_Name +
+            '( ' +
+            moment(p?.Date_In).format(DATE_FORMAT) +
+            ' -> ' +
+            moment(p?.Date_Out).format(DATE_FORMAT) +
+            ' ) | ')
+      );
+    } else
+      detail =
+        paymentInfor?.[0]?.Hotel_Name +
+        '-' +
+        paymentInfor?.[0].Room_Name +
+        '(' +
+        moment(paymentInfor?.[0]?.Date_In).format(DATE_FORMAT) +
+        ' -> ' +
+        moment(paymentInfor?.[0]?.Date_Out).format(DATE_FORMAT) +
+        ')';
+    return detail;
+  };
+  const callSendEmailBooking = useCallback(
+    async (email: string, idPayment: string) => {
       const payload = {
+        email: email,
         idPayment: idPayment,
-        idRoom: idRoom,
+        detail: getName(carts),
       };
-      const respond = await savePayments_D(payload);
+      const respond = await sendEmailBooking(payload);
       try {
         const res = await respond;
         if (res?.data?.code === SUCCESS_CODE) {
+          openNotificationWithIcon(
+            'success',
+            '',
+            'Booking information was sent to your mail!'
+          );
+        }
+      } catch (error) {}
+    },
+    [carts]
+  );
+
+  const finishPaymentDe = useCallback(
+    async (idPayment: string, email: string) => {
+      const payload = {
+        paymentD: JSON.stringify(carts),
+        idPayment: idPayment,
+      };
+      const respond = await saveMultiplePD(payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE) {
+          callSendEmailBooking(email, idPayment);
+          dispatch(setCarts([]));
           const param: some = {
-            idPayment: res?.data?.data?.ID_Payment,
-            idPayment_D: res?.data?.data?.ID_Payment_D,
+            idPayment: idPayment,
           };
           navigate({
             pathname: '/book-success',
@@ -81,44 +154,37 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
         }
       } catch (error) {}
     },
-    [navigate]
+    [callSendEmailBooking, carts, dispatch, navigate]
   );
+
   const finishPayment = useCallback(
-    async (paymentMethod: number, roomInfor: hotelRoom, idAccount: number) => {
+    async (values: any, roomInfor: any, idAccount: number) => {
       const guestNum =
         (hotelSearchingCondition?.adults ?? 0) +
         (hotelSearchingCondition?.children ?? 0);
+
       const payloadP = {
-        guestNum: guestNum,
-        firsTotal: roomInfor?.Price,
-        idCoupon: roomInfor?.ID_Coupon,
-        finalTotal: roomInfor?.Final_Price + 5,
-        dateIn: dateIn?.format(DATE_FORMAT_BACK_END),
-        dateOut: dateOut?.format(DATE_FORMAT_BACK_END),
         idAccount: idAccount,
-        paymentMethod: paymentMethod,
+        guestNum: guestNum,
+        finalTotal: roomInfor?.Final_Price,
+        paymentMethod: values?.paymentMethod,
       };
-      const payloadR = {
-        idRoom: roomInfor?.ID_Room,
-        idStatus: 2,
-      };
-      const respondP = await savePayments(payloadP);
-      const respondR = await editStatusRoom(payloadR);
-      try {
-        const resP = await respondP;
-        const resR = await respondR;
-        if (
-          resP?.data?.code === SUCCESS_CODE &&
-          resR?.data?.code === SUCCESS_CODE
-        ) {
-          const idPayment = resP?.data?.data?.ID_Payment;
-          finishPaymentDe(idPayment, roomInfor?.ID_Room || '');
-        }
-      } catch (error) {}
+
+      if (carts?.length) {
+        const respondP = await savePayments(payloadP);
+        try {
+          const resP = await respondP;
+          if (resP?.data?.code === SUCCESS_CODE) {
+            const idPayment = resP?.data?.data?.ID_Payment;
+            finishPaymentDe(idPayment, values?.email);
+          }
+        } catch (error) {}
+      } else {
+        openNotificationWithIcon('error', '', "Failed! Cart's empty!");
+      }
     },
     [
-      dateIn,
-      dateOut,
+      carts?.length,
       finishPaymentDe,
       hotelSearchingCondition?.adults,
       hotelSearchingCondition?.children,
@@ -126,13 +192,10 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
   );
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    if(userInfor){
-      console.log('userInfor',1)
-      finishPayment(values?.paymentMethod, roomInfor, userInfor?.ID_Account);
-    }
-    else {
-      console.log('userInfor',2)
-      setIsOpenLogin&&setIsOpenLogin(true)
+    if (userInfor) {
+      finishPayment(values, roomInfor, userInfor?.ID_Account);
+    } else {
+      setIsOpenLogin && setIsOpenLogin(true);
     }
   };
 
@@ -150,6 +213,7 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
   }, [userInfor]);
   useEffect(() => {
     setUserInfor();
+    // getLastIDPD();
   }, [setUserInfor]);
   return (
     <div className={styles['customer-infor-form']}>
@@ -205,9 +269,10 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
                 label='Email'
                 name='email'
                 initialValue={userInfor?.Email}
-                // rules={[
-                //   { required: true, message: 'Please input your password!' },
-                // ]}
+                rules={[
+                  { required: true, message: 'Please input your email!' },
+                  { type:'email', message : 'Please input your correct email format!'}
+                ]}
               >
                 <Input placeholder='example@gmail.com' value={user?.Email} />
               </Form.Item>
@@ -233,7 +298,7 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
             >
               <Radio.Group name='radiogroup' onChange={onChange} value={value}>
                 <Space direction='vertical'>
-                <Radio value={2}>
+                  <Radio value={2}>
                     <Image
                       src={CreditCard}
                       preview={false}
@@ -252,9 +317,10 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
                       width={20}
                       height={20}
                     />
-                    <Text style={{ paddingLeft: 10 }}>Pay before check in</Text>
+                    <Text style={{ paddingLeft: 10 }}>
+                      Pay with internet banking
+                    </Text>
                   </Radio>
-                  
                 </Space>
               </Radio.Group>
             </Form.Item>

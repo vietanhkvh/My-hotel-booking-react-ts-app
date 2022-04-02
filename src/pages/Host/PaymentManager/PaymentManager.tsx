@@ -103,12 +103,12 @@ const PaymentManager: FunctionComponent<PaymentManagerProps> = () => {
           {val === 2 ? (
             <>
               <Badge status='success' />
-              Payed
+              Payed by credit
             </>
           ) : val === 1 ? (
             <>
-              <Badge status='warning' />
-              Pay later
+              <Badge status='success' />
+              Payed by banking
             </>
           ) : (
             <>
@@ -132,7 +132,7 @@ const PaymentManager: FunctionComponent<PaymentManagerProps> = () => {
               }
             />
           ) : (
-            <></>
+            <>No action</>
       ),
     },
   ];

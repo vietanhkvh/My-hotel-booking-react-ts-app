@@ -1,11 +1,11 @@
 import {
-  constInterface,
   hotelLocation,
   ActionInterface,
   hotelSearching,
   hotelSeachingCondition,
   hotel,
   typeRooms,
+  cartItem,
 } from '../../const/interface';
 import { ConstActions } from '../actions/actionTypes';
 export interface constState {
@@ -13,14 +13,16 @@ export interface constState {
   readonly hotelSearchingByLocation?: [] | hotelSearching[];
   readonly hotelSeachingCondition?: hotelSeachingCondition;
   readonly hotelManager?: hotel[];
-  readonly typesRoom?: typeRooms[]
+  readonly typesRoom?: typeRooms[];
+  readonly carts?: cartItem[];
 }
 const initialState: constState = {
   hotelLocation: [],
   hotelSearchingByLocation: [],
   hotelSeachingCondition: {},
-  hotelManager:[],
-  typesRoom:[]
+  hotelManager: [],
+  typesRoom: [],
+  carts: [],
 };
 const constReducer: (
   state: constState | undefined,
@@ -37,9 +39,11 @@ const constReducer: (
     case ConstActions.setHotelSearchingCondition:
       return { ...state, hotelSeachingCondition: action.payload };
     case ConstActions.setHotelManager:
-      return {...state, hotelManager: action.payload}
+      return { ...state, hotelManager: action.payload };
     case ConstActions.setTypesRoom:
-      return {...state, typesRoom: action.payload}
+      return { ...state, typesRoom: action.payload };
+    case ConstActions.setCart:
+      return {...state, carts:[...action.payload]};
     default:
       return state;
   }

@@ -63,7 +63,7 @@ const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
       ward: values?.ward,
       street: values?.street,
       phone: values?.phone,
-      idStatus: values?.idStatus,
+      idStatus: values?.idStatus==='Non-active' ? 2 : 1,
       idAccount: userInfor?.ID_Account
      }
 
@@ -82,6 +82,7 @@ const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
       
     }
   },[getHotelList, idStatus, userInfor?.ID_Account])
+
   const getHotelIDLastest=useCallback(async()=>{
     const respond= await getIDHotelLastest();
     try {
@@ -93,9 +94,11 @@ const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
       
     }
   },[])
+
   useEffect(()=>{
     getHotelIDLastest()
   },[getHotelIDLastest])
+
   return (
     <div className={styles['hotel-infor-form']}>
       {console.log('idHotel', idHotel)}
@@ -132,7 +135,7 @@ const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
               <Form.Item
                 label='Status'
                 name='idStatus'
-                initialValue={2}
+                initialValue={'Non-active'}
                 // rules={[{ required: true, message: "Please input hotel's ward!" }]}
               >
                 <Input readOnly />
@@ -159,7 +162,16 @@ const HotelInforForm: FunctionComponent<HotelInforFormProps> = (props) => {
                 label='Phone'
                 name='phone'
                 rules={[
-                  { required: true, message: "Please input hotel's phone!" },
+                  { required: true, message: "Please input hotel's phone!" },() => ({
+                    validator(_, value) {
+                      if (!value || value?.length >= 10 ) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error('The phone format is not correct!')
+                      );
+                    },
+                  }),
                 ]}
               >
                 <Input />

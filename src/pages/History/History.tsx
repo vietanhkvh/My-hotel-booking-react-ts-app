@@ -17,16 +17,10 @@ import { openNotificationWithIcon } from '../../utils/helpers';
 import moment from 'moment';
 import NoPayment from '../../assest/icons/icon_empty_order_hotel.svg';
 import RatingForm from '../../components/common/RatingForm/RatingForm';
+import NoData from '../../components/common/NoData/NoData';
 const { Option } = Select;
 const { Text, Title } = Typography;
-const NoData = () => {
-  return (
-    <Row className={styles['no-data']}>
-      <Title level={4}> Don't have payment yet</Title>
-      <Image src={NoPayment} preview={false} width={150} height={150} />
-    </Row>
-  );
-};
+
 interface HistoryProps {}
 
 const History: FunctionComponent<HistoryProps> = () => {
@@ -35,7 +29,8 @@ const History: FunctionComponent<HistoryProps> = () => {
   );
   const [isOpenLogin, setIsOpenLogin] = useState<boolean>(false);
   const [payment, setPayment] = useState<payment[]>([]);
-  const [idPaymentClick, setIdPaymentClick] = useState<string>();
+  const [idPaymentDClick, setIdPaymentDClick] = useState<string>();
+  const [hotelName, setHotelName] = useState<string>();
   const [idStatus, setIDStatus] = useState<number>(0);
 
   const [visible, setVisible] = useState<boolean>(false);
@@ -71,14 +66,6 @@ const History: FunctionComponent<HistoryProps> = () => {
       dataIndex: 'Guest_Number',
       key: 'Guest_Number',
       render: (text) => <Text>{text}</Text>,
-      editable: true,
-      ellipsis: true,
-    },
-    {
-      title: 'First Total',
-      dataIndex: 'First_Total',
-      key: 'First_Total',
-      render: (text) => <Text>${text}</Text>,
       editable: true,
       ellipsis: true,
     },
@@ -155,7 +142,7 @@ const History: FunctionComponent<HistoryProps> = () => {
             <Button
               icon={<StarOutlined />}
               onClick={() =>
-                handlerClickRate(record?.ID_Payment)
+                handlerClickRate(record?.ID_Payment_D, record?.Hotel_Name)
               }
             />
             :''
@@ -165,12 +152,13 @@ const History: FunctionComponent<HistoryProps> = () => {
     },
   ];
   //////////////event
-  const handlerClickRate=(idPayment?:string)=>{
+  const handlerClickRate=(idPaymentD?:string, hotelName?:string)=>{
     setVisible(true)
-    setIdPaymentClick(idPayment)
+    setIdPaymentDClick(idPaymentD);
+    setHotelName(hotelName);
   }
   const handleChangeSts = (idPayment?: string, totalPay?: number) => {
-    const feeCancel = totalPay ? Math.ceil(totalPay * 0.3) : 0;
+    const feeCancel =  Math.ceil(totalPay! * 0.3);
     console.log('feeCancel', feeCancel);
     updateSts(idPayment, feeCancel);
   };
@@ -255,7 +243,7 @@ const History: FunctionComponent<HistoryProps> = () => {
             <MyEditTable data={payment} mergedColumns={columns} />
           </Row>
         ) : (
-          <NoData />
+          <NoData tilte="Don't have any payment yet" img={NoPayment}/>
         )}
         <RatingForm
           visible={visible}
@@ -263,7 +251,8 @@ const History: FunctionComponent<HistoryProps> = () => {
           getPayment={getPayment}
           ID_Account={userInfor?.ID_Account}
           idStatus={idStatus}
-          idPayment={idPaymentClick}
+          idPaymentD={idPaymentDClick}
+          hotelName={hotelName}
         />
       </Row>
     </div>

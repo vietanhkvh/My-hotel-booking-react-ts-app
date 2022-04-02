@@ -206,12 +206,14 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
             {record?.ID_Status === 1 ? (
               <Button
                 icon={<MinusOutlined />}
-                onClick={() => handleChangeSts(re?.ID_Hotel || '', 3)}
+                onClick={() => handleChangeSts(re?.ID_Hotel || '', 3, idStatus)}
+                disabled={editingKey !== ''}
               />
             ) : (
               <Button
                 icon={<PlusOutlined />}
-                onClick={() => handleChangeSts(re?.ID_Hotel || '', 4)}
+                onClick={() => handleChangeSts(re?.ID_Hotel || '', 4, idStatus)}
+                disabled={editingKey !== ''}
               />
             )}
           </Space>
@@ -225,8 +227,12 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
     setIDStatus(value);
     getHotelList(userInfor?.ID_Account, value);
   };
-  const handleChangeSts = (idHotel: string, idStatus: number) => {
-    updateSts(idHotel, idStatus);
+  const handleChangeSts = (
+    idHotel: string,
+    idStsSent: number,
+    idStsShow: number
+  ) => {
+    updateSts(idHotel, idStsSent, idStsShow);
   };
 
   const edit = (record: Partial<hotel>) => {
@@ -260,9 +266,8 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
           ...item,
           ...row,
         });
-        setHotelList(newData);
-        console.log('row', row);
-        updateHotel(ID_Hotel, row);
+
+        if (await updateHotel(ID_Hotel, row)) setHotelList(newData);
         setEditingKey('');
       } else {
         newData.push(row);
@@ -314,8 +319,10 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
       if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
         const message = 'Update hotel successfull!';
         openNotificationWithIcon('success', '', message);
+        return true;
       } else {
         openNotificationWithIcon('error', '', 'Update hotel failed');
+        return false;
       }
     } catch (error) {
       openNotificationWithIcon('error', '', 'Update hotel failed');
@@ -345,10 +352,10 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
     [dispatch]
   );
   const updateSts = useCallback(
-    async (idHotel: string, idStatus: number) => {
+    async (idHotel: string, idStsSent: number, idStsShow: number) => {
       const payload = {
         idHotel: idHotel,
-        idStatus: idStatus,
+        idStatus: idStsSent,
       };
       const respond = await updateHotelStatus(payload);
       try {
@@ -357,7 +364,7 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
           const message =
             'Sent request for hotel with ID: ' + idHotel + ' successfull!';
           openNotificationWithIcon('success', '', message);
-          getHotelList(userInfor?.ID_Account, 2);
+          getHotelList(userInfor?.ID_Account, idStsShow);
         } else {
           openNotificationWithIcon(
             'error',

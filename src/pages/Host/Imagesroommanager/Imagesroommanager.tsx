@@ -204,10 +204,10 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
         if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
           openNotificationWithIcon('success', '', 'Update image successfull!');
           getImgs(idRoom);
-          return 1;
+          return true;
         } else {
           openNotificationWithIcon('error', '', 'Update image failed!');
-          return 2;
+          return false;
         }
       } catch (error) {}
     },
@@ -238,7 +238,7 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
         'Remove image with id: ' + idImg + ' failed'
       );
     }
-  }, [getImgs, idRoom]);
+  }, [getImgs]);
   const hanlderDeleteImg=useCallback((idImg?:number, idRoom?:string)=>{
     deleteImgs(idImg, idRoom)
   },[deleteImgs])
@@ -272,7 +272,7 @@ const ImagesRoomManager: FunctionComponent<ImagesRoomManagerProps> = () => {
           ...row,
         });
         console.log('img', row);
-        if ((await updateImgHotel(ID_IMG, row)) === 1) {
+        if (await updateImgHotel(ID_IMG, row)) {
           setImgs(newData);
         }
         setEditingKey(undefined);

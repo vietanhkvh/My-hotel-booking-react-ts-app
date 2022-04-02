@@ -1,5 +1,15 @@
 import { userInfoInterface } from '../../../const/interface';
-import { Badge, Button, Form, Input, InputNumber, Popconfirm, Space, Typography } from 'antd';
+import {
+  Badge,
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Popconfirm,
+  Select,
+  Space,
+  Typography,
+} from 'antd';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import styles from './HostUser.module.scss';
 import { useSelector } from 'react-redux';
@@ -15,6 +25,7 @@ import {
 } from '@ant-design/icons';
 import MyEditTable from '../../../components/common/MyEditTable/MyEditTable';
 const { Text } = Typography;
+const { Option } = Select;
 
 //editable for account table
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
@@ -37,11 +48,19 @@ const EditableCell: React.FC<EditableCellProps> = ({
   children,
   ...restProps
 }) => {
-
   const switchInputNode = (inputType: string) => {
     switch (inputType) {
-      case 'number':
-        return <InputNumber min={1} max={9999} />;
+      case 'select':
+        return (
+          <Select>
+            <Option key={'active'} value={1}>
+              Active
+            </Option>
+            <Option key={'nonactive'} value={2}>
+              Nonactive
+            </Option>
+          </Select>
+        );
       default:
         return <Input />;
     }
@@ -73,11 +92,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 interface UserProps {
-  type?:string;
+  type?: string;
 }
 
 const Accounts: FunctionComponent<UserProps> = (props) => {
-  const{type}=props;
+  const { type } = props;
   const userInfor = useSelector(
     (state: { user: userState }) => state?.user?.userInfor
   );
@@ -89,7 +108,7 @@ const Accounts: FunctionComponent<UserProps> = (props) => {
     record?.ID_Account === editingKey;
 
   //////////////////////event
-  const getHost = useCallback(async (type:string) => {
+  const getHost = useCallback(async (type: string) => {
     const payload = {
       idRole: type,
     };
@@ -103,7 +122,7 @@ const Accounts: FunctionComponent<UserProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    getHost(type||"");
+    getHost(type || '');
   }, [getHost, type]);
   //////////////////////components child
   const edit = (record: Partial<userInfoInterface>) => {
@@ -210,6 +229,7 @@ const Accounts: FunctionComponent<UserProps> = (props) => {
           )}
         </Text>
       ),
+      editable: false,
     },
     {
       title: 'Action',
@@ -246,12 +266,12 @@ const Accounts: FunctionComponent<UserProps> = (props) => {
   ];
   const switchInputType = (dataIndex: string) => {
     switch (dataIndex) {
-      case 'Room_Name':
-        return 'text';
-      case 'ID_Type_Room':
+      // case 'Room_Name':
+      //   return 'text';
+      case 'Status':
         return 'select';
       default:
-        return 'number';
+        return 'text';
     }
   };
   const mergedColumns = columnsHost.map((col) => {

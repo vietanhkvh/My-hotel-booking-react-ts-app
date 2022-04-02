@@ -12,36 +12,42 @@ interface RatingFormProps {
   getPayment?: (val1?: number, val2?: number) => void;
   ID_Account?: number;
   idStatus?: number;
-  idPayment?: string;
+  idPaymentD?: string;
+  hotelName?: string;
 }
 
 const RatingForm: FunctionComponent<RatingFormProps> = (props) => {
-  const { visible, setVisible, getPayment, ID_Account, idStatus, idPayment } =
-    props;
+  const {
+    visible,
+    setVisible,
+    getPayment,
+    ID_Account,
+    idStatus,
+    idPaymentD,
+    hotelName,
+  } = props;
   ////////////////////state
 
-  // const customIcons = {
-  //   1: <FrownOutlined style={style} />,
-  //   2: <FrownOutlined style={style} />,
-  //   3: <MehOutlined style={style} />,
-  //   4: <SmileOutlined style={style} />,
-  //   5: <SmileOutlined style={style} />,
-  // };
   ///////////////////api
+  const handleCancel = useCallback(async () => {
+    console.log('Clicked cancel button');
+    setVisible && setVisible(false);
+  }, [setVisible]);
+
   const saveRatingInfor = useCallback(
-    async (idPayment?: string, vals?: any) => {
+    async (idPaymentD?: string, vals?: any, hotelName?: string) => {
       const payload = {
-        idPayment: idPayment,
+        idPaymentD: idPaymentD,
         rateCounting: vals?.rateCounting,
         rateDetail: vals?.rateDetail,
       };
-
+      console.log('hotelName-rating',hotelName)
       const respond = await saveRating(payload);
       try {
         const res = await respond;
         if (res?.data?.code === SUCCESS_CODE) {
           const message =
-            'Add rating for payment with: ' + vals?.idPayment + ' successfull!';
+            'Add rating for ' + hotelName + ' successfull!';
           openNotificationWithIcon('success', '', message);
           getPayment && getPayment(ID_Account, idStatus);
           handleCancel();
@@ -49,31 +55,29 @@ const RatingForm: FunctionComponent<RatingFormProps> = (props) => {
           openNotificationWithIcon(
             'error',
             '',
-            'Add rating for payment with: ' + vals?.idPayment + ' failed'
+            'Add rating for ' + hotelName + ' failed'
           );
         }
       } catch (error) {
         openNotificationWithIcon(
           'error',
           '',
-          'Add rating for payment with: ' + vals?.idPayment + ' failed'
+          'Add rating for ' + hotelName + ' failed'
         );
       }
     },
-    [ID_Account, getPayment, idStatus]
+    [ID_Account, getPayment, handleCancel, idStatus]
   );
   ////////////////////event
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    saveRatingInfor(idPayment, values);
+    console.log('hotelName-rating',hotelName)
+    saveRatingInfor(idPaymentD, values, hotelName);
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
-    setVisible && setVisible(false);
-  };
+
   return (
     <div className={styles['rating-form']}>
       <Modal

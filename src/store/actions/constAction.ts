@@ -30,3 +30,9 @@ export const setTypesRoom: (payload: any) => ActionInterface = (
   type: ConstActions.setTypesRoom,
   payload,
 });
+export const setCarts: (payload: any) => ActionInterface = (
+  payload
+) => ({
+  type: ConstActions.setCart,
+  payload,
+});

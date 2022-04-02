@@ -1,137 +1,95 @@
-import { Col, Row, Image, Typography, Divider } from 'antd';
-import { FunctionComponent, useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Col, Row, Space, Typography } from 'antd';
+import { FunctionComponent } from 'react';
 import styles from './PaymentInfor.module.scss';
-import Room from '../../../assest/images/room1.jpg';
-import { hotelRoom } from '../../../const/interface';
-import { getRoom } from '../../../services/hotel.service';
-import { SUCCESS_CODE } from '../../constants';
-import DoubleBed from '../../../assest/icons/double-bed-20.png';
-import SingleBed from '../../../assest/icons/single-bed-20.png';
-import Group from '../../../assest/icons/group-16.png';
-import Expand from '../../../assest/icons/expand-20.png';
-import { isMany } from '../../../utils/helpers';
+import { calcTotalPrice, isMany } from '../../../utils/helpers';
+import { cartItem, hotelRoom } from '../../../const/interface';
+import PaymentItem from '../PaymentItem/PaymentItem';
+import { useSelector } from 'react-redux';
+import { constState } from '@src/store/reducer/constReducer';
+import moment from 'moment';
+
 const { Text, Title } = Typography;
 interface PaymentInforProps {
   /**
    * room
    */
   room?: hotelRoom | undefined;
-  /**
-   * night number
-   */
-  dateGap: number;
 }
 
 const PaymentInfor: FunctionComponent<PaymentInforProps> = (props) => {
-  const { dateGap, room } = props;
+  const { room } = props;
+  const carts = useSelector(
+    (state: { const: constState }) => state?.const?.carts
+  );
   ////////////////////////state
 
-  const taxes: number = 5;
   ////////////////////////event
-  const calcRoomFee = () => {
-    return room?.Coupon_Value
-      ? (room?.Final_Price * dateGap).toFixed(1)
-      : room?.Price
-      ? (room?.Price * dateGap).toFixed(1)
-      : '';
-  };
-  
-  // useEffect(() => {
-  //   getRoomInfor(idHotel, idRoom);
-  //   return () => {
-  //     setRoom({
-  //       ID_Room: '',
-  //       Room_Name: '',
-  //       ID_Hotel: '',
-  //       Bed_Number: 0,
-  //       Bathroom_Number: 0,
-  //       Price: 0,
-  //       Coupon_Value: 0,
-  //       Final_Price: 0,
-  //       ID_Status: 0,
-  //       ID_Type_Room: '',
-  //     });
-  //   };
-  // }, [getRoomInfor, idHotel, idRoom]);
-
   return (
     <Col span={9} className={styles['payment-infor']}>
+      {carts?.map((c) => (
+        <>
+        <PaymentItem room={c} />
+        {console.log('Date_In',c?.Date_In)}
+        </>
+      ))}
+
       <Row className={styles['payment-item']}>
-        <Image
-          className={styles['room-img']}
-          src={Room}
-          preview={false}
-          width={432}
-          height={114}
-        />
-        {/* {console.log(
-          'room-infor',
-          JSON.parse(localStorage.getItem('room-infor') || '')
-        )} */}
-        {room?.Coupon_Value ? (
-          <Row className={styles['coupon']}>-{room?.Coupon_Value}%</Row>
-        ) : (
-          <></>
-        )}
-        <Title className={styles['title']} level={5}>
-          {room?.Room_Name}
-        </Title>
-        <Row className={styles['detail']}>
-          <Text className={styles['detail-item']} style={{ paddingLeft: 0 }}>
-            <Image
-              src={
-                room?.Bed_Number && room?.Bed_Number >= 2
-                  ? DoubleBed
-                  : SingleBed
-              }
-              preview={false}
-            />
-            1 bed
-          </Text>
-          <Text className={styles['detail-item']}>
-            <Image src={Group} preview={false} />
-            {room?.Bed_Number} guest{isMany(2)}
-          </Text>
-          <Text className={styles['detail-item']} style={{ border: 'none' }}>
-            <Image src={Expand} preview={false} />
-            {room?.Bed_Number && room?.Bed_Number * 20}m2
-          </Text>
-        </Row>
-      </Row>
-      <Row className={styles['payment-item']}>
-        <Row className={styles['bill-item']}>
-          <Text>1 room/night</Text>
-          <Text>${room?.Final_Price}</Text>
-          <Row className={styles['price-item']}>
-            {room?.Coupon_Value ? (
-              <>
-                <Row className={styles['coupon-value']}>
-                  -{room?.Coupon_Value}%
+        {carts?.map((c) => (
+          <Row className={styles['bill-item']}>
+            <Row
+              className={styles['price-item']}
+              style={{
+                justifyContent: 'flex-end',
+                display: c?.ID_Coupon ? '' : 'none',
+              }}
+            >
+              <Text className={styles['price-raw']}>
+                $
+                {c?.Price! *
+                  moment(c?.Date_Out).diff(moment(c?.Date_In), 'days')}
+              </Text>
+            </Row>
+            <Row className={styles['price-item']}>
+              <Col span={12}>
+                <Text className={styles['hotel-text']}>
+                  Pay at {c?.Hotel_Name}: {c?.Room_Name}
+                </Text>
+              </Col>
+              <Col span={12} className={styles['price-mem']}>
+                <Row>
+                  <Space>
+                  <Row
+                    className={styles['coupon-value']}
+                    style={{ display: c?.ID_Coupon ? '' : 'none' }}
+                  >
+                    -{c?.Coupon_Value}%
+                  </Row>
+                  <Text className={styles['price-text']}>
+                    ${c?.Final_Price}{' '}
+                  </Text>
+
+                  <Text className={styles['price-text']}>
+                    x{moment(c?.Date_Out).diff(moment(c?.Date_In), 'days')}=
+                  </Text>
+
+                  <Text className={styles['price-text']}>
+                    $
+                    {c?.Final_Price! *
+                      moment(c?.Date_Out).diff(moment(c?.Date_In), 'days')}
+                  </Text>
+                  </Space>
                 </Row>
-                <Text className={styles['price-raw']}>${room?.Price}</Text>
-              </>
-            ) : (
-              <></>
-            )}
+              </Col>
+            </Row>
           </Row>
-          <Row className={styles['total-room-rate']}>
-            <Text>
-              1 room x {dateGap} night{isMany(dateGap)}
-            </Text>
-            <Text>${calcRoomFee()}</Text>
-          </Row>
-        </Row>
+        ))}
         <Row
           className={styles['bill-item']}
           style={{ borderBottom: '4px solid rgb(237, 242, 247)' }}
-        >
-          <Text>Taxes and hotel service fees</Text>
-          <Text>${taxes}</Text>
-        </Row>
+        ></Row>
         <Row className={styles['bill-item']} style={{ borderBottom: 'none' }}>
-          <Text>Total room rate</Text>
-          <Text>${parseFloat(calcRoomFee()) + taxes}</Text>
+          <Text className={styles['total-txt']}>Total price</Text>
+          <Text className={styles['total-txt']}>${calcTotalPrice(carts!)}</Text>
         </Row>
       </Row>
     </Col>

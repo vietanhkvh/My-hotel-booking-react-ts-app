@@ -8,6 +8,7 @@ import {
 import { typeRooms } from '../../../const/interface';
 import { openNotificationWithIcon } from '../../../utils/helpers';
 import {
+  Badge,
   Button,
   Form,
   Input,
@@ -42,7 +43,7 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
       setVisible && setVisible(false);
       setConfirmLoading(false);
     }, 1000);
-    saveRoom(idHotel||'',values);
+    saveRoom(idHotel || '', values);
   };
   const handleCancel = () => {
     console.log('Clicked cancel button');
@@ -59,7 +60,7 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
   };
 
   const saveRoom = useCallback(
-    async (idHotel:string,values: any) => {
+    async (idHotel: string, values: any) => {
       const payload = {
         idHotel: idHotel,
         roomName: values?.roomName,
@@ -67,7 +68,7 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
         bathNumber: values?.bathNumber,
         price: values?.price,
         idType: values?.ID_Type_Room,
-        idStatus: values?.idStatus,
+        idStatus: values?.idStatus === 'Non-active' ? 2 : 1,
       };
       const respond = await saveRoomInfor(payload);
       try {
@@ -75,7 +76,7 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
         if (res?.data?.code === SUCCESS_CODE) {
           openNotificationWithIcon('success', '', 'Add new hotel successfull1');
           getRooms && getRooms(idHotel || '');
-        } else if(res?.data?.code !== SUCCESS_CODE || res?.data?.data ) {
+        } else if (res?.data?.code !== SUCCESS_CODE || res?.data?.data) {
           openNotificationWithIcon('error', '', 'Add new hotel failed!');
         }
       } catch (error) {}
@@ -136,7 +137,7 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input room name!",
+                    message: 'Please input room name!',
                   },
                 ]}
               >
@@ -154,7 +155,7 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input bed number!",
+                    message: 'Please input bed number!',
                   },
                 ]}
               >
@@ -166,7 +167,7 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
                 name='bathNumber'
                 hasFeedback
                 rules={[
-                  { required: true, message: "Please input bath number!" },
+                  { required: true, message: 'Please input bath number!' },
                 ]}
               >
                 <InputNumber max={10} min={1} />
@@ -176,9 +177,7 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
                 label='Price'
                 name='price'
                 hasFeedback
-                rules={[
-                  { required: true, message: "Please input price!" },
-                ]}
+                rules={[{ required: true, message: 'Please input price!' }]}
               >
                 <InputNumber
                   formatter={(value) =>
@@ -193,15 +192,16 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
               <Form.Item
                 label='Type'
                 name='ID_Type_Room'
-                initialValue={typesRoom?.[0]?.ID_Type_Room}  
+                initialValue={typesRoom?.[0]?.ID_Type_Room}
                 hasFeedback
                 rules={[
-                  { required: true, message: "Please select room's type room!" },
+                  {
+                    required: true,
+                    message: "Please select room's type room!",
+                  },
                 ]}
               >
-                <Select
-                  style={{ width: 120 }}
-                >
+                <Select style={{ width: 120 }}>
                   {typesRoom?.map((t, index) => (
                     <Option
                       key={(t.ID_Type_Room || '') + index}
@@ -216,16 +216,14 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
           </Row>
 
           <Row>
-            <Space size={'middle'}>
               <Form.Item
                 label='Status'
                 name='idStatus'
-                initialValue={2}
+                initialValue={'Non-active'}
                 // rules={[{ required: true, message: "Please input hotel's ward!" }]}
               >
-                <InputNumber readOnly />
+                <InputNumber readOnly style={{width:100}}/>
               </Form.Item>
-            </Space>
           </Row>
 
           <Row

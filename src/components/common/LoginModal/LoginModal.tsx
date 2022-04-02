@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 import { FunctionComponent, useEffect, useState } from 'react';
+import DesktopRegister from '../DesktopRegister/DesktopRegister';
 import LoginForm from '../LoginForm/LoginForm';
-import RegisterForm from '../RegisterForm/RegisterForm';
 import styles from './LoginModal.module.scss';
 interface LoginModalProps {
   /**
@@ -75,7 +75,7 @@ const LoginModal: FunctionComponent<LoginModalProps> = (props) => {
             handleClose={handleClose}
           />
         ) : (
-          <RegisterForm setTypeModal={setTypeModal} handleClose={handleClose} />
+          <DesktopRegister setTypeModal={setTypeModal}/>
         )}
       </Modal>
     </div>

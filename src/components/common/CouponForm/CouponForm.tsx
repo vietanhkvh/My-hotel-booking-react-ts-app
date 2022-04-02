@@ -7,6 +7,7 @@ import {
   InputNumber,
   Modal,
   Row,
+  Select,
   Space,
 } from 'antd';
 import moment from 'moment';
@@ -15,8 +16,10 @@ import styles from './CouponForm.module.scss';
 import { coupon } from '../../../const/interface';
 import { saveCoupon } from '../../../services/coupon.service';
 import { openNotificationWithIcon } from '../../../utils/helpers';
+import { useSelector } from 'react-redux';
+import { constState } from '@src/store/reducer/constReducer';
 const { RangePicker } = DatePicker;
-
+const {Option}= Select;
 interface CouponFormProps {
   visible?: boolean;
   setVisible?: (val: boolean) => void;
@@ -26,7 +29,9 @@ interface CouponFormProps {
 
 const CouponForm: FunctionComponent<CouponFormProps> = (props) => {
   const { visible, setVisible, idHotel, getCoupons } = props;
-
+  const typesRoom = useSelector(
+    (state: { const: constState }) => state?.const?.typesRoom
+  );
   //////////////////////state
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
@@ -72,7 +77,7 @@ const CouponForm: FunctionComponent<CouponFormProps> = (props) => {
         value: couponInfor?.value,
         startDate: moment(dateStart).format(DATE_FORMAT_BACK_END),
         endDate: moment(dateEnd).format(DATE_FORMAT_BACK_END),
-
+        typeRoom: couponInfor?.typeRoom
       };
       const respond = await saveCoupon(payload);
       try {
@@ -153,6 +158,30 @@ const CouponForm: FunctionComponent<CouponFormProps> = (props) => {
                   min={1}
                   formatter={(value) => `${value}%`}
                 />
+              </Form.Item>
+
+              <Form.Item
+                label='Type room'
+                name='typeRoom'
+                hasFeedback
+                initialValue={'LUX'}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input value!',
+                  },
+                ]}
+              >
+                 <Select style={{ width: 120 }}>
+                  {typesRoom?.map((t, index) => (
+                    <Option
+                      key={(t.ID_Type_Room || '') + index}
+                      value={t?.ID_Type_Room}
+                    >
+                      {t?.Type_Room_Name}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Space>
           </Row>

@@ -3,8 +3,6 @@ import { Row } from 'antd';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import SlickImages from '../SlickImages/SlickImages';
 import styles from './HotelImages.module.scss';
-import { getImgHotel } from '../../../services/common.service';
-import { SUCCESS_CODE } from '../../constants';
 import { hotelSearching } from '../../../const/interface';
 interface HotelImagesProps {
   /**

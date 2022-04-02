@@ -30,7 +30,10 @@ import {
 import styles from './CouponManager.module.scss';
 import { getHotelTableForHost } from '../../../services/hotel.service';
 import { setHotelManager } from '../../../store/actions/constAction';
-import { DATE_FORMAT_BACK_END, SUCCESS_CODE } from '../../../components/constants';
+import {
+  DATE_FORMAT_BACK_END,
+  SUCCESS_CODE,
+} from '../../../components/constants';
 import {
   getListCouponHotel,
   updateCoupon,
@@ -43,6 +46,7 @@ import {
   isDisableBtnAdd,
   openNotificationWithIcon,
 } from '../../../utils/helpers';
+import { constState } from '@src/store/reducer/constReducer';
 const { Option } = Select;
 const { Text } = Typography;
 
@@ -67,16 +71,19 @@ const EditableCell: React.FC<EditableCellProps> = ({
   children,
   ...restProps
 }) => {
-  const handleChange=(value)=> {
+  const typesRoom = useSelector(
+    (state: { const: constState }) => state?.const?.typesRoom
+  );
+  const handleChange = (value) => {
     console.log(`selected ${value}`);
-  }
+  };
   const switchInputNode = (inputType: string) => {
     switch (inputType) {
       case 'number':
         return <InputNumber min={1} max={9999} />;
       case 'datePicker':
         return <DatePicker onChange={handleChange} />;
-      case 'select':
+      case 'selectSts':
         return (
           <Select defaultValue={1} style={{ width: 120 }}>
             <Option key={'active'} value={1}>
@@ -85,6 +92,19 @@ const EditableCell: React.FC<EditableCellProps> = ({
             <Option key={'non-active'} value={2}>
               Non-active
             </Option>
+          </Select>
+        );
+      case 'selectTR':
+        return (
+          <Select style={{ width: 120 }}>
+            {typesRoom?.map((t, index) => (
+              <Option
+                key={(t.ID_Type_Room || '') + index}
+                value={t?.ID_Type_Room}
+              >
+                {t?.Type_Room_Name}
+              </Option>
+            ))}
           </Select>
         );
       default:
@@ -126,6 +146,9 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
     (state: { user: userState }) => state?.user?.userInfor
   );
   const dispatch: Dispatch<any> = useDispatch();
+  const typesRoom = useSelector(
+    (state: { const: constState }) => state?.const?.typesRoom
+  );
   ///////////////////////states
 
   const [form] = Form.useForm();
@@ -199,6 +222,7 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
         startDate: couponInfor.State_Date,
         endDate: couponInfor.End_Date,
         idStatus: couponInfor.ID_Status,
+        typeRoom: couponInfor?.ID_Type_Room,
       };
       const respond = await updateCoupon(payload);
       try {
@@ -208,12 +232,14 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
             'Update coupon with id: ' + ID_Coupon + ' successfull!';
           openNotificationWithIcon('success', '', message);
           getCoupons(couponInfor?.ID_Hotel);
+          return true;
         } else {
           openNotificationWithIcon(
             'error',
             '',
             'Update coupon with id: ' + ID_Coupon + ' failed'
           );
+          return false;
         }
       } catch (error) {
         openNotificationWithIcon(
@@ -256,8 +282,9 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
           ...row,
         });
         console.log('coupon', row);
-        updateCouponInfor(ID_Coupon, row);
-        setCoupons(newData);
+        if (await updateCouponInfor(ID_Coupon, row)) {
+          setCoupons(newData);
+        }
         setEditingKey(undefined);
       } else {
         newData.push(row);
@@ -275,7 +302,7 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
       key: 'ID_Coupon',
       render: (text) => <Text>{text}</Text>,
       editable: false,
-      width: '10%',
+      ellipsis: true,
     },
     {
       title: 'ID Hotel',
@@ -285,7 +312,7 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
         return <Text>{text}</Text>;
       },
       editable: true,
-      width: '10%',
+      ellipsis: true,
     },
     {
       title: 'Name',
@@ -293,7 +320,7 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
       key: 'Name',
       render: (text: string) => <Text>{text}</Text>,
       editable: true,
-      width: '20%',
+      ellipsis: true,
     },
     {
       title: 'Value',
@@ -301,7 +328,7 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
       key: 'Value',
       render: (text: string) => <Text>{text}%</Text>,
       editable: true,
-      width: '10%',
+      ellipsis: true,
     },
     {
       title: 'Start date',
@@ -316,14 +343,14 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
         );
       },
       editable: true,
-      width: '20%',
+      ellipsis: true,
     },
     {
       title: 'End date',
       dataIndex: 'End_Date',
       key: 'End_Date',
       editable: true,
-      width: '20%',
+      ellipsis: true,
     },
     {
       title: 'Status',
@@ -345,6 +372,14 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
         </Text>
       ),
       editable: true,
+    },
+    {
+      title: 'Type Room',
+      dataIndex: 'ID_Type_Room',
+      key: 'ID_Type_Room',
+      render: (val: string) => <Text>{val}</Text>,
+      editable: true,
+      ellipsis: true,
     },
     {
       title: 'Action',
@@ -385,7 +420,9 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
       case 'Value':
         return 'number';
       case 'ID_Status':
-        return 'select';
+        return 'selectSts';
+      case 'ID_Type_Room':
+        return 'selectTR';
       default:
         return 'text';
     }
@@ -431,6 +468,7 @@ const CouponManager: FunctionComponent<CouponManagerProps> = () => {
           disabled={isDisableBtnAdd(idHotel, editingKey)}
           type='primary'
         >
+          {console.log('isDisableBtnAdd', isDisableBtnAdd(idHotel, editingKey))}
           Add new coupon
         </Button>
       </Row>

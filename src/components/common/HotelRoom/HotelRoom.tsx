@@ -1,6 +1,12 @@
-import { Button, Col, Divider, Image, Row, Space, Tag, Typography } from 'antd';
-import { FunctionComponent, useCallback, useEffect, useState } from 'react';
-import { hotelRoom } from '@const/interface';
+import { Button, Col, Image, Row, Space, Tag, Typography } from 'antd';
+import {
+  Dispatch,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import { cartItem, hotelRoom } from '@const/interface';
 import styles from './HotelRoom.module.scss';
 import Room1 from '../../../assest/images/room1.jpg';
 import Room2 from '../../../assest/images/room2.jpg';
@@ -11,32 +17,40 @@ import SingleBed from '../../../assest/icons/single-bed-20.png';
 import Group from '../../../assest/icons/group-16.png';
 import Expand from '../../../assest/icons/expand-20.png';
 import { some, SUCCESS_CODE } from '../../constants';
-import { isMany } from '../../../utils/helpers';
+import {
+  calcGuest,
+  calcTotalPrice,
+  isMany,
+  openNotificationWithIcon,
+} from '../../../utils/helpers';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { constState } from '../../../store/reducer/constReducer';
 import { getImgRoom } from '../../../services/common.service';
+import clsx from 'clsx';
+import { setCarts } from '../../../store/actions/constAction';
+import moment from 'moment';
 const { Text } = Typography;
 const ImagesMember = (props) => {
   const { images } = props;
   return images?.length >= 4 ? (
     <>
-     <Row className={styles['images-main']}>
+      <Row className={styles['images-main']}>
         <Image src={images?.[0]?.Image} width={202} height={151} />
       </Row>
-    <Row className={styles['images-member']}>
-      <Space size={2}>
-        {images?.slice(0, 4).map((i: any, index: number) =>
-          index !== 0 ? (
-            <Col span={8} key={index}>
-              <Image src={i.Image} width={66} height={49} />
-            </Col>
-          ) : (
-            ''
-          )
-        )}
-      </Space>
-    </Row>
+      <Row className={styles['images-member']}>
+        <Space size={2}>
+          {images?.slice(0, 4).map((i: any, index: number) =>
+            index !== 0 ? (
+              <Col span={8} key={index}>
+                <Image src={i.Image} width={66} height={49} />
+              </Col>
+            ) : (
+              ''
+            )
+          )}
+        </Space>
+      </Row>
     </>
   ) : (
     <>
@@ -65,38 +79,92 @@ interface HotelRoomProps {
    * hotel room infor
    */
   hotelRoom?: hotelRoom;
+  /**
+   * rating point
+   */
+  ratingPoint?: number;
+  /**
+   * review number
+   */
+  reviewNum?: number;
+  /**
+   * imgHotel
+   */
+   imgHotel?:any;
 }
 
 const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
-  const { hotelRoom } = props;
+  ///////////////////state
+  let carts = useSelector(
+    (state: { const: constState }) => state?.const?.carts
+  );
+
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const { hotelRoom, ratingPoint, reviewNum, imgHotel } = props;
   const navigate = useNavigate();
   const hotelSearchingCondition = useSelector(
     (state: { const: constState }) => state?.const?.hotelSeachingCondition
   );
+  // const [roomsCarts, setRoomCarts] = useState<cartItem[]>(carts||[]);
+
   ///////////////component child
   const Price = (props) => {
     ///////////////////////////state
     const { couponValue, fisrtPrice, finalPrice, idStatus } = props;
 
     /////////////////////////////event
-    const handleBtnCLick = () => {
-      const param: some = {
-        hotelID: hotelRoom?.ID_Hotel,
-        hotelRoom: hotelRoom?.ID_Room,
-        dateIn: hotelSearchingCondition?.dateIn,
-        dateOut: hotelSearchingCondition?.dateOut,
-        rooms: hotelSearchingCondition?.rooms,
-        adults: hotelSearchingCondition?.adults,
-        children: hotelSearchingCondition?.children,
+    const handleBtnCLick = (type: string) => {
+      const room = {
+        ID_Hotel: hotelRoom?.ID_Hotel,
+        Hotel_Name: hotelRoom?.Hotel_Name,
+        ID_Room: hotelRoom?.ID_Room,
+        Room_Name: hotelRoom?.Room_Name,
+        Bed_Number: hotelRoom?.Bed_Number,
+        ID_Coupon: hotelRoom?.ID_Coupon,
+        Coupon_Value: hotelRoom?.Coupon_Value,
+        Price: hotelRoom?.Price,
+        Final_Price: hotelRoom?.Final_Price,
+        Rating_Point: ratingPoint,
+        Review_Number: reviewNum,
+        ID_Type_Room: hotelRoom?.ID_Type_Room,
+        Image_Room: images?.[0]?.Image,
+        Image_Hotel: imgHotel,
+        Date_In: hotelSearchingCondition?.dateIn,
+        Date_Out:  hotelSearchingCondition?.dateOut,
       };
-      navigate({
-        pathname: '/book',
-        search: `?${createSearchParams(param)}`,
-      });
+      console.log('carts', carts)
+      if (!carts?.find((c) => c.ID_Room === room.ID_Room)) {
+        carts?.push(room);
+        dispatch(setCarts(carts));
+        const param: some = {
+          dateIn: hotelSearchingCondition?.dateIn,
+          dateOut: hotelSearchingCondition?.dateOut,
+          rooms: hotelSearchingCondition?.rooms,
+          adults: hotelSearchingCondition?.adults,
+          children: hotelSearchingCondition?.children,
+          finalPrice: calcTotalPrice(carts!),
+        };
+        if (type === 'RESERVE') {
+          navigate({
+            pathname: '/book',
+            search: `?${createSearchParams(param)}`,
+          });
+        }
+      } else {
+        openNotificationWithIcon(
+          'error',
+          '',
+          "Can't reserve the room which was already added in cart!"
+        );
+      }
     };
+
+    // useEffect(() => {
+    //   setCart();
+    // }, [setCart]);
     return (
       <div className={styles['price-wrapper']}>
-        {console.log('hotelRoom', hotelRoom)}
         {couponValue ? (
           <>
             <Row className={styles['percent-wrapper']}>
@@ -138,10 +206,17 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
         <Text className={styles['item']}>/room/day</Text>
         <Button
           className={styles['button']}
-          onClick={handleBtnCLick}
+          onClick={()=>handleBtnCLick('RESERVE')}
           disabled={idStatus === 2 ? true : false}
         >
           Reserve
+        </Button>
+        <Button
+          className={clsx(styles['button'], styles['btn-add'])}
+          onClick={()=>handleBtnCLick('ADDCART')}
+          disabled={idStatus === 2 ? true : false}
+        >
+          Add to cart
         </Button>
       </div>
     );
@@ -180,9 +255,8 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
   }, [getImgsRoom, hotelRoom?.ID_Room]);
   return (
     <div className={styles['hotel-room']}>
-      {console.log('images', images)}
       <Row className={styles['images']}>
-        <ImagesMember images={images}/>
+        <ImagesMember images={images} />
       </Row>
       <Row className={styles['infor']}>
         <Col span={16} className={styles['room-infor']}>
@@ -200,7 +274,8 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
                 }
                 preview={false}
               />
-              1 bed
+              {calcGuest(hotelRoom?.Bed_Number)} bed
+              {isMany(calcGuest(hotelRoom?.Bed_Number))}
             </Text>
             <Text className={styles['detail-item']}>
               <Image src={Group} preview={false} />

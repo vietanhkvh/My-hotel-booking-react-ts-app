@@ -181,10 +181,10 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
         if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
           openNotificationWithIcon('success', '', 'Update image successfull!');
           getImgs(idHotel);
-          return 1;
+          return true;
         } else {
           openNotificationWithIcon('error', '', 'Update image failed!');
-          return 2;
+          return false;
         }
       } catch (error) {}
     },
@@ -246,7 +246,7 @@ const ImagesManager: FunctionComponent<ImagesManagerProps> = () => {
           ...row,
         });
         console.log('img', row);
-        if ((await updateImgHotel(ID_IMG, row)) === 1) {
+        if (await updateImgHotel(ID_IMG, row)) {
           setImgs(newData);
         }
         setEditingKey(undefined);

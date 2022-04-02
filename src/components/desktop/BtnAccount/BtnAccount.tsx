@@ -6,46 +6,46 @@ import { userInfoInterface } from '../../../const/interface';
 import { useNavigate } from 'react-router-dom';
 const { Text } = Typography;
 
-const adminList: some[] = [
-  {
-    text: 'Profile',
-    icon: '',
-  },
-  {
-    text: 'Log out',
-    icon: '',
-  },
-];
+// const adminList: some[] = [
+//   {
+//     text: 'Profile',
+//     icon: '',
+//   },
+//   {
+//     text: 'Log out',
+//     icon: '',
+//   },
+// ];
 
-const host: some[] = [
-  {
-    text: 'Profile',
-    icon: '',
-  },
-  {
-    text: 'Switch to traveling',
-    icon: '',
-  },
-  {
-    text: 'Log out',
-    icon: '',
-  },
-];
+// const host: some[] = [
+//   {
+//     text: 'Profile',
+//     icon: '',
+//   },
+//   {
+//     text: 'Switch to traveling',
+//     icon: '',
+//   },
+//   {
+//     text: 'Log out',
+//     icon: '',
+//   },
+// ];
 
-const guest: some[] = [
-  {
-    text: 'Profile',
-    icon: '',
-  },
-  {
-    text: 'Switch to host',
-    icon: '',
-  },
-  {
-    text: 'Log out',
-    icon: '',
-  },
-];
+// const guest: some[] = [
+//   {
+//     text: 'Profile',
+//     icon: '',
+//   },
+//   {
+//     text: 'Switch to host',
+//     icon: '',
+//   },
+//   {
+//     text: 'Log out',
+//     icon: '',
+//   },
+// ];
 
 interface BtnAccountProps {
   /**

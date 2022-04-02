@@ -1,5 +1,8 @@
-import { some, SUCCESS_CODE } from '../../../components/constants';
-import { getCouponHotel } from '../../../services/coupon.service';
+import {
+  DATE_FORMAT_BACK_END,
+  some,
+  SUCCESS_CODE,
+} from '../../../components/constants';
 import { isMany } from '../../../utils/helpers';
 import { Card, Col, Image, Rate, Row, Typography } from 'antd';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
@@ -15,16 +18,25 @@ import {
 import { hotelRoom, hotelSearching } from '../../../const/interface';
 import HotelImages from '../../../components/common/HotelImages/HotelImages';
 import HotelRoom from '../../../components/common/HotelRoom/HotelRoom';
+import { constState } from '@src/store/reducer/constReducer';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
+import NotFound from '../../../components/common/NotFound/NotFound';
 const { Meta } = Card;
 const { Text, Title } = Typography;
 interface HotelIdProps {}
 
 const HotelId: FunctionComponent<HotelIdProps> = (props) => {
+  const hotelSearchingCondition = useSelector(
+    (state: { const: constState }) => state?.const?.hotelSeachingCondition
+  );
   ///////////////////////////////////////state
   const { hotelId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const guestNum = parseInt(searchParams.get('adults')||"") + parseInt(searchParams.get('children')||"")
-  
+  const guestNum =
+    parseInt(searchParams.get('adults') || '') +
+    parseInt(searchParams.get('children') || '');
+
   const [hotelInfor, setHotelInfor] = useState<hotelSearching>({});
   const [hotelInfors, setHotelInfors] = useState<hotelSearching[]>([]);
   const [hotelRooms, setHotelRooms] = useState<hotelRoom[]>([]);
@@ -59,7 +71,8 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
           </Row>
           <Row>
             <span className={styles['description-text']}>
-            ({reviewNumber>0 ? reviewNumber : 0 } rate{isMany(reviewNumber ? reviewNumber : 0)})
+              ({reviewNumber > 0 ? reviewNumber : 0} rate
+              {isMany(reviewNumber ? reviewNumber : 0)})
             </span>
           </Row>
         </Row>
@@ -90,7 +103,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
   };
   const Price = (props) => {
     ///////////////////////////state
-    const { couponValue,minPrice ,finalPrice } = props;
+    const { couponValue, minPrice, finalPrice } = props;
     return (
       <div className={styles['price-wrapper']}>
         {couponValue ? (
@@ -133,33 +146,49 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
     );
   };
   /////////////////////////////////////////////////////////////event
-  const getHotelInfor = useCallback(async (hotelId: any) => {
-    const payload = {
-      idHotel: hotelId,
-    };
-    const respond = await getHotelInforByID(payload);
-    try {
-      const res = await respond;
-      if (res?.data?.code === SUCCESS_CODE) {
-        setHotelInfor(res?.data?.data?.[0]);
-        setHotelInfors(res?.data?.data);
-      }
-    } catch (error) {}
-  }, []);
-  const getHotelRoomList = useCallback(async (idHotel: string | undefined) => {
-    console.log('idhotel', idHotel) 
-    const payload: some = {
-      idHotel: idHotel,
-      guestNum: guestNum
-    };
-    const respond = await getHotelRoom(payload);
-    try {
-      const res = respond;
-      if (res?.data?.code === SUCCESS_CODE) {
-        setHotelRooms(res?.data?.data);
-      }
-    } catch (err) {}
-  }, [guestNum]);
+  const getHotelInfor = useCallback(
+    async (hotelId: any) => {
+      const payload = {
+        idHotel: hotelId,
+        dateIn: moment(hotelSearchingCondition?.dateIn).format(
+          DATE_FORMAT_BACK_END
+        ),
+        dateOut: moment(hotelSearchingCondition?.dateOut).format(
+          DATE_FORMAT_BACK_END
+        ),
+      };
+      const respond = await getHotelInforByID(payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE) {
+          setHotelInfor(res?.data?.data?.[0]);
+          setHotelInfors(res?.data?.data);
+        }
+      } catch (error) {}
+    },
+    [hotelSearchingCondition?.dateIn, hotelSearchingCondition?.dateOut]
+  );
+  const getHotelRoomList = useCallback(
+    async (idHotel: string | undefined) => {
+      const payload: some = {
+        idHotel: idHotel,
+        dateOut: moment(hotelSearchingCondition?.dateOut).format(
+          DATE_FORMAT_BACK_END
+        ),
+        dateIn: moment(hotelSearchingCondition?.dateIn).format(
+          DATE_FORMAT_BACK_END
+        ),
+      };
+      const respond = await getHotelRoom(payload);
+      try {
+        const res = respond;
+        if (res?.data?.code === SUCCESS_CODE) {
+          setHotelRooms(res?.data?.data);
+        }
+      } catch (err) {}
+    },
+    [hotelSearchingCondition?.dateIn, hotelSearchingCondition?.dateOut]
+  );
   useEffect(() => {
     getHotelInfor(hotelId);
     getHotelRoomList(hotelId);
@@ -191,11 +220,27 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
           />
         </Col>
       </Row>
-      <HotelImages hotelInfors={hotelInfors}/>
-      <Title level={5} style={{ marginTop: 20 }} >Rooms</Title>
-      {hotelRooms?.map((h) => (
-        <HotelRoom key={h?.ID_Room && h?.ID_Room} hotelRoom={h} />
-      ))}
+      <HotelImages hotelInfors={hotelInfors} />
+      <Title level={5} style={{ marginTop: 20 }}>
+        Rooms
+      </Title>
+      {console.log('hotelRooms', hotelRooms)}
+      {console.log('hotelInfor', hotelInfor)}
+      {hotelRooms?.length ? (
+        hotelRooms?.map((h) => (
+          <HotelRoom
+            key={h?.ID_Room && h?.ID_Room}
+            hotelRoom={h}
+            ratingPoint={hotelInfor?.Rating_Point}
+            reviewNum={hotelInfor?.Review_Number}
+            imgHotel={hotelInfor?.Image}
+          />
+        ))
+      ) : (
+        <Col className={styles['hotel-card']} span={24}>
+          <NotFound text={'Oop... No room is avaible now!'} />
+        </Col>
+      )}
     </Row>
   );
 };

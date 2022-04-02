@@ -1,53 +1,83 @@
 import { some } from '../../../const/keyString';
 import { Button, Form, Input, Typography } from 'antd';
-import { FunctionComponent, useCallback } from 'react';
+import { FunctionComponent, useCallback, useState } from 'react';
 import styles from './RegisterForm.module.scss';
-import { registerAccount } from '../../../services/common.service';
+import {
+  checkDupUserN,
+  registerAccount,
+  sendEmailOtp,
+} from '../../../services/common.service';
 import { SUCCESS_CODE } from '../../../components/constants';
 import { openNotificationWithIcon } from '../../../utils/helpers';
 const { Title } = Typography;
 interface RegisterFormProps {
   /**
-   * setTypeModal
+   * set step
    */
-  setTypeModal?: (val: string) => void;
+  setStep?: (val: number) => void;
   /**
-   * handleClose
+   * setRegisterUser
    */
-  handleClose?: () => void;
+  setRegisterUser?: (val: any) => void;
+  /**
+   * setOtpCr
+   */
+  setOtpCr?: (val: number) => void;
 }
 
 const RegisterForm: FunctionComponent<RegisterFormProps> = (props) => {
-  const { setTypeModal, handleClose } = props;
+  const { setStep, setRegisterUser, setOtpCr } = props;
   const [form] = Form.useForm();
   ////////////////state
+  const [isDupUserN, setIsDupUserN] = useState<boolean>();
   /////////////////////////event
-  const signUp = useCallback(async (val: some) => {
+  const callSendOtpCode = useCallback(async (email: string, otp: number) => {
     const payload = {
-      idRole: 'GUE',
-      userName: val?.userName,
-      password: val?.password,
-      fullName: val?.fullName,
-      email: val?.email,
-      phone: val?.phone,
-      status: 1,
+      email: email,
+      otp: otp,
     };
-    const respond = await registerAccount(payload);
+    const respond = await sendEmailOtp(payload);
     try {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE) {
-        openNotificationWithIcon('success', '', 'Register successfull1');
-        setTypeModal && setTypeModal('LOGIN');
-      } else if (res?.data?.code !== SUCCESS_CODE || res?.data?.data) {
-        openNotificationWithIcon('error', '', 'Register failed!');
+        openNotificationWithIcon(
+          'success',
+          '',
+          'Your OTP code was sent to your mail!'
+        );
       }
     } catch (error) {}
-  }, [setTypeModal]);
+  }, []);
+  const createOTP = () => {
+    const a = Math.floor(100000 + Math.random() * 900000);
+    return a;
+  };
+  const checkIsDupUserName = useCallback(async (email: string) => {
+    const payload = {
+      userName: email,
+    };
+    const respond = await checkDupUserN(payload);
+    try {
+      const res = await respond;
+      if (res?.data?.code === SUCCESS_CODE) {
+        setIsDupUserN(res?.data?.data);
+        if (!res?.data?.data) {
+          openNotificationWithIcon('success', '', 'Email is not registed!');
+        } else openNotificationWithIcon('error', '', 'Email was registed!');
+      }
+    } catch (error) {}
+  }, []);
   const onFinish = useCallback(
     (value: some) => {
-      signUp(value);
+      if (!isDupUserN) {
+        setStep && setStep(1);
+        setRegisterUser && setRegisterUser(value);
+        const otpCr = createOTP();
+        setOtpCr && setOtpCr(otpCr);
+        callSendOtpCode(value?.email, otpCr);
+      } else openNotificationWithIcon('error', '', 'Email was registed!');
     },
-    [signUp]
+    [callSendOtpCode, isDupUserN, setOtpCr, setRegisterUser, setStep]
   );
   return (
     <div className={styles['register-form']}>
@@ -60,29 +90,26 @@ const RegisterForm: FunctionComponent<RegisterFormProps> = (props) => {
         autoComplete='off'
         onFinish={onFinish}
       >
+        {console.log('isDupUserN', isDupUserN)}
         <Form.Item
           className={styles['item-input']}
           name='userName'
+          validateStatus={isDupUserN ? 'error' : ''}
           rules={[
             {
               required: true,
-              message: 'Please enter your user name!',
+              message: 'Please enter your user name(email)!',
             },
-          ]}
-        >
-          <Input className={styles['input-main']} placeholder={'User name'} />
-        </Form.Item>
-        <Form.Item
-          className={styles['item-input']}
-          name='fullName'
-          rules={[
             {
-              required: true,
-              message: 'Please enter your name!',
+              type: 'email',
+              message: 'Please enter rigth email formated!',
             },
           ]}
         >
-          <Input className={styles['input-main']} placeholder={'Full name'} />
+          <Input
+            className={styles['input-main']}
+            onBlur={(e) => checkIsDupUserName(e.target.value)}
+          />
         </Form.Item>
         <Form.Item
           className={styles['item-input']}
@@ -96,10 +123,33 @@ const RegisterForm: FunctionComponent<RegisterFormProps> = (props) => {
               type: 'email',
               message: 'Please enter rigth email formated!',
             },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('userName') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('The two emails that you entered do not match!')
+                );
+              },
+            }),
           ]}
         >
-          <Input className={styles['input-main']} placeholder={'Email'} />
+          <Input className={styles['input-main']} placeholder={'Re-email'} />
         </Form.Item>
+        <Form.Item
+          className={styles['item-input']}
+          name='fullName'
+          rules={[
+            {
+              required: true,
+              message: 'Please enter your name!',
+            },
+          ]}
+        >
+          <Input className={styles['input-main']} placeholder={'Full name'} />
+        </Form.Item>
+
         <Form.Item
           className={styles['item-input']}
           name='phone'
@@ -108,6 +158,16 @@ const RegisterForm: FunctionComponent<RegisterFormProps> = (props) => {
               required: true,
               message: 'Please enter your phone!',
             },
+            () => ({
+              validator(_, value) {
+                if (!value || value?.length >= 10 ) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('The phone format is not correct!')
+                );
+              },
+            }),
           ]}
         >
           <Input className={styles['input-main']} placeholder={'Phone'} />

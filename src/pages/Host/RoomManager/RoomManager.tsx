@@ -82,9 +82,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
         return <InputNumber min={1} max={9999} />;
       case 'select':
         return (
-          <Select
-            style={{ width: 120 }}
-          >
+          <Select style={{ width: 120 }}>
             {typesRoom?.map((t, index) => (
               <Option
                 key={(t.ID_Type_Room || '') + index}
@@ -192,59 +190,76 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
     try {
       const res = await respond;
       if (res?.data?.code === SUCCESS_CODE) {
-        console.log('rooms',res?.data?.data)
+        console.log('rooms', res?.data?.data);
         setRoom(res?.data?.data);
       }
     } catch (error) {}
   }, []);
 
-  const updateRoom = useCallback(async (idRoom: string, roomInfor: room) => {
-    const payload = {
-      roomName: roomInfor?.Room_Name,
-      bedNumber: roomInfor?.Bed_Number,
-      bathNumber: roomInfor?.Bathroom_Number,
-      price: roomInfor?.Price,
-      idType: roomInfor?.ID_Type_Room,
-    };
-    const respond = await updateRoomInfor(idRoom, payload);
-    try {
-      const res = await respond;
-      if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
-        const message = 'Update room successfull!';
-        openNotificationWithIcon('success', '', message);
-        getRooms(idHotel);
-      } else {
+  const updateRoom = useCallback(
+    async (idRoom: string, roomInfor: room) => {
+      const payload = {
+        roomName: roomInfor?.Room_Name,
+        bedNumber: roomInfor?.Bed_Number,
+        bathNumber: roomInfor?.Bathroom_Number,
+        price: roomInfor?.Price,
+        idType: roomInfor?.ID_Type_Room,
+      };
+      const respond = await updateRoomInfor(idRoom, payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
+          const message = 'Update room successfull!';
+          openNotificationWithIcon('success', '', message);
+          getRooms(idHotel);
+          return true;
+        } else {
+          openNotificationWithIcon('error', '', 'Update room failed');
+          return false;
+        }
+      } catch (error) {
         openNotificationWithIcon('error', '', 'Update room failed');
       }
-    } catch (error) {
-      openNotificationWithIcon('error', '', 'Update room failed');
-    }
-  }, [getRooms, idHotel]);
+    },
+    [getRooms, idHotel]
+  );
 
-  const updateStsRoom=useCallback(async (idRoom?: string, idStatus?:number ) => {
-    const payload = {
-      idRoom: idRoom,
-      idStatus: idStatus,
-    };
+  const updateStsRoom = useCallback(
+    async (idRoom?: string, idStatus?: number) => {
+      const payload = {
+        idRoom: idRoom,
+        idStatus: idStatus,
+      };
 
-    const respond = await editStatusRoom( payload);
-    try {
-      const res = await respond;
-      if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
-        const message = 'Update status room with id: '+idRoom+' successfull!';
-        openNotificationWithIcon('success', '', message);
-        getRooms(idHotel)
-      } else {
-        openNotificationWithIcon('error', '', 'Update status room with id: '+idRoom+' failed');
+      const respond = await editStatusRoom(payload);
+      try {
+        const res = await respond;
+        if (res?.data?.code === SUCCESS_CODE && res?.data?.data === 1) {
+          const message =
+            'Update status room with id: ' + idRoom + ' successfull!';
+          openNotificationWithIcon('success', '', message);
+          getRooms(idHotel);
+        } else {
+          openNotificationWithIcon(
+            'error',
+            '',
+            'Update status room with id: ' + idRoom + ' failed'
+          );
+        }
+      } catch (error) {
+        openNotificationWithIcon(
+          'error',
+          '',
+          'Update status room with id: ' + idRoom + ' failed'
+        );
       }
-    } catch (error) {
-      openNotificationWithIcon('error', '', 'Update status room with id: '+idRoom+' failed');
-    }
-  }, [getRooms, idHotel]);
+    },
+    [getRooms, idHotel]
+  );
 
-  const handlerSts=(idRoom?:string, idStatus?:number)=>{
+  const handlerSts = (idRoom?: string, idStatus?: number) => {
     updateStsRoom(idRoom, idStatus);
-  }
+  };
 
   const getType = useCallback(async () => {
     const respond = await getTypesRoom();
@@ -290,16 +305,17 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
           ...item,
           ...row,
         });
-        setRoom(newData);
-        updateRoom(ID_Room, row);
+        if (await updateRoom(ID_Room, row)) {
+          setRoom(newData);
+        }
+
         setEditingKey('');
       } else {
         newData.push(row);
         setRoom(newData);
         setEditingKey('');
       }
-    } catch (errInfo) {
-    }
+    } catch (errInfo) {}
   };
 
   const columnsRoom = [
@@ -389,12 +405,15 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
               onClick={() => edit(record)}
             />
             {record?.ID_Status === 1 ? (
-              <Button icon={<MinusOutlined />} onClick={()=>handlerSts(record?.ID_Room, 2)}/>
+              <Button
+                icon={<MinusOutlined />}
+                onClick={() => handlerSts(record?.ID_Room, 2)}
+              />
             ) : (
-              <Button 
-              icon={<PlusOutlined />}
-              disabled={ record?.ID_Status === 2 && record?.ID_Payment ? false : true}
-              onClick={()=>handlerSts(record?.ID_Room, 1)}
+              <Button
+                icon={<PlusOutlined />}
+                // disabled={ record?.ID_Status === 2 && record?.ID_Payment ? false : true}
+                onClick={() => handlerSts(record?.ID_Room, 1)}
               />
             )}
           </Space>

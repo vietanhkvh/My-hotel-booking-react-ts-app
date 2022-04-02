@@ -1,8 +1,8 @@
 import { routes } from '../../../routes/routes';
-import { Col, Image, Layout, Menu, Popover, Row, Space } from 'antd';
-import { FunctionComponent, useCallback, useState } from 'react';
+import { Badge, Col, Image, Layout, Menu, Popover, Row, Space } from 'antd';
+import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import styles from './HeaderDesk.module.scss';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import LogoDesk from '../../../assest/images/logo-desk.png';
 import ButtonNav from '../ButtonNav/ButtonNav';
 import UserIc from '../../../assest/icons/user-24.png';
@@ -10,11 +10,13 @@ import DownA from '../../../assest/icons/down-arrow-16.png';
 import PhoneIc from '../../../assest/icons/phone-mob-16.png';
 import BtnAccount from '../BtnAccount/BtnAccount';
 import SearchingComponent from '../SearchingComponent/SearchingComponent';
+import ListIC from '../../../assest/icons/clipboard-24.png' 
 import LoginModal from '../../common/LoginModal/LoginModal';
 import { useSelector } from 'react-redux';
 import { userState } from '../../../store/reducer/userReducer';
 import MyAvatar from '../../common/MyAvatar/MyAvatar';
 import clsx from 'clsx';
+import { constState } from '../../../store/reducer/constReducer';
 
 const { Header } = Layout;
 
@@ -23,7 +25,12 @@ interface HeaderProps {}
 const HeaderNav: FunctionComponent<HeaderProps> = () => {
   const { pathname } = useLocation();
   const keyActive = pathname.substring(1, pathname.length);
+  const navigate = useNavigate();
+  const carts = useSelector(
+    (state: { const: constState }) => state?.const?.carts
+  );
   ////////////////////state
+  const [cartS, setCartS] = useState<any>(carts||[])
   const [currentKey, setCurrentKey] = useState<string>('');
   const [isOpenLogin, setIsOpenLogin] = useState<boolean>(false);
   const [typeScreenModal, setTypeScreenModal] = useState<string>('LOGIN');
@@ -73,7 +80,16 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
   const handleSetNavBarNew = useCallback(() => {
     window.scrollY >= 80 ? setNavBarNew(true) : setNavBarNew(false);
   }, []);
+  const handlerClickCart=()=>{
+    navigate({
+      pathname:'/itinerary'
+    })
+  }
   window.addEventListener('scroll', handleSetNavBarNew);
+
+  useEffect(()=>{
+    setCartS(carts);
+  },[carts])
   return (
     <Row className={styles['header']}>
       <Header
@@ -151,6 +167,10 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
                     </Col>
                   </Row>
                 </Popover>
+                {console.log('test', cartS?.length)}
+                <Badge count={cartS?.length} size={'small'} showZero={true}>
+                <ButtonNav icon={ListIC} text={''} handlerClick={handlerClickCart}/>
+                </Badge>
               </Space>
             </Row>
           </Col>

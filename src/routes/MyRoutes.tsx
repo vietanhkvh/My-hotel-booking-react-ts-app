@@ -24,6 +24,7 @@ import Accounts from '../pages/Admin/HostUser/HostUser';
 import ActiveRequestion from '../pages/Admin/ActiveRequestion/ActiveRequestion';
 import Requestion from '../pages/Admin/Requestion/Requestion';
 import PaymentManager from '../pages/Host/PaymentManager/PaymentManager';
+import Cart from '../pages/Cart/Cart';
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
@@ -119,6 +120,7 @@ const MyRoutes = (props) => {
       <Route path='book' element={<ConfirmPay />} />
       <Route path='book-success' element={<Success />} />
       <Route path='history' element={<History />} />
+      <Route path='itinerary' element={<Cart />}/>
     </Routes>
   );
 };

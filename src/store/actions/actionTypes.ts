@@ -10,5 +10,10 @@ export const ConstActions={
     setHotelSearchingCondition:'SET_HOTEL_SEARCHING_CONDITION',
     setHotelManager:'SET_HOTEL_MANAGER',
     setTypesRoom:'SET_TYPES_ROOM',
+    setCart:'SET_CART',
     removeHotelSearching:'REMOVE_HOTEL_SEARCHING'
+}
+export const CartActions={
+    addCart:'SET_CART',
+    removeCart:'REMOVE_CART'
 }

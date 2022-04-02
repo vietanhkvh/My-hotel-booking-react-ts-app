@@ -2,11 +2,17 @@ import { some } from '../const/keyString';
 import api from '../utils/api';
 
 export const getCouponHotel = (payload: some) => {
-  return api.get('/coupon/' + payload?.idHotel);
+  return api.post(
+    'coupon-hotel/' +
+      payload?.idHotel +
+      '?dateIn=' +
+      payload?.dateIn +
+      '&dateOut=' +
+      payload?.dateOut
+  );
 };
-
 export const getListCouponHotel = (payload: some) => {
-  return api.get('coupon-hotel/' + payload?.idHotel);
+  return api.get('coupon-hotel-manager/' + payload?.idHotel);
 };
 export const saveCoupon = (payload: some) => {
   return api.post(
@@ -19,7 +25,9 @@ export const saveCoupon = (payload: some) => {
       '&startDate=' +
       payload?.startDate +
       '&endDate=' +
-      payload?.endDate
+      payload?.endDate +
+      '&typeRoom=' +
+      payload?.typeRoom
   );
 };
 export const updateCoupon = (payload: some) => {
@@ -33,7 +41,10 @@ export const updateCoupon = (payload: some) => {
       '&startDate=' +
       payload?.startDate +
       '&endDate=' +
-      payload?.endDate
-      +'&idStatus='+payload?.idStatus
+      payload?.endDate +
+      '&idStatus=' +
+      payload?.idStatus +
+      '&typeRoom=' +
+      payload?.typeRoom
   );
 };

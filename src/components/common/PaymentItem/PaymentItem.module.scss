@@ -1,0 +1,88 @@
+.payment-item {
+  width: 100%;
+  padding: 24px;
+  background: white;
+  margin-top: 12px;
+  border-radius: 8px;
+  .infor-member {
+    .hotel {
+      padding: 0 15px;
+      .hotel-infor {
+        .hotel-name {
+          display: -webkit-box;
+          overflow: hidden;
+          font-size: 18px;
+          transition: all 0.2s;
+          font-weight: 600;
+          line-height: 21px;
+          margin-bottom: 2px;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          white-space: break-spaces;
+          margin-right: 10px;
+        }
+      }
+      .date {
+        padding-top: 10px;
+        .date-item {
+          border-left: 1px solid #e0e0e0;
+          padding: 0 10px;
+          .title {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    .image {
+        .room-img {
+          position: relative;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+        .coupon {
+          top: 0px;
+          left: 0px;
+          color: #ffffff;
+          width: 50px;
+          display: flex;
+          padding: 5px 10px;
+          z-index: 2;
+          position: absolute;
+          font-size: 12px;
+          background: #ff3366;
+          align-items: center;
+          font-weight: 600;
+          line-height: 21px;
+          white-space: nowrap;
+          border-radius: 8px 0;
+          justify-content: center;
+        }
+      }
+      .infor {
+        padding: 0 15px;
+        .detail {
+          margin-top: 10px;
+          .detail-item {
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            border-left: 1px solid #adadad;
+          }
+        }
+        .title {
+          width: 100%;
+          display: -webkit-box;
+          overflow: hidden;
+          font-size: 18px;
+          transition: all 0.2s;
+          font-weight: 600;
+          line-height: 21px;
+          margin-bottom: 2px;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          white-space: break-spaces;
+        }
+      }
+  }
+  
+}

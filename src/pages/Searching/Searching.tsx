@@ -8,6 +8,7 @@ import { constState } from '../../store/reducer/constReducer';
 import { isMany } from '../../utils/helpers';
 import { useSearchParams } from 'react-router-dom';
 import NotFound from '../../components/common/NotFound/NotFound';
+import { hotelSearching } from '@const/interface';
 const { Text } = Typography;
 interface SearchingProps {}
 
@@ -43,18 +44,18 @@ const Searching: FunctionComponent<SearchingProps> = () => {
             <Filter />
           </Col> */}
             <Col className={styles['hotel-card']} span={24}>
-              {hotelSearchingByLocation?.map((h: any) => {
+              {hotelSearchingByLocation?.map((h: hotelSearching) => {
                 return (
                   <HotelCard
                     key={h?.ID_Hotel}
-                    idHotel={h?.ID_Hotel}
+                    idHotel={h?.ID_Hotel!}
                     name={h?.Hotel_Name}
                     district={h?.District}
                     phone={h?.Phone}
                     minPrice={h?.Min_Price}
-                    image={h?.Image}
+                    image={h?.Imgs}
                     reviewNumber={h?.Review_Number}
-                    rating={h?.Rating_Point}
+                    rating={h?.Rating_Point!}
                     params={params}
                   />
                 );
@@ -64,7 +65,7 @@ const Searching: FunctionComponent<SearchingProps> = () => {
         </>
       ) : (
         <Col className={styles['hotel-card']} span={24}>
-          <NotFound />
+          <NotFound text={'Oop... No hotel is found'}/>
         </Col>
       )}
     </div>

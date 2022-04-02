@@ -1,7 +1,6 @@
 .payment-infor {
   border: 1px solid #edf2f7;
   border-radius: 8px;
-  margin-top: 12px;
   .payment-item {
     width: 100%;
     display: flex;
@@ -9,55 +8,10 @@
     margin-bottom: 14px;
     border-radius: 8px;
     padding: 24px;
-    .room-img {
-      position: relative;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .coupon {
-      top: 24px;
-      left: 48px;
-      color: #ffffff;
-      width: 125px;
-      display: flex;
-      padding: 5px 10px;
-      z-index: 2;
-      position: absolute;
-      font-size: 18px;
-      background: #ff3366;
-      align-items: center;
-      font-weight: 600;
-      line-height: 21px;
-      white-space: nowrap;
-      border-radius: 8px 0;
-      justify-content: center;
-    }
-    .detail {
-      margin-top: 10px;
-      .detail-item {
-        display: flex;
-        align-items: center;
-        padding: 0 24px;
-        border-right: 1px solid #adadad;
-      }
-    }
-    .title {
-      width: 100%;
-      margin-top: 10px;
-      display: -webkit-box;
-      overflow: hidden;
-      font-size: 18px;
-      transition: all 0.2s;
-      font-weight: 600;
-      line-height: 21px;
-      margin-bottom: 2px;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      white-space: break-spaces;
-    }
+    margin-top: 12px;
     .bill-item {
       width: 100%;
-      padding: 14px 0 12px;
+      padding: 12px 0;
       position: relative;
       font-weight: 400;
       line-height: 16px;
@@ -65,7 +19,15 @@
       justify-content: space-between;
       .price-item {
         width: 100%;
-        justify-content: flex-end;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        .price-mem{
+          display: flex;
+          justify-content: flex-end;
+        }
+        .price-text{
+          font-weight: 700;
+        }
         .coupon-value {
           color: #ffffff;
           padding: 1px 3px;
@@ -74,6 +36,7 @@
           font-weight: 600;
           line-height: 14px;
           border-radius: 4px;
+          margin-right: 5px;
         }
         .price-raw {
           color: #718096;
@@ -84,11 +47,9 @@
           text-decoration: line-through;
         }
       }
-      .total-room-rate {
-        margin-top: 10px;
-        width: 100%;
-        padding-left: 24px;
-        justify-content: space-between;
+      .total-txt{
+        font-weight: 700;
+        font-size: 18px;
       }
     }
   }

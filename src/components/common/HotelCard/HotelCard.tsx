@@ -6,10 +6,11 @@ import LocationIC from '../../../assest/icons/location-50.png';
 import Hotel from '../../../assest/images/hotel.jpg';
 import { isMany } from '../../../utils/helpers';
 import { getCouponHotel } from '../../../services/coupon.service';
-import { some, SUCCESS_CODE } from '../../constants';
+import { DATE_FORMAT_BACK_END, some, SUCCESS_CODE } from '../../constants';
 import PhoneIC from '../../../assest/icons/phone-50.png' 
 import { useSelector } from 'react-redux';
 import { constState } from '@src/store/reducer/constReducer';
+import moment from 'moment';
 const { Meta } = Card;
 const { Text } = Typography;
 interface HotelCardProps {
@@ -65,7 +66,9 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
     params
   } = props;
   const navigate = useNavigate();
-  
+  const hotelSearchingCondition = useSelector(
+    (state: { const: constState }) => state?.const?.hotelSeachingCondition
+  );
   ////////////////////////component
   const Title = (props) => {
     const { name, idHotel } = props;
@@ -81,6 +84,7 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
     const { ratingP, district, reviewNumber, phone } = props;
     return (
       <Row className={styles['description']}>
+        {console.log('image', image)}
         <Row className={styles['description-item']}>
           <Row>
             <Rate
@@ -129,6 +133,8 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
     const hanldeGetCoupon = useCallback(async (idHotel: string) => {
       const payload: some = {
         idHotel: idHotel,
+        dateIn: moment(hotelSearchingCondition?.dateIn).format(DATE_FORMAT_BACK_END),
+        dateOut: moment(hotelSearchingCondition?.dateOut).format(DATE_FORMAT_BACK_END),
       };
       const respond = await getCouponHotel(payload);
       try{
@@ -150,27 +156,18 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
             <Row className={styles['percent-wrapper']}>
               <Text className={styles['percent']}>-{percent}%</Text>
             </Row>
-            <Text
+            {/* <Text
               className={styles['item']}
               style={{ textDecorationLine: 'line-through' }}
             >
               {fisrtPrice}$
-            </Text>
-            <Text
-              className={styles['item']}
-              style={{
-                fontSize: 20,
-                fontWeight: 600,
-                lineHeight: '24px',
-                color: 'inherit',
-              }}
-            >
-              ${fisrtPrice*(1-(percent*0.01))}
-            </Text>
+            </Text> */}
           </>
         ) : (
           <>
-            <Text
+          </>
+        )}
+        <Text
               className={styles['item']}
               style={{
                 fontSize: 20,
@@ -179,10 +176,9 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
                 color: 'inherit',
               }}
             >
+              From
               ${fisrtPrice}
             </Text>
-          </>
-        )}
         <Text className={styles['item']}>/room/day</Text>
       </div>
     );
