@@ -47,7 +47,7 @@ export interface hotelRoom {
   Bed_Number?: number;
   Bathroom_Number?: number;
   Price: number;
-  ID_Coupon?: number;
+  ID_Coupon?: string;
   Coupon_Value?: number;
   Final_Price: number;
   ID_Status?: number;
@@ -136,7 +136,7 @@ export interface cartItem {
   ID_Room?: string;
   Room_Name?: string;
   Bed_Number?: number;
-  ID_Coupon?: number;
+  ID_Coupon?: string;
   Coupon_Value?: number;
   Price?: number;
   Final_Price?: number;
@@ -147,4 +147,11 @@ export interface cartItem {
   Image_Hotel?: any;
   Date_In?: any;
   Date_Out?: any;
+}
+export interface ratingInfor{
+  ID_Rating?:number,
+  Rate_Counting?:number,
+  Rate_Detail?:string,
+  FullName?:string,
+  Date_Out?:any
 }

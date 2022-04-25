@@ -21,11 +21,7 @@ import Cash from '../../../assest/icons/cash-40.png';
 import styles from './CustomerInforForm.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { constState } from '@src/store/reducer/constReducer';
-import {
-  DATE_FORMAT,
-  some,
-  SUCCESS_CODE,
-} from '../../constants';
+import { DATE_FORMAT, some, SUCCESS_CODE } from '../../constants';
 import {
   saveMultiplePD,
   savePayments,
@@ -39,7 +35,8 @@ import moment from 'moment';
 import { setCarts } from '../../../store/actions/constAction';
 import { openNotificationWithIcon } from '../../../utils/helpers';
 import { sendEmailBooking } from '../../../services/common.service';
-const { Text, Title } = Typography;
+import Paypal from '../Paypal/Paypal';
+const { Title } = Typography;
 interface CustomerInforFormProps {
   /**
    * userInfor
@@ -63,148 +60,43 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
   props
 ) => {
   const { userInfor, setIsOpenLogin } = props;
-  const navigate = useNavigate();
+
 
   /////////////////////////////states
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState({
+    fullName: userInfor?.FullName,
+    email: userInfor?.Email,
+    phone: userInfor?.Phone,
+  });
   const [user, setUser] = useState<any>({});
   const [searchParams, setSearchParams] = useSearchParams();
   const roomInfor = {
     Final_Price: searchParams.get('finalPrice'),
   };
-  const hotelSearchingCondition = useSelector(
-    (state: { const: constState }) => state?.const?.hotelSeachingCondition
-  );
-  const carts = useSelector(
-    (state: { const: constState }) => state?.const?.carts
-  );
-  const dispatch: Dispatch<any> = useDispatch();
 
-  // const dateIn = moment(hotelSearchingCondition?.dateIn);
-  // const dateOut = moment(hotelSearchingCondition?.dateOut);
   ///////////////////////////////event
-  const getName = (paymentInfor: any) => {
-    let detail: string = '';
-    if (paymentInfor?.length !== 1) {
-      paymentInfor?.forEach(
-        (p: any) =>
-          (detail +=
-            p?.Hotel_Name +
-            ' - ' +
-            p?.Room_Name +
-            '( ' +
-            moment(p?.Date_In).format(DATE_FORMAT) +
-            ' -> ' +
-            moment(p?.Date_Out).format(DATE_FORMAT) +
-            ' ) | ')
-      );
-    } else
-      detail =
-        paymentInfor?.[0]?.Hotel_Name +
-        '-' +
-        paymentInfor?.[0].Room_Name +
-        '(' +
-        moment(paymentInfor?.[0]?.Date_In).format(DATE_FORMAT) +
-        ' -> ' +
-        moment(paymentInfor?.[0]?.Date_Out).format(DATE_FORMAT) +
-        ')';
-    return detail;
-  };
-  const callSendEmailBooking = useCallback(
-    async (email: string, idPayment: string) => {
-      const payload = {
-        email: email,
-        idPayment: idPayment,
-        detail: getName(carts),
-      };
-      const respond = await sendEmailBooking(payload);
-      try {
-        const res = await respond;
-        if (res?.data?.code === SUCCESS_CODE) {
-          openNotificationWithIcon(
-            'success',
-            '',
-            'Booking information was sent to your mail!'
-          );
-        }
-      } catch (error) {}
-    },
-    [carts]
-  );
 
-  const finishPaymentDe = useCallback(
-    async (idPayment: string, email: string) => {
-      const payload = {
-        paymentD: JSON.stringify(carts),
-        idPayment: idPayment,
-      };
-      const respond = await saveMultiplePD(payload);
-      try {
-        const res = await respond;
-        if (res?.data?.code === SUCCESS_CODE) {
-          callSendEmailBooking(email, idPayment);
-          dispatch(setCarts([]));
-          const param: some = {
-            idPayment: idPayment,
-          };
-          navigate({
-            pathname: '/book-success',
-            search: `?${createSearchParams(param)}`,
-          });
-        }
-      } catch (error) {}
-    },
-    [callSendEmailBooking, carts, dispatch, navigate]
-  );
-
-  const finishPayment = useCallback(
-    async (values: any, roomInfor: any, idAccount: number) => {
-      const guestNum =
-        (hotelSearchingCondition?.adults ?? 0) +
-        (hotelSearchingCondition?.children ?? 0);
-
-      const payloadP = {
-        idAccount: idAccount,
-        guestNum: guestNum,
-        finalTotal: roomInfor?.Final_Price,
-        paymentMethod: values?.paymentMethod,
-      };
-
-      if (carts?.length) {
-        const respondP = await savePayments(payloadP);
-        try {
-          const resP = await respondP;
-          if (resP?.data?.code === SUCCESS_CODE) {
-            const idPayment = resP?.data?.data?.ID_Payment;
-            finishPaymentDe(idPayment, values?.email);
-          }
-        } catch (error) {}
-      } else {
-        openNotificationWithIcon('error', '', "Failed! Cart's empty!");
-      }
-    },
-    [
-      carts?.length,
-      finishPaymentDe,
-      hotelSearchingCondition?.adults,
-      hotelSearchingCondition?.children,
-    ]
-  );
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    if (userInfor) {
-      finishPayment(values, roomInfor, userInfor?.ID_Account);
-    } else {
-      setIsOpenLogin && setIsOpenLogin(true);
-    }
+    // if (userInfor) {
+    //   finishPayment(values, roomInfor, userInfor?.ID_Account);
+    // } else {
+    //   setIsOpenLogin && setIsOpenLogin(true);
+    // }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     // console.log('value:', values);
     console.log('Failed:', errorInfo);
   };
-  const onChange = (e) => {
-    setValue(e.target.value);
+  const onChangeEmail = (e: any) => {
+    setValue({ ...value, email: e.target.value });
+  };
+  const onChangeFullName = (e: any) => {
+    setValue({ ...value, fullName: e.target.value });
+  };
+  const onChangePhone = (e: any) => {
+    setValue({ ...value, phone: e.target.value });
   };
   const setUserInfor = useCallback(() => {
     if (userInfor) {
@@ -213,7 +105,6 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
   }, [userInfor]);
   useEffect(() => {
     setUserInfor();
-    // getLastIDPD();
   }, [setUserInfor]);
   return (
     <div className={styles['customer-infor-form']}>
@@ -240,7 +131,11 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
               { required: true, message: 'Please input your full name!' },
             ]}
           >
-            <Input placeholder='Louis Lane' value={user?.FullName} />
+            <Input
+              placeholder='Louis Lane'
+              value={user?.FullName}
+              onChange={(e) => onChangeFullName(e)}
+            />
           </Form.Item>
           <Row gutter={5}>
             <Col span={12}>
@@ -260,7 +155,11 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
                   },
                 ]}
               >
-                <Input placeholder='0123456789' value={user?.Phone} />
+                <Input
+                  placeholder='0123456789'
+                  value={user?.Phone}
+                  onChange={(e) => onChangePhone(e)}
+                />
               </Form.Item>
             </Col>
 
@@ -271,10 +170,17 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
                 initialValue={userInfor?.Email}
                 rules={[
                   { required: true, message: 'Please input your email!' },
-                  { type:'email', message : 'Please input your correct email format!'}
+                  {
+                    type: 'email',
+                    message: 'Please input your correct email format!',
+                  },
                 ]}
               >
-                <Input placeholder='example@gmail.com' value={user?.Email} />
+                <Input
+                  placeholder='example@gmail.com'
+                  value={user?.Email}
+                  onChange={(e) => onChangeEmail(e)}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -296,8 +202,8 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
                 },
               ]}
             >
-              <Radio.Group name='radiogroup' onChange={onChange} value={value}>
-                <Space direction='vertical'>
+              {/* <Radio.Group name='radiogroup' onChange={onChange} value={value}> */}
+              {/* <Space direction='vertical'>
                   <Radio value={2}>
                     <Image
                       src={CreditCard}
@@ -321,14 +227,15 @@ const CustomerInforForm: FunctionComponent<CustomerInforFormProps> = (
                       Pay with internet banking
                     </Text>
                   </Radio>
-                </Space>
-              </Radio.Group>
+                </Space> */}
+              {/* </Radio.Group> */}
+              <Paypal value={value} amount={roomInfor?.Final_Price!}/>
             </Form.Item>
-            <Form.Item className={styles['button-pay']}>
+            {/* <Form.Item className={styles['button-pay']}>
               <Button className={styles['button']} htmlType='submit'>
                 Pay
               </Button>
-            </Form.Item>
+            </Form.Item> */}
           </Row>
         </Row>
       </Form>

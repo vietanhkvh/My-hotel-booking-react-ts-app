@@ -14,10 +14,29 @@ export const getHotelTableForHost = (payload: some) => {
 export const getLocationHotel = () => {
   return api.get('hotel-location');
 };
+export const getNameHotel = (payload: any) => {
+  return api.post('hotel-name?name=' + payload?.name);
+};
 export const getSearchingResultLocation = (payload: some) => {
   return api.post(
     'hotel-list-searching-location?location=' +
       payload?.location +
+      '&dateIn=' +
+      payload?.dateIn +
+      '&dateOut=' +
+      payload?.dateOut +
+      '&guestNum=' +
+      payload?.guestNum
+  );
+};
+export const getSearchingResultName = (payload: some) => {
+  return api.post(
+    'hotel-list-searching-name?name=' +
+      payload?.name +
+      '&dateIn=' +
+      payload?.dateIn +
+      '&dateOut=' +
+      payload?.dateOut +
       '&guestNum=' +
       payload?.guestNum
   );

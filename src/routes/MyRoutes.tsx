@@ -25,12 +25,21 @@ import ActiveRequestion from '../pages/Admin/ActiveRequestion/ActiveRequestion';
 import Requestion from '../pages/Admin/Requestion/Requestion';
 import PaymentManager from '../pages/Host/PaymentManager/PaymentManager';
 import Cart from '../pages/Cart/Cart';
+import { userState } from '@src/store/reducer/userReducer';
+import { useSelector } from 'react-redux';
+import ProtectedRoute from './ProtectedRoute/ProtectedRoute';
+import DashBoardHost from '../pages/Host/DashBoardHost/DashBoardHost';
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
   const [Update, setUpdate] = useState(Date.now());
   //   const isMobileDisplay = useRef(isMobileAndTabletCheck());
   //   const isMobile = isMobileAndTabletCheck();
+
+  const userInfor = useSelector(
+    (state: { user: userState }) => state.user?.userInfor
+  );
+
   useEffect(() => {
     const check = () => {
       // setTimeout(checkDisplayType, 0);
@@ -61,25 +70,140 @@ const MyRoutes = (props) => {
 
         <Route path={'/searching'} element={<Searching />} />
 
-        <Route path='users' element={<Users />}>
-          <Route path=':userId' element={<User />} />
+        <Route
+          path='users'
+          element={
+            <ProtectedRoute isAllowed={!!userInfor}>
+              <Users />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path=':userId'
+            element={
+              <ProtectedRoute isAllowed={!!userInfor}>
+                <User />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         {/* host */}
-        <Route path='hotel-manager' element={<HotelManager />} />
-        <Route path='room-manager' element={<RoomManager />} />
-        <Route path='payment-manager' element={<PaymentManager />} />
+        <Route
+          path='dashboard'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+            >
+              <DashBoardHost />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path='hotel-images' element={<ImagesManager />} />
-        <Route path='room-images' element={<ImagesRoomManager/>} />
-        <Route path='coupon-manager' element={<CouponManager />} />
+        <Route
+          path='hotel-manager'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+            >
+              <HotelManager />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='room-manager'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+            >
+              <RoomManager />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='payment-manager'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+            >
+              <PaymentManager />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='hotel-images'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+            >
+              <ImagesManager />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='room-images'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+            >
+              <ImagesRoomManager />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='coupon-manager'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+            >
+              <CouponManager />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Admin */}
-        <Route path='host-manager' element={<Accounts type='HOS' />} />
-        <Route path='guest-manager' element={<Accounts type='GUE'/>} />
-        <Route path='de-active-requestion' element={<ActiveRequestion />} />
-        <Route path='host-requestion' element={<Requestion />} />
-        
+        <Route
+          path='host-manager'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'ADM'}
+            >
+              <Accounts type='HOS' />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='guest-manager'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'ADM'}
+            >
+              <Accounts type='GUE' />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='de-active-requestion'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'ADM'}
+            >
+              <ActiveRequestion />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='host-requestion'
+          element={
+            <ProtectedRoute
+              isAllowed={!!userInfor && userInfor?.ID_Role === 'ADM'}
+            >
+              <Requestion />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path={'*'} element={<Nopage />} />
         {/* {routerConfig.map((r: any) => {
         const { component, needAuthor, grantPermision, ...rest } = r;
@@ -118,9 +242,32 @@ const MyRoutes = (props) => {
       })} */}
       </Route>
       <Route path='book' element={<ConfirmPay />} />
-      <Route path='book-success' element={<Success />} />
-      <Route path='history' element={<History />} />
-      <Route path='itinerary' element={<Cart />}/>
+      <Route
+        path='book-success'
+        element={
+          <ProtectedRoute
+            isAllowed={!!userInfor && userInfor?.ID_Role === 'GUE'}
+          >
+            <Success />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='history'
+        element={
+          <ProtectedRoute
+            isAllowed={!!userInfor && userInfor?.ID_Role === 'GUE'}
+          >
+            <History />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='itinerary'
+        element={
+            <Cart />
+        }
+      />
     </Routes>
   );
 };

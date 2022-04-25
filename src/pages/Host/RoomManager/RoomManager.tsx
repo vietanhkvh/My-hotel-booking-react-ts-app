@@ -149,12 +149,12 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
   const isEditing = (record: room) => record.ID_Room === editingKey;
 
   ///////////////////////event
-  function onChange(value) {
+  const onChange=(value) => {
     console.log(`selected ${value}`);
     getRooms(value);
     setIDHotel(value);
   }
-  function onSearch(val) {
+  const onSearch=(val)=> {
     console.log('search:', val);
   }
   const showModal = () => {
@@ -334,7 +334,7 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
       editable: true,
     },
     {
-      title: 'Bed Number',
+      title: 'Guest Number',
       dataIndex: 'Bed_Number',
       key: 'Bed_Number',
       render: (text) => <Text>{text}</Text>,
@@ -412,7 +412,7 @@ const RoomManager: FunctionComponent<RoomManagerProps> = () => {
             ) : (
               <Button
                 icon={<PlusOutlined />}
-                // disabled={ record?.ID_Status === 2 && record?.ID_Payment ? false : true}
+                disabled={ record?.ID_Payment === null ? false : true}
                 onClick={() => handlerSts(record?.ID_Room, 1)}
               />
             )}

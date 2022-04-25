@@ -167,7 +167,6 @@ const HeaderNav: FunctionComponent<HeaderProps> = () => {
                     </Col>
                   </Row>
                 </Popover>
-                {console.log('test', cartS?.length)}
                 <Badge count={cartS?.length} size={'small'} showZero={true}>
                 <ButtonNav icon={ListIC} text={''} handlerClick={handlerClickCart}/>
                 </Badge>

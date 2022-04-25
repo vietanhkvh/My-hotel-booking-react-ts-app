@@ -4,7 +4,7 @@ import {
   SUCCESS_CODE,
 } from '../../../components/constants';
 import { isMany } from '../../../utils/helpers';
-import { Card, Col, Image, Rate, Row, Typography } from 'antd';
+import { Card, Col, Image, Rate, Row, Space, Typography } from 'antd';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import LocationIC from '../../../assest/icons/location-50.png';
@@ -15,13 +15,19 @@ import {
   getHotelInforByID,
   getHotelRoom,
 } from '../../../services/hotel.service';
-import { hotelRoom, hotelSearching } from '../../../const/interface';
+import {
+  hotelRoom,
+  hotelSearching,
+  ratingInfor,
+} from '../../../const/interface';
 import HotelImages from '../../../components/common/HotelImages/HotelImages';
 import HotelRoom from '../../../components/common/HotelRoom/HotelRoom';
 import { constState } from '@src/store/reducer/constReducer';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import NotFound from '../../../components/common/NotFound/NotFound';
+import RatedCard from '../../../components/common/RatedCard/RatedCard';
+import { getRatingHotel } from '../../../services/common.service';
 const { Meta } = Card;
 const { Text, Title } = Typography;
 interface HotelIdProps {}
@@ -40,6 +46,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
   const [hotelInfor, setHotelInfor] = useState<hotelSearching>({});
   const [hotelInfors, setHotelInfors] = useState<hotelSearching[]>([]);
   const [hotelRooms, setHotelRooms] = useState<hotelRoom[]>([]);
+  const [ratingHotel, setRatingHotel] = useState<ratingInfor[]>([]);
   const TitleCom = (props) => {
     const { name } = props;
     return (
@@ -189,10 +196,24 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
     },
     [hotelSearchingCondition?.dateIn, hotelSearchingCondition?.dateOut]
   );
+  const getRatingIFHotel = useCallback(async (idHotel?: string) => {
+    const payload: some = {
+      idHotel: idHotel,
+    };
+    const respond = await getRatingHotel(payload);
+    try {
+      const res = respond;
+      if (res?.data?.code === SUCCESS_CODE) {
+        setRatingHotel(res?.data?.data);
+      }
+    } catch (err) {}
+  }, []);
+
   useEffect(() => {
     getHotelInfor(hotelId);
     getHotelRoomList(hotelId);
-  }, [getHotelInfor, getHotelRoomList, hotelId]);
+    getRatingIFHotel(hotelId);
+  }, [getHotelInfor, getHotelRoomList, getRatingIFHotel, hotelId]);
   return (
     <Row className={styles['hotel-id']}>
       <Row className={styles['hotel-card']}>
@@ -224,8 +245,6 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
       <Title level={5} style={{ marginTop: 20 }}>
         Rooms
       </Title>
-      {console.log('hotelRooms', hotelRooms)}
-      {console.log('hotelInfor', hotelInfor)}
       {hotelRooms?.length ? (
         hotelRooms?.map((h) => (
           <HotelRoom
@@ -241,6 +260,22 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
           <NotFound text={'Oop... No room is avaible now!'} />
         </Col>
       )}
+      <Row className={styles['rating-component']}>
+        <Row>
+          <Title level={5}>People say about {hotelInfor?.Hotel_Name}</Title>
+        </Row>
+        <Row className={styles['rate-container']}>
+          <Space size={'middle'}>
+            {ratingHotel?.length > 0 ? (
+              ratingHotel?.map((r) => (
+                <RatedCard key={r.ID_Rating} rateInfor={r} />
+              ))
+            ) : (
+              <Text>Don't have rating yet!</Text>
+            )}
+          </Space>
+        </Row>
+      </Row>
     </Row>
   );
 };

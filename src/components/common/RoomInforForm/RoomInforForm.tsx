@@ -6,7 +6,11 @@ import {
   saveRoomInfor,
 } from '../../../services/hotel.service';
 import { typeRooms } from '../../../const/interface';
-import { openNotificationWithIcon } from '../../../utils/helpers';
+import {
+  calcGuest,
+  isMany,
+  openNotificationWithIcon,
+} from '../../../utils/helpers';
 import {
   Badge,
   Button,
@@ -36,6 +40,8 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
   ///////////////////////////state
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [idRoom, setidRoom] = useState<string>('');
+  const [idTypeR, setIDTypeR] = useState<string>(typesRoom?.[0]?.ID_Type_Room!);
+  const [guestN, setGuestN] = useState<number>(1);
   //////////////////////////event
   const handleOk = (values: any) => {
     setConfirmLoading(true);
@@ -94,10 +100,31 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
     } catch (error) {}
   }, []);
 
+  const handlerChange = (val: any) => {
+    setIDTypeR(val);
+  };
+  const handlerSetGN = (val: any) => {
+    setGuestN(val);
+  };
   useEffect(() => {
     getRoomIDLastest();
   }, [getRoomIDLastest]);
 
+  const setMaxMinRoom = (idTypeR?: string) => {
+    switch (idTypeR) {
+      case 'SIN':
+        return { bedMax: 1, bathMax: 1, priceMin: 10 };
+      case 'MED':
+        return { bedMax: 2, bathMax: 2, priceMin: 25 };
+      case 'LUX':
+        return { bedMax: 4, bathMax: 3, priceMin: 50 };
+      default:
+        return { bedMax: 1, bathMax: 1, priceMin: 10 };
+    }
+  };
+  const isSINOrDOU = (guestN?: number) => {
+    return guestN && guestN >= 2 ? 'double' : 'single';
+  };
   return (
     <div className={styles['room-infor-form']}>
       <Modal
@@ -149,50 +176,9 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
           <Row>
             <Space size={'middle'}>
               <Form.Item
-                label='Bed Number'
-                name='bedNumber'
-                hasFeedback
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input bed number!',
-                  },
-                ]}
-              >
-                <InputNumber max={10} min={1} />
-              </Form.Item>
-
-              <Form.Item
-                label='Bath Number'
-                name='bathNumber'
-                hasFeedback
-                rules={[
-                  { required: true, message: 'Please input bath number!' },
-                ]}
-              >
-                <InputNumber max={10} min={1} />
-              </Form.Item>
-
-              <Form.Item
-                label='Price'
-                name='price'
-                hasFeedback
-                rules={[{ required: true, message: 'Please input price!' }]}
-              >
-                <InputNumber
-                  formatter={(value) =>
-                    `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  }
-                  // parser={value:number => value.replace(/\$\s?|(,*)/g, '')}
-                  max={1000000}
-                  min={10}
-                />
-              </Form.Item>
-
-              <Form.Item
                 label='Type'
                 name='ID_Type_Room'
-                initialValue={typesRoom?.[0]?.ID_Type_Room}
+                initialValue={idTypeR}
                 hasFeedback
                 rules={[
                   {
@@ -201,10 +187,10 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
                   },
                 ]}
               >
-                <Select style={{ width: 120 }}>
+                <Select style={{ width: 120 }} onChange={handlerChange}>
                   {typesRoom?.map((t, index) => (
                     <Option
-                      key={(t.ID_Type_Room || '') + index}
+                      key={t.ID_Type_Room! + index}
                       value={t?.ID_Type_Room}
                     >
                       {t?.Type_Room_Name}
@@ -212,18 +198,93 @@ const RoomInforForm: FunctionComponent<RoomInforFormProps> = (props) => {
                   ))}
                 </Select>
               </Form.Item>
+
+              <Form.Item
+                label={`Guest Number(${calcGuest(guestN)} ${isSINOrDOU(guestN)} bed${isMany(
+                  calcGuest(guestN)
+                )})`}
+                name='bedNumber'
+                initialValue={1}
+                // hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input bed number!',
+                  },
+                  () => ({
+                    validator(_, value) {
+                      if (!value || value <= setMaxMinRoom(idTypeR)?.bedMax) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Not allow!'));
+                    },
+                  }),
+                ]}
+              >
+                <InputNumber
+                  max={setMaxMinRoom(idTypeR)?.bedMax}
+                  min={1}
+                  onChange={handlerSetGN}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label='Bath Number'
+                name='bathNumber'
+                initialValue={1}
+                // hasFeedback
+                rules={[
+                  { required: true, message: 'Please input bath number!' },
+                  () => ({
+                    validator(_, value) {
+                      if (!value || value <= setMaxMinRoom(idTypeR)?.bathMax) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Not allow!'));
+                    },
+                  }),
+                ]}
+              >
+                <InputNumber max={setMaxMinRoom(idTypeR)?.bathMax} min={1} />
+              </Form.Item>
             </Space>
           </Row>
 
           <Row>
+            <Space>
+              <Form.Item
+                label='Price'
+                name='price'
+                initialValue={setMaxMinRoom(idTypeR)?.priceMin}
+                rules={[
+                  { required: true, message: 'Please input price!' },
+                  () => ({
+                    validator(_, value) {
+                      if (!value || value >= setMaxMinRoom(idTypeR)?.priceMin) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Not allow!'));
+                    },
+                  }),
+                ]}
+              >
+                <InputNumber
+                  formatter={(value) =>
+                    `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                  // parser={value:number => value.replace(/\$\s?|(,*)/g, '')}
+                  max={10000}
+                  min={setMaxMinRoom(idTypeR)?.priceMin}
+                />
+              </Form.Item>
               <Form.Item
                 label='Status'
                 name='idStatus'
                 initialValue={'Non-active'}
-                // rules={[{ required: true, message: "Please input hotel's ward!" }]}
               >
-                <InputNumber readOnly style={{width:100}}/>
+                <InputNumber readOnly style={{ width: 100 }} />
               </Form.Item>
+            </Space>
           </Row>
 
           <Row

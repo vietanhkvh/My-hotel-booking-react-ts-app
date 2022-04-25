@@ -1,4 +1,14 @@
-import { Button, Col, DatePicker, Image, Popover, Row, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Image,
+  Input,
+  Popover,
+  Row,
+  Tabs,
+  Typography,
+} from 'antd';
 import {
   Dispatch,
   FunctionComponent,
@@ -18,20 +28,21 @@ import LocationInputSearch from '../LocationInputSearch/LocationInputSearch';
 import Search from '../../../assest/icons/icons8-search.svg';
 import moment from 'moment';
 import PopupNumberGuest from '../PopupNumberGuest/PopupNumberGuest';
+import { DATE_FORMAT, DATE_FORMAT_BACK_END, some, SUCCESS_CODE } from '../../constants';
 import {
-  DATE_FORMAT,
-  DATE_FORMAT_BACK_END,
-  some,
-  SUCCESS_CODE,
-} from '../../constants';
-import { getSearchingResultLocation } from '../../../services/hotel.service';
+  getSearchingResultLocation,
+  getSearchingResultName,
+} from '../../../services/hotel.service';
 import {
   setHotelSearchingByLocation,
   setHotelSearchingCondition,
 } from '../../../store/actions/constAction';
+import HotelNameInputSearch from '../HotelNameInputSearch/HotelNameInputSearch';
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
+const { TabPane } = Tabs;
+
 interface HotelSearchingProps {}
 
 const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
@@ -46,12 +57,15 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
     dateOut: searchParams.get('dateOut'),
     adults: searchParams.get('adults'),
     children: searchParams.get('children'),
+    type: searchParams.get('type'),
   });
   ////////////////////////////state
   const [adults, setAdults] = useState<number>(1);
   const [children, setChildren] = useState<number>(0);
   const [location, setLocation] = useState<string>('');
-
+  //tab search
+  const [tab, setTab] = useState<string>('location');
+  const [strSearch, setStrSearch] = useState<string>();
   //popup
   const [visible, setVisible] = useState<boolean>(false);
   //disable search
@@ -109,13 +123,20 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
       dateIn: any,
       dateOut: any,
       adults: number,
-      children: number
+      children: number,
+      type: string,
+      strSearch: string
     ) => {
       const payload: some = {
         location: location,
+        name: strSearch,
+        dateIn: dateIn?.format(DATE_FORMAT_BACK_END),
+        dateOut: dateOut?.format(DATE_FORMAT_BACK_END),
         guestNum: adults + children,
       };
-      const respond = await getSearchingResultLocation(payload);
+      const respond = await (type === 'location'
+        ? getSearchingResultLocation(payload)
+        : getSearchingResultName(payload));
       try {
         const res = await respond;
         if (res?.data?.code === SUCCESS_CODE) {
@@ -125,7 +146,9 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
             dateOut: dateOut,
             adults: adults,
             children: children,
+            type: type,
           };
+
           dispatch(setHotelSearchingByLocation(res?.data?.data));
           dispatch(setHotelSearchingCondition(params));
           navigate({
@@ -139,6 +162,9 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
     },
     [dispatch, navigate]
   );
+  const callback = (key: any) => {
+    setTab(key);
+  };
 
   /////////////////////useEffect
   useEffect(() => {
@@ -151,28 +177,34 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
       gutter={28}
       style={{ margin: '0' }}
     >
-      {/* {console.log('date in', moment(dateIn).format('YYYY-MM-DD') )} */}
       <Col span={8} className={styles['item-container']}>
-        <Row className={styles['title-wrapper']}>
-          <Text className={styles['title']}>Location</Text>
-        </Row>
-        <LocationInputSearch
-          placeholder={'Thành phố, khách sạn, điểm đến'}
-          handleSetLocation={hanldeSetLocation}
-          location={params?.location? params?.location : ''}
-        />
+        <Tabs defaultActiveKey={params?.type !== ''? params?.type : 'location'} onChange={callback}>
+          <TabPane tab='Location' key='location'>
+            <LocationInputSearch
+              placeholder={'City you want to go...'}
+              handleSetLocation={hanldeSetLocation}
+              location={params?.location !== '' ? params?.location : ''}
+            />
+          </TabPane>
+          <TabPane tab='Hotel' key='hotelName'>
+            <HotelNameInputSearch
+              placeholder={'Hotel name...'}
+              handleSetLocation={hanldeSetLocation}
+              location={params?.location !== '' ? params?.location : ''}
+              setStrSearch={setStrSearch}
+            />
+          </TabPane>
+        </Tabs>
       </Col>
 
       <Col span={8} className={styles['item-container']}>
         <Row className={styles['title-wrapper']}>
           <Text className={styles['title']}>Check In/Out</Text>
           <Text className={styles['count-date']}>
-            {' '}
             {dateDiff} day{isMany(dateDiff)}
           </Text>
         </Row>
         <Row>
-          {console.log('params', params)}
           <RangePicker
             allowEmpty={[false, false]}
             defaultValue={
@@ -195,7 +227,6 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
           />
         </Row>
       </Col>
-
       <Col
         span={6}
         className={styles['item-container']}
@@ -239,7 +270,15 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
           className={styles['btn-search']}
           disabled={disSearch ? true : false}
           onClick={() =>
-            handleSubmitSearch(location, dateIn, dateOut, adults, children)
+            handleSubmitSearch(
+              location,
+              dateIn,
+              dateOut,
+              adults,
+              children,
+              tab!,
+              strSearch!
+            )
           }
         >
           <Image preview={false} src={Search} width={'35px'} height={'35px'} />

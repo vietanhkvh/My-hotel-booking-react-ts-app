@@ -1,5 +1,6 @@
 import { Modal } from 'antd';
 import { FunctionComponent, useEffect, useState } from 'react';
+import DesktopForgotPwd from '../DesktopForgotPwd/DesktopForgotPwd';
 import DesktopRegister from '../DesktopRegister/DesktopRegister';
 import LoginForm from '../LoginForm/LoginForm';
 import styles from './LoginModal.module.scss';
@@ -67,13 +68,14 @@ const LoginModal: FunctionComponent<LoginModalProps> = (props) => {
         width={'100%'}
         style={{ textAlign: 'center', maxWidth: 407 }}
       >
-        {console.log('typeScreenModal', typeScreenModal)}
         {typeScreenModal === 'LOGIN' ? (
           <LoginForm
             setTypeModal={setTypeModal}
             setIsOpenLogin={setIsOpenLogin}
             handleClose={handleClose}
           />
+        ) : typeScreenModal === "FORGOT" ? (
+          <DesktopForgotPwd setTypeModal={setTypeModal}/>
         ) : (
           <DesktopRegister setTypeModal={setTypeModal}/>
         )}

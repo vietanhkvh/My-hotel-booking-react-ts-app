@@ -1,0 +1,61 @@
+.statistical {
+  .container {
+    .select {
+      position: absolute;
+      width: 100%;
+      left: 270px;
+      top: 20px;
+      .select-data {
+        div[class='ant-select-selector'] {
+          background-color: #1890fa;
+          border-radius: 5px;
+          color: white;
+        }
+        input{
+          color: white;
+        }
+      }
+      .item {
+        width: 200px;
+        border-radius: 5px;
+        background-color: #1890fa;
+        color: white;
+      }
+    }
+    .year {
+      left: 500px;
+      top: 20px;
+      color: white;
+      z-index: 99;
+    }
+    .statistic {
+      
+      div[class='ant-statistic-content'] {
+        height: 40px;
+        line-height: 40px;
+      }
+      span[class='ant-statistic-content-value-int'] {
+        font-size: 30px;
+      }
+      span[class='ant-statistic-content-suffix'] {
+        font-size: 30px;
+      }
+      span[class='ant-statistic-content-value-decimal'] {
+        font-size: 30px;
+      }
+    }
+    .content {
+      margin-top: 10px;
+      width: 100%;
+      margin-bottom: 12px;
+      height: 70px;
+      justify-content: center;
+      align-content: flex-end;
+    }
+    .footer {
+      margin-top: 8px;
+      padding-top: 9px;
+      border-top: 1px solid #f0f0f0;
+    }
+  }
+}

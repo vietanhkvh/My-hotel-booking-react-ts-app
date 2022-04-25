@@ -13,6 +13,7 @@ import { SUCCESS_CODE } from '../../constants';
 import { openNotificationWithIcon } from '../../../utils/helpers';
 import { useDispatch } from 'react-redux';
 import { setUserInforAction } from '../../../store/actions/userAction';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 interface UserInforProps {}
@@ -27,6 +28,7 @@ const UserInfor: FunctionComponent<UserInforProps> = () => {
     userInfor
   );
   const dispatch: Dispatch<any> = useDispatch();
+  const navigate = useNavigate();
   ///api
   const updateAccount = useCallback(
     async (idAccount?: number, values?: any) => {
@@ -105,6 +107,10 @@ const UserInfor: FunctionComponent<UserInforProps> = () => {
   const onFinish = (values: any) => {
     console.log('Success:', values);
     updateAccount(userInfor?.ID_Account, values);
+    localStorage.removeItem('token-key');
+    localStorage.removeItem('persist:root');
+    navigate('/');
+    window.location.reload();
   };
 
   const onFinishFailed = (errorInfo: any) => {

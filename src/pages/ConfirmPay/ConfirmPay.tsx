@@ -94,7 +94,7 @@ const ConfirmPay: FunctionComponent<ConfirmPayProps> = (props) => {
         }
       } catch (error) {}
     },
-    []
+    [hotelSearchingCondition?.dateIn, hotelSearchingCondition?.dateOut]
   );
   useEffect(() => {
     getHotelInfor(idHotel);

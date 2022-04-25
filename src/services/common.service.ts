@@ -113,3 +113,53 @@ export const sendEmailOtp = (payload: some) => {
     'send-email-otp?email=' + payload?.email + '&otpCode=' + payload?.otp
   );
 };
+export const sendEmailNewPwd = (payload: some) => {
+  return api.post('send-email-forgot-pwd?email=' + payload?.email);
+};
+//statistical
+export const getPaymentAmount = (payload: some) => {
+  return api.get('payments-amount/' + payload?.idAccount);
+};
+export const getTotalIncome = (payload: some) => {
+  return api.get('payments-income/' + payload?.idAccount + '/' + payload?.year);
+};
+
+export const getTotalIncomeEY = (payload: some) => {
+  return api.get(
+    'payments-income-each-year/' + payload?.idAccount + '/' + payload?.year
+  );
+};
+
+export const getTotalRoomIncomeM = (payload: some) => {
+  return api.get(
+    'payments-room-income-month/' +
+      payload?.idAccount +
+      '/' +
+      payload?.idHotel +
+      '/' +
+      payload?.year
+  );
+};
+
+export const getTotalHotelIncomeY = (payload: some) => {
+  return api.get(
+    'payments-income-year/' +
+      payload?.idAccount +
+      '/' +
+      payload?.idHotel +
+      '/' +
+      payload?.year
+  );
+};
+
+export const getTotalRA = (payload: some) => {
+  return api.get('room-active/' + payload?.idAccount);
+};
+
+export const getTotalR = (payload: some) => {
+  return api.get('room-all/' + payload?.idAccount);
+};
+
+export const getRatingHotel = (payload: some) => {
+  return api.get('rating-hotel/' + payload?.idHotel);
+};

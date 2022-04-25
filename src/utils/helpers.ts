@@ -186,7 +186,14 @@ export function isEmail(text) {
     text
   );
 }
-
+export function ValidateEmail(mail) 
+{
+ if (/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+  {
+    return (true)
+  }
+    return (false)
+}
 export const setLastRegisterValue = (key, value) => {
   const localValue = localStorage.getItem('last-registerValue');
   let v = {};

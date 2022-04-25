@@ -7,7 +7,7 @@ import Hotel from '../../../assest/images/hotel.jpg';
 import { isMany } from '../../../utils/helpers';
 import { getCouponHotel } from '../../../services/coupon.service';
 import { DATE_FORMAT_BACK_END, some, SUCCESS_CODE } from '../../constants';
-import PhoneIC from '../../../assest/icons/phone-50.png' 
+import PhoneIC from '../../../assest/icons/phone-50.png';
 import { useSelector } from 'react-redux';
 import { constState } from '@src/store/reducer/constReducer';
 import moment from 'moment';
@@ -35,6 +35,10 @@ interface HotelCardProps {
    */
   minPrice?: number;
   /**
+   * coupon Val
+   */
+  couponVal?: number;
+  /**
    * image src
    */
   image?: any;
@@ -60,10 +64,11 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
     district,
     phone,
     minPrice,
+    couponVal,
     image,
     reviewNumber,
     rating,
-    params
+    params,
   } = props;
   const navigate = useNavigate();
   const hotelSearchingCondition = useSelector(
@@ -102,7 +107,8 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
           </Row>
           <Row>
             <span className={styles['description-text']}>
-              ({reviewNumber>0 ? reviewNumber : 0 } rate{isMany(reviewNumber ? reviewNumber : 0)})
+              ({reviewNumber > 0 ? reviewNumber : 0} rate
+              {isMany(reviewNumber ? reviewNumber : 0)})
             </span>
           </Row>
         </Row>
@@ -116,7 +122,13 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
         </Row>
         <Row className={styles['description-item']}>
           <Col>
-            <Image src={PhoneIC} preview={false} width={16} height={14} style={{paddingLeft: 2}}/>
+            <Image
+              src={PhoneIC}
+              preview={false}
+              width={16}
+              height={14}
+              style={{ paddingLeft: 2 }}
+            />
           </Col>
           <Col style={{ marginLeft: 8 }}>
             <span>{phone}</span>
@@ -127,28 +139,28 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
   };
   const Price = (props) => {
     ///////////////////////////state
-    const { idHotel, fisrtPrice } = props;
-    const [percent, setPercent]= useState<number>();
+    const { idHotel, fisrtPrice, percent } = props;
+    // const [percent, setPercent]= useState<number>();
     /////////////////////////////event
-    const hanldeGetCoupon = useCallback(async (idHotel: string) => {
-      const payload: some = {
-        idHotel: idHotel,
-        dateIn: moment(hotelSearchingCondition?.dateIn).format(DATE_FORMAT_BACK_END),
-        dateOut: moment(hotelSearchingCondition?.dateOut).format(DATE_FORMAT_BACK_END),
-      };
-      const respond = await getCouponHotel(payload);
-      try{
-        const res= await respond;
-        if(res?.data?.code===SUCCESS_CODE){
-          setPercent(res?.data?.data?.[0].Value);
-        }
-      }catch(err){
-        alert("Sever doesn't respond")
-      }
-    }, []);
-    useEffect(() => {
-      hanldeGetCoupon(idHotel);
-    }, [hanldeGetCoupon, idHotel]);
+    // const hanldeGetCoupon = useCallback(async (idHotel: string) => {
+    //   const payload: some = {
+    //     idHotel: idHotel,
+    //     dateIn: moment(hotelSearchingCondition?.dateIn).format(DATE_FORMAT_BACK_END),
+    //     dateOut: moment(hotelSearchingCondition?.dateOut).format(DATE_FORMAT_BACK_END),
+    //   };
+    //   const respond = await getCouponHotel(payload);
+    //   try{
+    //     const res= await respond;
+    //     if(res?.data?.code===SUCCESS_CODE){
+    //       setPercent(res?.data?.data?.[0].Value);
+    //     }
+    //   }catch(err){
+    //     alert("Sever doesn't respond")
+    //   }
+    // }, []);
+    // useEffect(() => {
+    //   // hanldeGetCoupon(idHotel);
+    // }, [hanldeGetCoupon, idHotel]);
     return (
       <div className={styles['price-wrapper']}>
         {percent ? (
@@ -164,31 +176,28 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
             </Text> */}
           </>
         ) : (
-          <>
-          </>
+          <></>
         )}
         <Text
-              className={styles['item']}
-              style={{
-                fontSize: 20,
-                fontWeight: 600,
-                lineHeight: '24px',
-                color: 'inherit',
-              }}
-            >
-              From
-              ${fisrtPrice}
-            </Text>
+          className={styles['item']}
+          style={{
+            fontSize: 20,
+            fontWeight: 600,
+            lineHeight: '24px',
+            color: 'inherit',
+          }}
+        >
+          From ${fisrtPrice}
+        </Text>
         <Text className={styles['item']}>/room/day</Text>
       </div>
     );
   };
   ///////////////////////////event
-  const handleClickHotelCard = (idHotel:string) => {
-    
+  const handleClickHotelCard = (idHotel: string) => {
     navigate({
-      pathname:`/hotel/${idHotel}`,
-      search: `?${createSearchParams(params)}`
+      pathname: `/hotel/${idHotel}`,
+      search: `?${createSearchParams(params)}`,
     });
   };
   return (
@@ -212,7 +221,10 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
         }
         bodyStyle={{ width: 'calc(100% - 286px)' }}
       >
-        <Row className={styles['price-detail']} onClick={()=>handleClickHotelCard(idHotel)}>
+        <Row
+          className={styles['price-detail']}
+          onClick={() => handleClickHotelCard(idHotel)}
+        >
           <Col span={16}>
             <Meta
               title={<Title name={name} idHotel={idHotel} />}
@@ -227,7 +239,11 @@ const HotelCard: FunctionComponent<HotelCardProps> = (props) => {
             />
           </Col>
           <Col span={8} className={styles['price']}>
-            <Price idHotel={idHotel} fisrtPrice={minPrice} />
+            <Price
+              idHotel={idHotel}
+              fisrtPrice={minPrice}
+              percent={couponVal}
+            />
           </Col>
         </Row>
       </Card>

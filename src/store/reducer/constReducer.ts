@@ -10,6 +10,7 @@ import {
 import { ConstActions } from '../actions/actionTypes';
 export interface constState {
   readonly hotelLocation?: [] | hotelLocation[];
+  readonly hotelName?: [] | any[];
   readonly hotelSearchingByLocation?: [] | hotelSearching[];
   readonly hotelSeachingCondition?: hotelSeachingCondition;
   readonly hotelManager?: hotel[];
@@ -18,6 +19,7 @@ export interface constState {
 }
 const initialState: constState = {
   hotelLocation: [],
+  hotelName: [],
   hotelSearchingByLocation: [],
   hotelSeachingCondition: {},
   hotelManager: [],
@@ -34,6 +36,8 @@ const constReducer: (
   switch (action.type) {
     case ConstActions.setHotelLocation:
       return { ...state, hotelLocation: action.payload };
+    case ConstActions.setHotelName:
+      return { ...state, hotelName: action.payload };
     case ConstActions.setHotelSearching:
       return { ...state, hotelSearchingByLocation: action.payload };
     case ConstActions.setHotelSearchingCondition:
@@ -43,7 +47,7 @@ const constReducer: (
     case ConstActions.setTypesRoom:
       return { ...state, typesRoom: action.payload };
     case ConstActions.setCart:
-      return {...state, carts:[...action.payload]};
+      return { ...state, carts: [...action.payload] };
     default:
       return state;
   }

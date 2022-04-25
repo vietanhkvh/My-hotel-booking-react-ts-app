@@ -8,7 +8,9 @@ import {
   FileImageOutlined,
   KeyOutlined,
   HomeOutlined,
-  DollarOutlined
+  DollarOutlined,
+  FundOutlined,
+  AreaChartOutlined
 } from '@ant-design/icons';
 import LogoDesk from '../../../assest/images/logo-desk.png';
 import LogoMob from '../../../assest/images/logo-mob.png';
@@ -47,14 +49,29 @@ const DeskHostLayout: FunctionComponent<DeskHostLayoutProps> = () => {
               />
             </Link>
           </div>
+          {console.log('keyActive',keyActive)}
           <Menu
             theme='dark'
-            defaultSelectedKeys={['1']}
+            defaultSelectedKeys={['dashboard']}
+            defaultActiveFirst
             mode='inline'
-            activeKey={keyActive}
+            // activeKey={keyActive}
             selectedKeys={[currentKey]}
             onClick={(e) => handleClickMenu(e)}
           >
+            <Menu.Item key='home' icon={<AreaChartOutlined />}>
+              <Link to={'dashboard'}>
+                <span
+                  style={{
+                    textTransform: 'capitalize',
+                    fontSize: 16,
+                    fontWeight: 600,
+                  }}
+                >
+                  Dashboard
+                </span>
+              </Link>
+            </Menu.Item>
             <Menu.Item key='hotel-manager' icon={<HomeOutlined />}>
               <Link to={'hotel-manager'}>
                 <span
@@ -97,7 +114,15 @@ const DeskHostLayout: FunctionComponent<DeskHostLayoutProps> = () => {
             <SubMenu
               key='images-manager'
               icon={<FileImageOutlined />}
-              title='Images'
+              title={ <span
+                style={{
+                  textTransform: 'capitalize',
+                  fontSize: 16,
+                  fontWeight: 600,
+                }}
+              >
+                Images
+              </span>}
             >
               <Menu.Item key='hotel-images'>
                 <Link to={'hotel-images'}>
@@ -131,7 +156,7 @@ const DeskHostLayout: FunctionComponent<DeskHostLayoutProps> = () => {
                 <span
                   style={{
                     textTransform: 'capitalize',
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: 600,
                   }}
                 >

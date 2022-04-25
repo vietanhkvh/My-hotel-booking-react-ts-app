@@ -24,13 +24,14 @@ const DesktopLayout = (props) => {
       }}
       children={
         userInfor ? (
-          userInfor?.ID_Role==='GUE' ? 
-          <DesktopGuestLayout/>
-          :
-          (userInfor?.ID_Role==='HOS'?<DeskHostLayout /> :
-            <DesktopAdminLayout/>
-          )
+          userInfor?.ID_Role === 'GUE' ? (
+            <DesktopGuestLayout />
+          ) : userInfor?.ID_Role === 'HOS' ? (
+            <DeskHostLayout />
           ) : (
+            <DesktopAdminLayout />
+          )
+        ) : (
           <DesktopGuestLayout />
         )
       }

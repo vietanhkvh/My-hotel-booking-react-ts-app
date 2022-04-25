@@ -103,6 +103,10 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
   const [idStatus, setIDStatus] = useState<number>(0);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string>('');
+  const [sortedInfo, setSortedInfo] = useState<any>({
+    columnKey: '',
+    order: '',
+  });
   //modal hotel form state
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -113,14 +117,16 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
       title: 'ID Hotel',
       dataIndex: 'ID_Hotel',
       key: 'ID_Hotel',
-      render: (ID_Hotel) => <Text>{ID_Hotel}</Text>,
+      render: (ID_Hotel: any) => <Text>{ID_Hotel}</Text>,
       editable: false,
     },
     {
       title: 'Hotel Name',
       dataIndex: 'Hotel_Name',
       key: 'Hotel_Name',
-      render: (text) => <Text>{text}</Text>,
+      // // render: (text: any) => <Text>{text}</Text>,
+      // sorter: (a:any, b:any) => a.Hotel_Name.length - b.Hotel_Name.length,
+      // sortOrder: sortedInfo.columnKey === 'Hotel_Name' && sortedInfo.order,
       editable: true,
     },
     {
@@ -222,6 +228,10 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
     },
   ];
   ///////////////////event
+  const handleChange = (pagination, sorter) => {
+    console.log('Various parameters', sorter);
+    setSortedInfo(sorter);
+  };
   const onChange = (value: any) => {
     console.log(`selected ${value}`);
     setIDStatus(value);
@@ -413,6 +423,7 @@ const HotelManager: FunctionComponent<HotelManagerProps> = () => {
         <Table
           columns={mergedColumns}
           dataSource={hotelList}
+          onChange={handleChange}
           components={{
             body: {
               cell: EditableCell,

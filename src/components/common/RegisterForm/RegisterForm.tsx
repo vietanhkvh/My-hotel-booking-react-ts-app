@@ -73,6 +73,7 @@ const RegisterForm: FunctionComponent<RegisterFormProps> = (props) => {
         setStep && setStep(1);
         setRegisterUser && setRegisterUser(value);
         const otpCr = createOTP();
+        console.log('opt', otpCr)
         setOtpCr && setOtpCr(otpCr);
         callSendOtpCode(value?.email, otpCr);
       } else openNotificationWithIcon('error', '', 'Email was registed!');

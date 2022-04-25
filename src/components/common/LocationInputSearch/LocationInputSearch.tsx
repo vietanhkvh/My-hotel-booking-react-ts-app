@@ -115,8 +115,8 @@ const LocationInputSearch: FunctionComponent<LocationInputSearchProps> = (
         size={'large'}
       >
         {options}
-      </Select>
-    </div>
+        </Select>
+        </div>
   );
 };
 

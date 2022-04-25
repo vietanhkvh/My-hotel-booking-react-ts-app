@@ -1,64 +1,70 @@
 .hotel-id {
   margin-top: 24px;
-  .hotel-card{
-    background:white;
+  .hotel-card {
+    background: white;
     border-radius: 8px;
     padding: 15px 25px;
     width: 100%;
-      .price {
+    .price {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      .price-wrapper {
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
-        .price-wrapper {
-          display: flex;
-          flex-direction: column;
-          flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        width: 100%;
+        .percent-wrapper {
           width: 100%;
-          .percent-wrapper {
-            width: 100%;
-            justify-content: flex-end;
-            .percent {
-              width: 40px;
-              border-radius: 5px;
-              color: #ffffff;
-              text-align: center;
-              background: #ff385c;
-              margin-left: 8px;
-            }
+          justify-content: flex-end;
+          .percent {
+            width: 40px;
+            border-radius: 5px;
+            color: #ffffff;
+            text-align: center;
+            background: #ff385c;
+            margin-left: 8px;
           }
-          .item {
-            margin-top: 2px;
-            color: rgb(74, 85, 104);
-            width: 100%;
-            text-align: end;
-            font-size: 15px;
-            line-height: 17px;
-          }
+        }
+        .item {
+          margin-top: 2px;
+          color: rgb(74, 85, 104);
+          width: 100%;
+          text-align: end;
+          font-size: 15px;
+          line-height: 17px;
         }
       }
     }
-}
-.title-meta {
-    .hotel-name {
-      display: -webkit-box;
-      overflow: hidden;
-      font-size: 18px;
-      transition: all 0.2s;
-      font-weight: 600;
-      line-height: 21px;
-      margin-bottom: 2px;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      white-space: break-spaces;
+  }
+  .rating-component {
+    flex-direction: column;
+    .rate-container {
+      overflow-x: auto;
     }
   }
-.description{
-    flex-direction: column;
-    .description-item{
-        margin-top: 3px;
-        .description-text{
-          line-height: 26px; 
-          margin-left: 8px;
-        }
+}
+.title-meta {
+  .hotel-name {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 18px;
+    transition: all 0.2s;
+    font-weight: 600;
+    line-height: 21px;
+    margin-bottom: 2px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    white-space: break-spaces;
+  }
+}
+.description {
+  flex-direction: column;
+  .description-item {
+    margin-top: 3px;
+    .description-text {
+      line-height: 26px;
+      margin-left: 8px;
     }
+  }
 }
