@@ -88,7 +88,7 @@ const OtpForm: FunctionComponent<OtpFormProps> = (props) => {
         fullName: val?.fullName,
         email: val?.email,
         phone: val?.phone,
-        status: 3,
+        status: 1,
       };
       const respond = await registerAccount(payload);
       try {

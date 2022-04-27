@@ -25,12 +25,16 @@ import { getHotelTableForHost } from '../../../services/hotel.service';
 import { setHotelManager } from '../../../store/actions/constAction';
 import RingProgressChart from '../../../components/common/RingProgressChart/RingProgressChart';
 import moment from 'moment';
+import { constState } from '@src/store/reducer/constReducer';
 const { Title } = Typography;
 interface DashBoardHostProps {}
 
 const DashBoardHost: FunctionComponent<DashBoardHostProps> = () => {
   const userInfor = useSelector(
     (state: { user: userState }) => state?.user?.userInfor
+  );
+  const hotelManager = useSelector(
+    (state: { const: constState }) => state?.const?.hotelManager
   );
   const dispatch: Dispatch<any> = useDispatch();
   ///////////////////////////state
@@ -39,11 +43,11 @@ const DashBoardHost: FunctionComponent<DashBoardHostProps> = () => {
   const [incomeEY, setIncomeEY] = useState<number[]>();
   const [incomeTHY, setIncomeTHY] = useState<number>();
   const [hotels, setHotels] = useState<any>('');
-  const [idHotel, setIDHotel] = useState<any>('');
+  const [idHotel, setIDHotel] = useState<any>(hotelManager?.[0]?.ID_Hotel);
   const [year, setYear] = useState<any>(moment().year());
   const [yearT, setYearT] = useState<any>(moment().year());
-  const [roomAct, setRoomAct] = useState<number>();
-  const [roomA, setRoomA] = useState<number>();
+  const [roomAct, setRoomAct] = useState<number>(0);
+  const [roomA, setRoomA] = useState<number>(0);
   //////////////////////////api
   const getPaymentA = useCallback(async (idAccount: number) => {
     const payload = {
@@ -58,10 +62,10 @@ const DashBoardHost: FunctionComponent<DashBoardHostProps> = () => {
     } catch (error) {}
   }, []);
 
-  const getTotalI = useCallback(async (idAccount: number, year:any) => {
+  const getTotalI = useCallback(async (idAccount: number, year: any) => {
     const payload = {
       idAccount: idAccount,
-      year: year
+      year: year,
     };
     const respond = await getTotalIncome(payload);
     try {
@@ -72,10 +76,10 @@ const DashBoardHost: FunctionComponent<DashBoardHostProps> = () => {
     } catch (error) {}
   }, []);
 
-  const getTotalIM = useCallback(async (idAccount: number, year:any) => {
+  const getTotalIM = useCallback(async (idAccount: number, year: any) => {
     const payload = {
       idAccount: idAccount,
-      year: year
+      year: year,
     };
     const respond = await getTotalIncomeEY(payload);
     try {
@@ -85,8 +89,6 @@ const DashBoardHost: FunctionComponent<DashBoardHostProps> = () => {
       }
     } catch (error) {}
   }, []);
-
-  
 
   const getTotalRoomA = useCallback(async (idAccount: number) => {
     const payload = {
@@ -153,7 +155,16 @@ const DashBoardHost: FunctionComponent<DashBoardHostProps> = () => {
     getHotelList(userInfor?.ID_Account);
     getTotalRoomA(userInfor?.ID_Account!);
     getTotalRoom(userInfor?.ID_Account!);
-  }, [getHotelList, getPaymentA, getTotalI, getTotalIM, getTotalRoom, getTotalRoomA, userInfor?.ID_Account, yearT]);
+  }, [
+    getHotelList,
+    getPaymentA,
+    getTotalI,
+    getTotalIM,
+    getTotalRoom,
+    getTotalRoomA,
+    userInfor?.ID_Account,
+    yearT,
+  ]);
   return (
     <div className={styles['dash-board-host']}>
       <Row gutter={[16, 16]} className={styles['container']}>
@@ -175,7 +186,7 @@ const DashBoardHost: FunctionComponent<DashBoardHostProps> = () => {
             prefix={<Title level={2}>$</Title>}
             precision={1}
             yearSelect={true}
-            styleYear={{left:300, width:100}}
+            styleYear={{ left: 300, width: 100 }}
             setYearOption={setYearT}
             Chart={() => <LineChart data={incomeEY} />}
             footer={false}
@@ -186,9 +197,7 @@ const DashBoardHost: FunctionComponent<DashBoardHostProps> = () => {
             title='Active rooms'
             value={roomAct}
             suffix={`/${roomA}`}
-            Chart={() => (
-              <RingProgressChart percent={roomAct! / roomA!} />
-            )}
+            Chart={() => <RingProgressChart percent={roomAct! / roomA!} />}
           />
         </Col>
         <Col xs={24} sm={24} md={24} lg={24}>

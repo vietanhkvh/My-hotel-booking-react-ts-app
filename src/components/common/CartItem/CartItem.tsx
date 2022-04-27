@@ -15,8 +15,9 @@ import { cartItem } from '../../../const/interface';
 import { setCarts } from '../../../store/actions/constAction';
 import { calcGuest, isMany } from '../../../utils/helpers';
 import moment from 'moment';
+import { DATE_FORMAT } from '../../../components/constants';
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 interface CartItemProps {
   /**
    * room infor
@@ -31,7 +32,9 @@ const CartItem: FunctionComponent<CartItemProps> = (props) => {
     (state: { const: constState }) => state?.const?.carts
   );
   const dispatch: Dispatch<any> = useDispatch();
-  const dateGap = moment(roomInfor?.Date_Out).diff(moment(roomInfor?.Date_In),'days');
+  const dateI = moment(roomInfor?.Date_In);
+  const dateO = moment(roomInfor?.Date_Out);
+  const dateGap = dateO.diff(dateI, 'days');
 
   //////////////////api
   ///event
@@ -48,7 +51,7 @@ const CartItem: FunctionComponent<CartItemProps> = (props) => {
     }
   };
   const handlerDetele = (idRoom?: string) => {
-    const index = carts?.findIndex((c) => (c.ID_Room === idRoom));
+    const index = carts?.findIndex((c) => c.ID_Room === idRoom);
     carts?.splice(index!, 1);
     dispatch(setCarts(carts));
   };
@@ -103,7 +106,6 @@ const CartItem: FunctionComponent<CartItemProps> = (props) => {
   };
   return (
     <div className={styles['cart-item']}>
-      {console.log('roomInfor', roomInfor)}
       <Row className={styles['infor']}>
         <Col
           span={3}
@@ -117,7 +119,7 @@ const CartItem: FunctionComponent<CartItemProps> = (props) => {
             height={100}
           />
         </Col>
-        <Col span={11} className={styles['room-infor']}>
+        <Col span={8} className={styles['room-infor']}>
           <Text className={clsx(styles['title'], styles['title-hotel'])}>
             {roomInfor?.Hotel_Name}
           </Text>
@@ -151,8 +153,16 @@ const CartItem: FunctionComponent<CartItemProps> = (props) => {
             </Text>
           </Row>
         </Col>
+        <Col span={5} className={styles['date-infor']}>
+          <Row className={styles['date']}>
+            <Space>
+              <Title level={5}>{dateI?.format(DATE_FORMAT)} - </Title>
+              <Title level={5}>{dateO?.format(DATE_FORMAT)}</Title>
+            </Space>
+          </Row>
+        </Col>
         <Col
-          span={5}
+          span={3}
           className={styles['price']}
           style={{
             justifyContent: !roomInfor?.Coupon_Value
@@ -166,8 +176,17 @@ const CartItem: FunctionComponent<CartItemProps> = (props) => {
             finalPrice={roomInfor?.Final_Price}
           />
         </Col>
-        <Col span={2} className={clsx(styles['infor-member'], styles['infor-mem'])}><Text className={styles['txt']}>x{dateGap}</Text></Col>
-        <Col span={1} className={styles['infor-member']}><Text className={styles['txt']}>${roomInfor?.Final_Price! * dateGap}</Text></Col>
+        <Col
+          span={2}
+          className={clsx(styles['infor-member'], styles['infor-mem'])}
+        >
+          <Text className={styles['txt']}>x{dateGap}</Text>
+        </Col>
+        <Col span={1} className={styles['infor-member']}>
+          <Text className={styles['txt']}>
+            ${roomInfor?.Final_Price! * dateGap}
+          </Text>
+        </Col>
         <Col span={2} className={styles['infor-member']}>
           <Button
             className={clsx(styles['button'], styles['btn-add'])}

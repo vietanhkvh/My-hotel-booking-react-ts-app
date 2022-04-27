@@ -41,7 +41,7 @@ const Searching: FunctionComponent<SearchingProps> = () => {
   const [dataArr, setDataArr] = useState<hotelSearching[]>(
     hotelSearchingByLocation!
   );
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const params = {
     location: searchParams.get('location'),
     dateIn: searchParams.get('dateIn'),

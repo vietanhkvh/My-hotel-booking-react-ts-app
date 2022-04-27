@@ -158,7 +158,7 @@ const History: FunctionComponent<HistoryProps> = () => {
     setHotelName(hotelName);
   }
   const handleChangeSts = (idPayment?: string, totalPay?: number) => {
-    const feeCancel =  Math.ceil(totalPay! * 0.3);
+    const feeCancel =  Math.round(totalPay! * 0.3);
     console.log('feeCancel', feeCancel);
     updateSts(idPayment, feeCancel);
   };

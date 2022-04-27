@@ -63,14 +63,6 @@ const PaymentManager: FunctionComponent<PaymentManagerProps> = () => {
       ellipsis: true,
     },
     {
-      title: 'First Total',
-      dataIndex: 'First_Total',
-      key: 'First_Total',
-      render: (text) => <Text>${text}</Text>,
-      editable: true,
-      ellipsis: true,
-    },
-    {
       title: 'Final total',
       dataIndex: 'Final_Total',
       key: 'Final_Total',

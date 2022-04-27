@@ -7,7 +7,7 @@ import { SUCCESS_CODE } from '../../constants';
 interface BarChartProps {
   idAccout?: number;
   idHotel?: string;
-  year?:string;
+  year?:any;
   xField?: string;
   yField?: string;
   seriesField?: string;

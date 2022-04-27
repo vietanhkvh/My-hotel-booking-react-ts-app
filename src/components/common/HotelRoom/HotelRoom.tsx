@@ -90,7 +90,7 @@ interface HotelRoomProps {
   /**
    * imgHotel
    */
-   imgHotel?:any;
+  imgHotel?: any;
 }
 
 const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
@@ -131,9 +131,9 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
         Image_Room: images?.[0]?.Image,
         Image_Hotel: imgHotel,
         Date_In: hotelSearchingCondition?.dateIn,
-        Date_Out:  hotelSearchingCondition?.dateOut,
+        Date_Out: hotelSearchingCondition?.dateOut,
       };
-      console.log('carts', carts)
+      console.log('carts', carts);
       if (!carts?.find((c) => c.ID_Room === room.ID_Room)) {
         carts?.push(room);
         dispatch(setCarts(carts));
@@ -206,14 +206,14 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
         <Text className={styles['item']}>/room/day</Text>
         <Button
           className={styles['button']}
-          onClick={()=>handleBtnCLick('RESERVE')}
+          onClick={() => handleBtnCLick('RESERVE')}
           disabled={idStatus === 2 ? true : false}
         >
           Reserve
         </Button>
         <Button
           className={clsx(styles['button'], styles['btn-add'])}
-          onClick={()=>handleBtnCLick('ADDCART')}
+          onClick={() => handleBtnCLick('ADDCART')}
           disabled={idStatus === 2 ? true : false}
         >
           Add to cart
@@ -266,16 +266,29 @@ const HotelRoom: FunctionComponent<HotelRoomProps> = (props) => {
           <Text className={styles['title']}>{hotelRoom?.Room_Name}</Text>
           <Row className={styles['detail']}>
             <Text className={styles['detail-item']} style={{ paddingLeft: 0 }}>
-              <Image
-                src={
-                  hotelRoom?.Bed_Number && hotelRoom?.Bed_Number >= 2
-                    ? DoubleBed
-                    : SingleBed
-                }
-                preview={false}
-              />
-              {calcGuest(hotelRoom?.Bed_Number)} bed
-              {isMany(calcGuest(hotelRoom?.Bed_Number))}
+              {hotelRoom?.Bed_Number && hotelRoom?.Bed_Number === 3 ? (
+                <Row gutter={10}>
+                  <Col>
+                    <Image src={DoubleBed} preview={false} />1 bed
+                  </Col>
+                  <Col>
+                    <Image src={SingleBed} preview={false} />1 bed
+                  </Col>
+                </Row>
+              ) : (
+                <>
+                  <Image
+                    src={
+                      hotelRoom?.Bed_Number && hotelRoom?.Bed_Number >= 2
+                        ? DoubleBed
+                        : SingleBed
+                    }
+                    preview={false}
+                  />
+                  {calcGuest(hotelRoom?.Bed_Number)} bed
+                  {isMany(calcGuest(hotelRoom?.Bed_Number))}
+                </>
+              )}
             </Text>
             <Text className={styles['detail-item']}>
               <Image src={Group} preview={false} />

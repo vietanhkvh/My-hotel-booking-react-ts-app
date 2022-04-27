@@ -28,6 +28,7 @@ import moment from 'moment';
 import NotFound from '../../../components/common/NotFound/NotFound';
 import RatedCard from '../../../components/common/RatedCard/RatedCard';
 import { getRatingHotel } from '../../../services/common.service';
+import Myloading from '../../../components/common/Myloading/Myloading';
 const { Meta } = Card;
 const { Text, Title } = Typography;
 interface HotelIdProps {}
@@ -47,6 +48,8 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
   const [hotelInfors, setHotelInfors] = useState<hotelSearching[]>([]);
   const [hotelRooms, setHotelRooms] = useState<hotelRoom[]>([]);
   const [ratingHotel, setRatingHotel] = useState<ratingInfor[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
   const TitleCom = (props) => {
     const { name } = props;
     return (
@@ -191,6 +194,7 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
         const res = respond;
         if (res?.data?.code === SUCCESS_CODE) {
           setHotelRooms(res?.data?.data);
+          setLoading(false);
         }
       } catch (err) {}
     },
@@ -245,7 +249,11 @@ const HotelId: FunctionComponent<HotelIdProps> = (props) => {
       <Title level={5} style={{ marginTop: 20 }}>
         Rooms
       </Title>
-      {hotelRooms?.length ? (
+      {loading ? (
+        <div className={styles['loading']}>
+          <Myloading />
+        </div>
+      ) : hotelRooms?.length ? (
         hotelRooms?.map((h) => (
           <HotelRoom
             key={h?.ID_Room && h?.ID_Room}

@@ -28,7 +28,12 @@ import LocationInputSearch from '../LocationInputSearch/LocationInputSearch';
 import Search from '../../../assest/icons/icons8-search.svg';
 import moment from 'moment';
 import PopupNumberGuest from '../PopupNumberGuest/PopupNumberGuest';
-import { DATE_FORMAT, DATE_FORMAT_BACK_END, some, SUCCESS_CODE } from '../../constants';
+import {
+  DATE_FORMAT,
+  DATE_FORMAT_BACK_END,
+  some,
+  SUCCESS_CODE,
+} from '../../constants';
 import {
   getSearchingResultLocation,
   getSearchingResultName,
@@ -79,8 +84,10 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
     return num >= 2 ? 's' : '';
   };
   const disabledDate = (current: any) => {
-    // Can not select days before today and today
-    return current && current < moment().add('-1', 'days').endOf('day');
+    // Can not select days before today
+    return (
+      moment().add(-1, 'days') >= current || moment().add(45, 'days') <= current
+    );
   };
   const handleVisibleChange = (visible: boolean) => {
     setVisible(visible);
@@ -132,7 +139,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
         name: strSearch,
         dateIn: dateIn?.format(DATE_FORMAT_BACK_END),
         dateOut: dateOut?.format(DATE_FORMAT_BACK_END),
-        guestNum: adults + children,
+        guestNum: adults + children / 2,
       };
       const respond = await (type === 'location'
         ? getSearchingResultLocation(payload)
@@ -178,7 +185,10 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
       style={{ margin: '0' }}
     >
       <Col span={8} className={styles['item-container']}>
-        <Tabs defaultActiveKey={params?.type !== ''? params?.type : 'location'} onChange={callback}>
+        <Tabs
+          defaultActiveKey={params?.type !== '' ? params?.type : 'location'}
+          onChange={callback}
+        >
           <TabPane tab='Location' key='location'>
             <LocationInputSearch
               placeholder={'City you want to go...'}
