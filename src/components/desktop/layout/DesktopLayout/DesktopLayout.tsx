@@ -1,12 +1,12 @@
 // import { Col } from 'ant';
-import React from 'react';
-import LayoutCus from '../../../Layout';
+import React from "react";
+import LayoutCus from "../../../Layout";
 // import useTrans from '../../../../hooks/useTrans';
-import { useSelector } from 'react-redux';
-import { userState } from '@src/store/reducer/userReducer';
-import DesktopGuestLayout from '../../DesktopGuestLayout/DesktopGuestLayout';
-import DeskHostLayout from '../../DeskHostLayout/DeskHostLayout';
-import DesktopAdminLayout from '../../DesktopAdminLayout/DesktopAdminLayout';
+import { useSelector } from "react-redux";
+import { userState } from "@src/store/reducer/userReducer";
+import DesktopGuestLayout from "../../DesktopGuestLayout/DesktopGuestLayout";
+import DeskHostLayout from "../../Deskhostlayout/Deskhostlayout";
+import DesktopAdminLayout from "../../DesktopAdminLayout/DesktopAdminLayout";
 
 const DesktopLayout = (props) => {
   const { route, children, dataProfileDomain } = props;
@@ -17,16 +17,16 @@ const DesktopLayout = (props) => {
   return (
     <LayoutCus
       contents={{
-        title: 'Los Cocos',
-        url: '',
-        description: 'Book a room with lots of hot deals',
+        title: "Los Cocos",
+        url: "",
+        description: "Book a room with lots of hot deals",
         icon: dataProfileDomain?.logo,
       }}
       children={
         userInfor ? (
-          userInfor?.ID_Role === 'GUE' ? (
+          userInfor?.ID_Role === "GUE" ? (
             <DesktopGuestLayout />
-          ) : userInfor?.ID_Role === 'HOS' ? (
+          ) : userInfor?.ID_Role === "HOS" ? (
             <DeskHostLayout />
           ) : (
             <DesktopAdminLayout />

@@ -1,25 +1,25 @@
-import { some } from 'src/const/keyString';
-import React from 'react';
-import styles from './MobileLayout.module.scss';
-import LayoutCus from '../../Layout';
-import { Layout, Row } from 'antd';
-import { Outlet } from 'react-router-dom';
-import Headermob from '../Headermob/Headermob';
+import { some } from "src/const/keyString";
+import React from "react";
+import styles from "./MobileLayout.module.scss";
+import LayoutCus from "../../Layout";
+import { Layout, Row } from "antd";
+import { Outlet } from "react-router-dom";
+import Headermob from "../Headermob/Headermob";
 const { Content } = Layout;
 // import MobileHeader from './MobileHeader';
 // import { ShareInfor } from '@src/const/shareInfor';
 
 const LayoutMobile = () => {
   return (
-    <div className={styles['layout']}>
+    <div className={styles["layout"]}>
       <Headermob />
-      <Content className={styles['content']}>
+      <Content className={styles["content"]}>
         {/* <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>List</Breadcrumb.Item>
           <Breadcrumb.Item>App</Breadcrumb.Item>
         </Breadcrumb> */}
-        <Row className={styles['site-layout-content']}>
+        <Row className={styles["site-layout-content"]}>
           <Outlet />
         </Row>
       </Content>
@@ -32,7 +32,7 @@ interface Props {
   route?: string;
 }
 
-const MobileLayout = (props:Props) => {
+const MobileLayout = (props: Props) => {
   const { dataProfileDomain } = props;
 
   // const showHeader = [routesPath.HOME].indexOf(route) > -1;
@@ -46,10 +46,9 @@ const MobileLayout = (props:Props) => {
     <LayoutCus
       contents={{
         title: dataProfileDomain?.brandName,
-        url: '',
-        description: 'react-app',
+        url: "",
+        description: "react-app",
         icon: dataProfileDomain?.logo,
-        // shareImg: 'https://mytour.vn/themes/images/logo-ss-facebook.png',
       }}
       children={<LayoutMobile />}
     />
