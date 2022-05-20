@@ -1,48 +1,41 @@
 // import { Col } from 'ant';
 import React from 'react';
 import LayoutCus from '../../../Layout';
-import useTrans from '../../../../hooks/useTrans';
-import styles from './DesktopLayout.module.scss';
-import HeaderDesk from '../../HeaderDesk/HeaderDesk';
-import { Layout, Breadcrumb, Row } from 'antd';
-import { Outlet } from 'react-router-dom';
-const { Content, Footer } = Layout;
-const LayoutDesk = () => {
-  return (
-    <div className={styles['layout']}>
-      <HeaderDesk />
-      <Content className={styles['content']}>
-        {/* <Breadcrumb style={{ margin: '16px 0' }}>
-      <Breadcrumb.Item>Home</Breadcrumb.Item>
-      <Breadcrumb.Item>List</Breadcrumb.Item>
-      <Breadcrumb.Item>App</Breadcrumb.Item>
-    </Breadcrumb> */}
-        <Row className={styles['site-layout-content']}>
-          <Outlet />
-        </Row>
-      </Content>
-      <Footer className={styles['footer']}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
-    </div>
-  );
-};
+// import useTrans from '../../../../hooks/useTrans';
+import { useSelector } from 'react-redux';
+import { userState } from '@src/store/reducer/userReducer';
+import DesktopGuestLayout from '../../DesktopGuestLayout/DesktopGuestLayout';
+import DeskHostLayout from '../../DeskHostLayout/DeskHostLayout';
+import DesktopAdminLayout from '../../DesktopAdminLayout/DesktopAdminLayout';
+
 const DesktopLayout = (props) => {
   const { route, children, dataProfileDomain } = props;
-  const { t } = useTrans();
-
+  // const { t } = useTrans();
+  const userInfor = useSelector(
+    (state: { user: userState }) => state.user?.userInfor
+  );
   return (
     <LayoutCus
       contents={{
-        title: 'react-ts-base',
+        title: 'Los Cocos',
         url: '',
-        description: 'react-app',
+        description: 'Book a room with lots of hot deals',
         icon: dataProfileDomain?.logo,
-        // shareImg: 'https://mytour.vn/themes/images/logo-ss-facebook.png',
       }}
-      children={<LayoutDesk/>} 
+      children={
+        userInfor ? (
+          userInfor?.ID_Role === 'GUE' ? (
+            <DesktopGuestLayout />
+          ) : userInfor?.ID_Role === 'HOS' ? (
+            <DeskHostLayout />
+          ) : (
+            <DesktopAdminLayout />
+          )
+        ) : (
+          <DesktopGuestLayout />
+        )
+      }
     />
-    
   );
 };
 

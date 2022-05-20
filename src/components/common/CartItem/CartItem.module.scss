@@ -1,0 +1,105 @@
+.cart-item {
+  border-bottom: 1px solid #adadad;
+  .infor {
+    width: 100%;
+    padding: 16px 24px;
+    .title {
+      display: -webkit-box;
+      overflow: hidden;
+      font-size: 18px;
+      transition: all 0.2s;
+      font-weight: 600;
+      line-height: 21px;
+      margin-bottom: 2px;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      white-space: break-spaces;
+      margin-bottom: 10px;
+    }
+    .title-hotel {
+      font-size: 22px;
+    }
+    .detail {
+      margin-top: 10px;
+      .detail-item {
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        border-right: 1px solid #adadad;
+      }
+    }
+    .price {
+      display: flex;
+      flex-direction: column;
+      .price-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        width: 100%;
+        align-items: flex-end;
+        .percent-wrapper {
+          width: 100%;
+          justify-content: flex-end;
+          .percent {
+            width: 40px;
+            border-radius: 5px;
+            color: #ffffff;
+            text-align: center;
+            background: #ff385c;
+          }
+        }
+        .item {
+          margin-top: 2px;
+          color: rgb(74, 85, 104);
+          width: 100%;
+          text-align: end;
+          font-size: 15px;
+          line-height: 17px;
+        }
+      }
+    }
+    .infor-member {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .button {
+        color: rgb(253, 253, 253);
+        width: 56px;
+        border: none;
+        height: 44px;
+        padding: 6px 8px;
+        font-size: 16px;
+        min-height: 20px;
+        font-weight: 600;
+        border-radius: 8px;
+        text-transform: none;
+        background-color: #ff3366;
+      }
+      .btn-add {
+        background-color: transparent;
+        color: #000;
+        border: 1px solid #000;
+      }
+      .btn-add:hover {
+        background-color: #ff3366;
+        color: #ffffff;
+        transition: 0.5;
+        border: none;
+      }
+      .txt {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+    .infor-mem {
+      justify-content: center;
+    }
+    .date-infor {
+      .date {
+        justify-content: center;
+        align-content: center;
+        height: 100%;
+      }
+    }
+  }
+}

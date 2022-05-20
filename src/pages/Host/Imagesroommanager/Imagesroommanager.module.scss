@@ -1,0 +1,20 @@
+.images-room-manager {
+    padding: 20px;
+    .function-wrapper {
+      margin-bottom: 20px ;
+      width: 100%;
+      .item{
+          width: 150px;
+          border-radius: 5px;
+      }
+      .btn-add {
+          background-color: #83c3fb;
+      }
+      .select-room{
+          div[class='ant-select-selector']{
+          background-color: #1890FA;
+          color: white;
+          }
+      }
+    }
+}

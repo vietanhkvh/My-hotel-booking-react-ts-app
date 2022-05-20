@@ -1,0 +1,23 @@
+.register-form {
+    padding: 12px 32px;
+    .registerInfo {
+      .item-input {
+        .input-main {
+          height: 52px;
+          background: #f1f5f9;
+          border-radius: 8px;
+          input {
+            background: #f1f5f9;
+          }
+        }
+      }
+      .btn-register {
+        width: 100%;
+        border-radius: 8px;
+        height: 52px;
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 14px;
+      }
+    }
+}

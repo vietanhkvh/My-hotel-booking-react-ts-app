@@ -1,0 +1,90 @@
+.success {
+  width: 100%;
+  height: 100vh;
+  background-color: #edf2f7;
+  padding: 10px;
+  justify-content: center;
+  .success-item {
+    background-color: white;
+    margin: auto 100px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .button {
+      border-radius: 4px;
+      background-color: #ff3366;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .payment {
+      background-color: white;
+      width: 100%;
+      border: 1px solid #edf2f7;
+      border-radius: 3px;
+      text-align: center;
+      .hotel-name {
+        width: 100%;
+      }
+      .payment-wrapper {
+        width: 100%;
+        justify-content: space-evenly;
+        padding: 10px 0;
+        border-radius: 6px;
+        .payment-item {
+          width: 426px;
+          background-color: #edf2f7;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          border-radius: 10px;
+          .detail {
+            display: -webkit-box;
+            overflow: hidden;
+            transition: all 0.2s;
+            font-weight: 600;
+            line-height: 21px;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            white-space: break-spaces;
+          }
+          .txt {
+            font-weight: 700;
+          }
+        }
+
+        .payment-price {
+          width: 100%;
+          margin: auto 32px;
+          padding: 12px 28px;
+          .payment-price-item {
+            width: 100%;
+            justify-content: space-between;
+            margin: 5px auto;
+            .title {
+              font-weight: 600;
+            }
+            .total {
+              font-size: 18px;
+            }
+            .txt {
+              font-weight: 700;
+            }
+          }
+          .payment-total {
+            // border-top: 2px solid white;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+          }
+        }
+      }
+    }
+  }
+  .payment-item-wrapper{
+    justify-content: space-evenly;
+    padding: 10px 0;
+    border-bottom: 1px solid #edf2f7;
+  }
+}

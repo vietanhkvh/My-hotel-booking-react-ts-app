@@ -1,5 +1,9 @@
+import { styleNotiError, styleNotiSuccess } from '../components/constants';
 import { some } from '@const/keyString';
+import { notification } from 'antd';
 import DeviceDetector from 'ua-parser-js';
+import moment from 'moment';
+import { cartItem } from '@const/interface';
 
 const has = Object.prototype.hasOwnProperty;
 
@@ -182,7 +186,14 @@ export function isEmail(text) {
     text
   );
 }
-
+export function ValidateEmail(mail) 
+{
+ if (/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+  {
+    return (true)
+  }
+    return (false)
+}
 export const setLastRegisterValue = (key, value) => {
   const localValue = localStorage.getItem('last-registerValue');
   let v = {};
@@ -256,4 +267,47 @@ export const checkIsSvgLink = (path) => {
   const t = path.split('.');
   if (t[t.length - 1] === 'svg') return true;
   return false;
+};
+
+export const isMany = (num: number) => {
+  return num >= 2 ? 's' : '';
+};
+
+export const openNotificationWithIcon = (
+  type: string,
+  message: string,
+  description: string,
+  style?: any
+) => {
+  notification[type]({
+    message: message,
+    description: description,
+    style: type==='error'? styleNotiError : styleNotiSuccess,
+  });
+};
+notification.config({
+  placement: 'topRight',
+  duration: 6,
+  maxCount: 1,
+});
+export const isDisableBtnAdd=(val1:any, editingKey:any )=>{
+  if(val1 !== ''){    
+    if( editingKey === undefined || editingKey === '') return false
+    else return true
+  }
+  return true
+}
+export const calcGuest = (guestNum?: number) => {
+  if (guestNum && guestNum < 2) {
+    return guestNum;
+  } else return Math.floor(guestNum! / 2);
+};
+
+export const calcTotalPrice = (carts: cartItem[]) => {
+  let total = 0;
+  carts.forEach((c) => {
+    const dateGap = moment(c?.Date_Out).diff(moment(c?.Date_In),'days');
+    total += c.Final_Price! * dateGap;
+  });
+  return total;
 };

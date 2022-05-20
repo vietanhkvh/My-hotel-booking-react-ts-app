@@ -5,7 +5,7 @@ import LayoutCus from '../../Layout';
 import { Layout, Row } from 'antd';
 import { Outlet } from 'react-router-dom';
 import Headermob from '../Headermob/Headermob';
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 // import MobileHeader from './MobileHeader';
 // import { ShareInfor } from '@src/const/shareInfor';
 
@@ -23,20 +23,17 @@ const LayoutMobile = () => {
           <Outlet />
         </Row>
       </Content>
-      <Footer className={styles['footer']}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
     </div>
   );
 };
 interface Props {
-  dataProfileDomain: some;
+  dataProfileDomain?: some;
   children?: any;
-  route: string;
+  route?: string;
 }
 
-const MobileLayout = (props) => {
-  const { dataProfileDomain, children, route } = props;
+const MobileLayout = (props:Props) => {
+  const { dataProfileDomain } = props;
 
   // const showHeader = [routesPath.HOME].indexOf(route) > -1;
   // if (!showHeader) {

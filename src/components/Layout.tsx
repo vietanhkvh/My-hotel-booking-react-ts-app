@@ -2,11 +2,13 @@ import { some } from '@components/constants';
 import { Helmet } from 'react-helmet';
 import React from 'react';
 import styles from './Layout.module.scss';
+import { Layout } from 'antd';
 declare global {
   interface Window {
     vntCa: any;
   }
 }
+const { Footer } = Layout;
 
 export default function LayoutCus({
   children,
@@ -16,7 +18,7 @@ export default function LayoutCus({
   contents?: some;
 }) {
   return (
-    <>
+    <div className={styles['layout']}>
       <Helmet>
         <meta httpEquiv='Content-Type' content='text/html; charset=utf-8' />
         <meta
@@ -45,7 +47,10 @@ export default function LayoutCus({
         />
         <meta property='og:locale' content='en_GB' />
       </Helmet>
-        {children}
-    </>
+      {children}
+      <Footer style={{ textAlign: 'center', backgroundColor: '#ffffff' }}>
+        Ant Design ©2018 Created by Ant UED
+      </Footer>
+    </div>
   );
 }

@@ -1,0 +1,58 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.login-modal {
+  background-color: black;
+  .ant-modal-header {
+    border-bottom: none;
+  }
+  .ant-modal-footer {
+    border-top: none;
+  }
+}
+
+.ant-notification-notice-content {
+  margin-right: 50px;
+  .ant-notification-notice-with-icon {
+    display: flex;
+    align-items: center;
+    span.anticon.anticon-close-circle.ant-notification-notice-icon.ant-notification-notice-icon-error {
+      line-height: initial;
+      font-size: initial;
+    }
+    .ant-notification-notice-message {
+      display: none;
+    }
+    .ant-notification-notice-description {
+      // margin-left: 50px;
+      font-size: 12px;
+    }
+  }
+}
+.ant-notification-notice-close{
+  top:initial;
+}
+.ant-notification-notice.ant-notification-notice-error.ant-notification-notice-closable {
+  width: 300px;
+}
+
+.menu-pop-over {
+  .ant-popover-inner-content {
+    padding: 5px;
+  }
+}

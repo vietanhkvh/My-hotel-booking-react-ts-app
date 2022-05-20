@@ -1,0 +1,24 @@
+.hotel-manager {
+  padding: 20px;
+  .select {
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    div[class='ant-select-selector'] {
+      background-color: #1890fa;
+      color: white;
+    }
+    .btn-add {
+      width: 200px;
+      background-color: #83c3fb;
+      border-radius: 5px;
+    }
+  }
+  .editable-row {
+    .ant-form-item-explain {
+      position: absolute;
+      top: 100%;
+      font-size: 12px;
+    }
+  }
+}
