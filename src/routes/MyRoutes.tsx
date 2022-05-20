@@ -1,38 +1,39 @@
-import { useEffect, useState } from 'react';
-import { isMobileAndTabletCheck } from '../utils/helpers';
-import { Route, RouteObject, Routes } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 // import { routerConfig } from './routerConfig';
-import MobileLayout from '../components/mobile/layout/MobileLayout';
-import DesktopLayout from '../components/desktop/layout/DesktopLayout/DesktopLayout';
-import Home from '../pages/Home/Home';
-import Hotel from '../pages/Hotel/Hotel';
-import Users from '../pages/Users/Users';
-import User from '../pages/User/User';
-import Searching from '../pages/Searching/Searching';
-import HotelId from '../pages/Hotel/HotelId/HotelId';
-import Restaurant from '../pages/Restaurant/Restaurant';
-import Nopage from '../pages/Nopage/Nopage';
-import ConfirmPay from '../pages/ConfirmPay/ConfirmPay';
-import Success from '../pages/Success/Success';
-import History from '../pages/History/History';
-import HotelManager from '../pages/Host/HotelManager/HotelManager';
-import RoomManager from '../pages/Host/RoomManager/RoomManager';
-import ImagesManager from '../pages/Host/ImagesManager/ImagesManager';
-import ImagesRoomManager from '../pages/Host/Imagesroommanager/Imagesroommanager';
-import CouponManager from '../pages/Host/CouponManager/CouponManager';
-import Accounts from '../pages/Admin/HostUser/HostUser';
-import ActiveRequestion from '../pages/Admin/ActiveRequestion/ActiveRequestion';
-import Requestion from '../pages/Admin/Requestion/Requestion';
-import PaymentManager from '../pages/Host/PaymentManager/PaymentManager';
-import Cart from '../pages/Cart/Cart';
-import { userState } from '@src/store/reducer/userReducer';
-import { useSelector } from 'react-redux';
-import ProtectedRoute from './ProtectedRoute/ProtectedRoute';
-import DashBoardHost from '../pages/Host/DashBoardHost/DashBoardHost';
+import MobileLayout from "../components/mobile/layout/MobileLayout";
+import DesktopLayout from "../components/desktop/layout/DesktopLayout/DesktopLayout";
+import Home from "../pages/Home/Home";
+import Hotel from "../pages/Hotel/Hotel";
+import Users from "../pages/Users/Users";
+import User from "../pages/User/User";
+import Searching from "../pages/Searching/Searching";
+import HotelId from "../pages/Hotel/HotelId/HotelId";
+import Restaurant from "../pages/Restaurant/Restaurant";
+import Nopage from "../pages/Nopage/Nopage";
+import ConfirmPay from "../pages/ConfirmPay/ConfirmPay";
+import Success from "../pages/Success/Success";
+import History from "../pages/History/History";
+import HotelManager from "../pages/Host/HotelManager/HotelManager";
+import RoomManager from "../pages/Host/RoomManager/RoomManager";
+import ImagesManager from "../pages/Host/ImagesManager/ImagesManager";
+import ImagesRoomManager from "../pages/Host/Imagesroommanager/Imagesroommanager";
+import CouponManager from "../pages/Host/CouponManager/CouponManager";
+import Accounts from "../pages/Admin/HostUser/HostUser";
+import ActiveRequestion from "../pages/Admin/ActiveRequestion/ActiveRequestion";
+import Requestion from "../pages/Admin/Requestion/Requestion";
+import PaymentManager from "../pages/Host/PaymentManager/PaymentManager";
+import Cart from "../pages/Cart/Cart";
+import { userState } from "@src/store/reducer/userReducer";
+import { useSelector } from "react-redux";
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
+import DashBoardHost from "../pages/Host/DashBoardHost/DashBoardHost";
+import { constState } from "@src/store/reducer/constReducer";
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
-  const [Update, setUpdate] = useState(Date.now());
+
+  const [update, setUpdate] = useState(Date.now());
   //   const isMobileDisplay = useRef(isMobileAndTabletCheck());
   //   const isMobile = isMobileAndTabletCheck();
 
@@ -46,32 +47,32 @@ const MyRoutes = (props) => {
       setUpdate(Date.now());
       setTimeout(() => setUpdate(Date.now()), 0);
     };
-    window.addEventListener('resize', check);
+    window.addEventListener("resize", check);
     return () => {
-      window.removeEventListener('resize', check);
+      window.removeEventListener("resize", check);
     };
   }, []);
 
   return (
     <Routes>
       <Route
-        path={'/'}
+        path={"/"}
         element={isMobile ? <MobileLayout /> : <DesktopLayout />}
       >
         {/* guest */}
-        <Route path={'/home'} element={<Home />} />
-        <Route path={''} element={<Home />} />
+        <Route path={"/home"} element={<Home isMobile={isMobile} />} />
+        <Route path={""} element={<Home isMobile={isMobile} />} />
 
-        <Route path='hotel' element={<Hotel />}>
-          <Route path=':hotelId' element={<HotelId />} />
+        <Route path="hotel" element={<Hotel isMobile={isMobile} />}>
+          <Route path=":hotelId" element={<HotelId />} />
         </Route>
 
-        <Route path={'/restaurant'} element={<Restaurant />} />
+        <Route path={"/restaurant"} element={<Restaurant />} />
 
-        <Route path={'/searching'} element={<Searching />} />
+        <Route path={"/searching"} element={<Searching />} />
 
         <Route
-          path='users'
+          path="users"
           element={
             <ProtectedRoute isAllowed={!!userInfor}>
               <Users />
@@ -79,7 +80,7 @@ const MyRoutes = (props) => {
           }
         >
           <Route
-            path=':userId'
+            path=":userId"
             element={
               <ProtectedRoute isAllowed={!!userInfor}>
                 <User />
@@ -90,10 +91,10 @@ const MyRoutes = (props) => {
 
         {/* host */}
         <Route
-          path='dashboard'
+          path="dashboard"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "HOS"}
             >
               <DashBoardHost />
             </ProtectedRoute>
@@ -101,30 +102,30 @@ const MyRoutes = (props) => {
         />
 
         <Route
-          path='hotel-manager'
+          path="hotel-manager"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "HOS"}
             >
               <HotelManager />
             </ProtectedRoute>
           }
         />
         <Route
-          path='room-manager'
+          path="room-manager"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "HOS"}
             >
               <RoomManager />
             </ProtectedRoute>
           }
         />
         <Route
-          path='payment-manager'
+          path="payment-manager"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "HOS"}
             >
               <PaymentManager />
             </ProtectedRoute>
@@ -132,30 +133,30 @@ const MyRoutes = (props) => {
         />
 
         <Route
-          path='hotel-images'
+          path="hotel-images"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "HOS"}
             >
               <ImagesManager />
             </ProtectedRoute>
           }
         />
         <Route
-          path='room-images'
+          path="room-images"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "HOS"}
             >
               <ImagesRoomManager />
             </ProtectedRoute>
           }
         />
         <Route
-          path='coupon-manager'
+          path="coupon-manager"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'HOS'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "HOS"}
             >
               <CouponManager />
             </ProtectedRoute>
@@ -164,47 +165,47 @@ const MyRoutes = (props) => {
 
         {/* Admin */}
         <Route
-          path='host-manager'
+          path="host-manager"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'ADM'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "ADM"}
             >
-              <Accounts type='HOS' />
+              <Accounts type="HOS" />
             </ProtectedRoute>
           }
         />
         <Route
-          path='guest-manager'
+          path="guest-manager"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'ADM'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "ADM"}
             >
-              <Accounts type='GUE' />
+              <Accounts type="GUE" />
             </ProtectedRoute>
           }
         />
         <Route
-          path='de-active-requestion'
+          path="de-active-requestion"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'ADM'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "ADM"}
             >
               <ActiveRequestion />
             </ProtectedRoute>
           }
         />
         <Route
-          path='host-requestion'
+          path="host-requestion"
           element={
             <ProtectedRoute
-              isAllowed={!!userInfor && userInfor?.ID_Role === 'ADM'}
+              isAllowed={!!userInfor && userInfor?.ID_Role === "ADM"}
             >
               <Requestion />
             </ProtectedRoute>
           }
         />
 
-        <Route path={'*'} element={<Nopage />} />
+        <Route path={"*"} element={<Nopage />} />
         {/* {routerConfig.map((r: any) => {
         const { component, needAuthor, grantPermision, ...rest } = r;
         const mode = isMobileAndTabletCheck() ? 'mobile' : 'desktop';
@@ -241,33 +242,28 @@ const MyRoutes = (props) => {
         );
       })} */}
       </Route>
-      <Route path='book' element={<ConfirmPay />} />
+      <Route path="book" element={<ConfirmPay />} />
       <Route
-        path='book-success'
+        path="book-success"
         element={
           <ProtectedRoute
-            isAllowed={!!userInfor && userInfor?.ID_Role === 'GUE'}
+            isAllowed={!!userInfor && userInfor?.ID_Role === "GUE"}
           >
             <Success />
           </ProtectedRoute>
         }
       />
       <Route
-        path='history'
+        path="history"
         element={
           <ProtectedRoute
-            isAllowed={!!userInfor && userInfor?.ID_Role === 'GUE'}
+            isAllowed={!!userInfor && userInfor?.ID_Role === "GUE"}
           >
             <History />
           </ProtectedRoute>
         }
       />
-      <Route
-        path='itinerary'
-        element={
-            <Cart />
-        }
-      />
+      <Route path="itinerary" element={<Cart />} />
     </Routes>
   );
 };

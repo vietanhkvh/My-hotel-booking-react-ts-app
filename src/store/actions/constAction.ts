@@ -1,14 +1,16 @@
-import { ConstActions } from './actionTypes';
-import { ActionInterface } from '../../const/interface';
+import { ConstActions } from "./actionTypes";
+import { ActionInterface } from "../../const/interface";
+export const setMobileVer: (payload: any) => ActionInterface = (payload) => ({
+  type: ConstActions.setMobileVer,
+  payload,
+});
 export const setHotelLocationAction: (payload: any) => ActionInterface = (
   payload
 ) => ({
   type: ConstActions.setHotelLocation,
   payload,
 });
-export const setHotelName: (payload: any) => ActionInterface = (
-  payload
-) => ({
+export const setHotelName: (payload: any) => ActionInterface = (payload) => ({
   type: ConstActions.setHotelName,
   payload,
 });
@@ -30,15 +32,11 @@ export const setHotelManager: (payload: any) => ActionInterface = (
   type: ConstActions.setHotelManager,
   payload,
 });
-export const setTypesRoom: (payload: any) => ActionInterface = (
-  payload
-) => ({
+export const setTypesRoom: (payload: any) => ActionInterface = (payload) => ({
   type: ConstActions.setTypesRoom,
   payload,
 });
-export const setCarts: (payload: any) => ActionInterface = (
-  payload
-) => ({
+export const setCarts: (payload: any) => ActionInterface = (payload) => ({
   type: ConstActions.setCart,
   payload,
 });

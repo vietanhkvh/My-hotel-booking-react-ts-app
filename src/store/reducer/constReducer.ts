@@ -6,9 +6,10 @@ import {
   hotel,
   typeRooms,
   cartItem,
-} from '../../const/interface';
-import { ConstActions } from '../actions/actionTypes';
+} from "../../const/interface";
+import { ConstActions } from "../actions/actionTypes";
 export interface constState {
+  readonly isMobileVer?: boolean | undefined;
   readonly hotelLocation?: [] | hotelLocation[];
   readonly hotelName?: [] | any[];
   readonly hotelSearchingByLocation?: [] | hotelSearching[];
@@ -18,6 +19,7 @@ export interface constState {
   readonly carts?: cartItem[];
 }
 const initialState: constState = {
+  isMobileVer: undefined,
   hotelLocation: [],
   hotelName: [],
   hotelSearchingByLocation: [],
@@ -34,6 +36,8 @@ const constReducer: (
   action: ActionInterface
 ) => {
   switch (action.type) {
+    case ConstActions.setMobileVer:
+      return { ...state, isMobileVer: action.payload };
     case ConstActions.setHotelLocation:
       return { ...state, hotelLocation: action.payload };
     case ConstActions.setHotelName:

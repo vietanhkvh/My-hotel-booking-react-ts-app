@@ -1,12 +1,14 @@
-import * as React from 'react';
-import './App.css';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { isMobileAndTabletCheck } from '../utils/helpers';
-import 'antd/dist/antd.min.css';
-import "slick-carousel/slick/slick.css"; 
+import * as React from "react";
+import "./App.css";
+import { BrowserRouter as Router } from "react-router-dom";
+import { isMobileAndTabletCheck } from "../utils/helpers";
+import "antd/dist/antd.min.css";
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import MyRoutes from '../routes/MyRoutes';
-import '../styles/globals.scss';
+import MyRoutes from "../routes/MyRoutes";
+import "../styles/globals.scss";
+import { useDispatch } from "react-redux";
+import { setMobileVer } from "../store/actions/constAction";
 // import Nopage from '../pages/Nopage/Nopage';
 // import Home from '../pages/Home/Home';
 // import Users from '../pages/Users/Users';
@@ -19,14 +21,16 @@ import '../styles/globals.scss';
 
 export default function App() {
   const [isMobile, setIsMobile] = React.useState(isMobileAndTabletCheck());
+  const dispatch: React.Dispatch<any> = useDispatch();
+
   const getWindowSize = () =>
     isMobileAndTabletCheck() ? setIsMobile(true) : setIsMobile(false);
 
   React.useEffect(() => {
-    window.addEventListener('resize', getWindowSize);
+    window.addEventListener("resize", getWindowSize);
     getWindowSize();
-  }, []);
-  console.log('isMobile', isMobile);
+    dispatch(setMobileVer(isMobile));
+  }, [dispatch, isMobile]);
   //router object
   // const routerConfigV6: RouteObject[] = [
   //   {

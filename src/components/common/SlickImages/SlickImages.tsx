@@ -1,9 +1,11 @@
-import { some } from '@const/keyString';
-import { Image, Row } from 'antd';
-import { FunctionComponent, useCallback, useEffect, useState } from 'react';
-import Slider from 'react-slick';
-import { banner, hotel, room } from './dataRaw';
-import styles from './SlickImages.module.scss';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import { some } from "@const/keyString";
+import { Image, Row } from "antd";
+import clsx from "clsx";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
+import Slider from "react-slick";
+import { banner, hotel, room } from "./dataRaw";
+import styles from "./SlickImages.module.scss";
 interface SlickImagesProps {
   /**
    * image array
@@ -13,10 +15,14 @@ interface SlickImagesProps {
    * type display
    */
   type: string;
+  /**
+   * is mobile ver
+   */
+  isMobile: boolean;
 }
 
 const SlickImages: FunctionComponent<SlickImagesProps> = (props) => {
-  const { images, type } = props;
+  const { images, type, isMobile } = props;
   const [imgs, setImgs] = useState<any[]>([]);
   const imgDefault = useCallback(
     (type: string) => {
@@ -24,13 +30,13 @@ const SlickImages: FunctionComponent<SlickImagesProps> = (props) => {
         setImgs(images);
       } else {
         switch (type) {
-          case 'hotel':
+          case "hotel":
             setImgs(hotel);
             break;
-          case 'room':
+          case "room":
             setImgs(room);
             break;
-          case 'banner':
+          case "banner":
             setImgs(banner);
             break;
           default:
@@ -46,36 +52,39 @@ const SlickImages: FunctionComponent<SlickImagesProps> = (props) => {
   }, [imgDefault, type]);
   const settings = {
     dots: true,
-    dotsClass: 'slick-dots slick-thumb',
+    dotsClass: "slick-dots slick-thumb",
     infinite: true,
     slidesToShow: 3,
     slidesToScroll: 1,
-    customPaging: (i) =>(
+    customPaging: (i) => (
       <a key={i}>
         <Image
-        // key={imgs[i].ID_IMG}
+          // key={imgs[i].ID_IMG}
           preview={false}
           src={
-            images && images?.length > 3
-              ? images?.[i]?.Image
-              : imgs?.[i]?.Image
+            images && images?.length > 3 ? images?.[i]?.Image : imgs?.[i]?.Image
           }
-          width={60}
-          height={45}
+          width={isMobile ? 50 : 60}
+          height={isMobile ? 20 : 45}
         />
       </a>
     ),
     autoplay: true,
     speed: 1500,
     autoplaySpeed: 1000,
-    cssEase: 'linear',
+    cssEase: "linear",
   };
   return (
-    <Row className={styles['slick-images']}>
-      {console.log('images', images)}
-      <Slider {...settings} className={styles['slider']}>
+    <Row className={clsx(styles["slick-images"], isMobile && styles["mobile"])}>
+      {console.log("images", images)}
+      <Slider {...settings} className={styles["slider"]}>
         {imgs.map((d: some) => (
-          <Image key={d?.ID_IMG} src={d?.Image} width={380} height={195} />
+          <Image
+            key={d?.ID_IMG}
+            src={d?.Image}
+            width={isMobile ? 100 : 380}
+            height={isMobile ? 90 : 195}
+          />
         ))}
       </Slider>
     </Row>
