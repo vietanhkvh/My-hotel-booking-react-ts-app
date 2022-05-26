@@ -53,11 +53,11 @@ export default function LayoutCus({
         <meta property="og:locale" content="en_GB" />
       </Helmet>
       {children}
-      {!isMobile && (
-        <Footer style={{ textAlign: "center", backgroundColor: "#ffffff" }}>
-          Ant Design ©2018 Created by Ant UED
-        </Footer>
-      )}
+      {/* {!isMobile && ( */}
+      <Footer style={{ textAlign: "center", backgroundColor: "#ffffff" }}>
+        Ant Design ©2018 Created by Ant UED
+      </Footer>
+      {/* )} */}
     </div>
   );
 }

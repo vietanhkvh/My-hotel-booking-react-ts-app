@@ -3,6 +3,10 @@
   width: 100%;
   overflow: hidden;
   padding: 24px 24px;
+  &-mobile {
+    height: 145px;
+    padding: 12px;
+  }
   border-radius: 8px;
   background-color: white;
   justify-content: center;
@@ -58,7 +62,4 @@
       }
     }
   }
-}
-.mobile {
-  height: 185px;
 }

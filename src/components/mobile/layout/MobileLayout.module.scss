@@ -1,16 +1,16 @@
 .layout {
-  height: 100vh ;
   padding: 0 10px;
+
+  .content {
+    // min-height: calc(100vh - 400px - 395px);
+    // height: 100%;
     .site-layout-content {
       min-height: 280px;
       background: #fff;
       height: 100%;
     }
-    .content {
-        min-height: calc(100vh - 400px - 395px);
-        height: 100vh - 28vh;
-    }
-    .footer{
-      text-align: center;
-    }
   }
+  .footer {
+    text-align: center;
+  }
+}

@@ -5,25 +5,20 @@ import LayoutCus from "../../Layout";
 import { Layout, Row } from "antd";
 import { Outlet } from "react-router-dom";
 import Headermob from "../Headermob/Headermob";
-const { Content } = Layout;
+const { Content, Footer } = Layout;
 // import MobileHeader from './MobileHeader';
 // import { ShareInfor } from '@src/const/shareInfor';
 
 const LayoutMobile = () => {
   return (
-    <div className={styles["layout"]}>
+    <Layout className={styles["layout"]}>
       <Headermob />
       <Content className={styles["content"]}>
-        {/* <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb> */}
         <Row className={styles["site-layout-content"]}>
           <Outlet />
         </Row>
       </Content>
-    </div>
+    </Layout>
   );
 };
 interface Props {

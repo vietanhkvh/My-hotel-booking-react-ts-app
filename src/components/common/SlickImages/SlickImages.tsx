@@ -51,39 +51,50 @@ const SlickImages: FunctionComponent<SlickImagesProps> = (props) => {
     imgDefault(type);
   }, [imgDefault, type]);
   const settings = {
-    dots: true,
+    dots: !isMobile && true,
     dotsClass: "slick-dots slick-thumb",
     infinite: true,
-    slidesToShow: 3,
+    swipe: isMobile && true,
+    slidesToShow: isMobile ? 2 : 3,
     slidesToScroll: 1,
-    customPaging: (i) => (
-      <a key={i}>
-        <Image
-          // key={imgs[i].ID_IMG}
-          preview={false}
-          src={
-            images && images?.length > 3 ? images?.[i]?.Image : imgs?.[i]?.Image
-          }
-          width={isMobile ? 50 : 60}
-          height={isMobile ? 20 : 45}
-        />
-      </a>
-    ),
+    arrows: isMobile && false,
+    customPaging: (i) =>
+      isMobile ? (
+        <></>
+      ) : (
+        <a key={i}>
+          <Image
+            // key={imgs[i].ID_IMG}
+            preview={false}
+            src={
+              images && images?.length > 3
+                ? images?.[i]?.Image
+                : imgs?.[i]?.Image
+            }
+            width={60}
+            height={45}
+          />
+        </a>
+      ),
     autoplay: true,
     speed: 1500,
     autoplaySpeed: 1000,
     cssEase: "linear",
   };
   return (
-    <Row className={clsx(styles["slick-images"], isMobile && styles["mobile"])}>
-      {console.log("images", images)}
+    <Row
+      className={clsx(
+        styles["slick-images"],
+        isMobile && styles["slick-images-mobile"]
+      )}
+    >
       <Slider {...settings} className={styles["slider"]}>
         {imgs.map((d: some) => (
           <Image
             key={d?.ID_IMG}
             src={d?.Image}
-            width={isMobile ? 100 : 380}
-            height={isMobile ? 90 : 195}
+            width={isMobile ? 160 : 380}
+            height={isMobile ? 120 : 195}
           />
         ))}
       </Slider>
