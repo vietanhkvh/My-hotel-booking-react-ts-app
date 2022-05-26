@@ -93,7 +93,7 @@ const SlickImages: FunctionComponent<SlickImagesProps> = (props) => {
           <Image
             key={d?.ID_IMG}
             src={d?.Image}
-            width={isMobile ? 160 : 380}
+            width={isMobile ? "45vw" : 380}
             height={isMobile ? 120 : 195}
           />
         ))}
