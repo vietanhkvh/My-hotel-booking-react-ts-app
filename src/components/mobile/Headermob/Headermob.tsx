@@ -5,9 +5,11 @@ import { routes } from "../../../routes/routes";
 import { Link } from "react-router-dom";
 import LogoDes from "../../../assest/images/logo-desk.png";
 import { MenuOutlined, SearchOutlined } from "@ant-design/icons";
-import { iconSizeL, iconSizeM } from "../../../const/data.const";
+import SearchingComponent from "../SearchingComponent/SearchingComponent";
+
 import MenuLink from "../MenuLink/MenuLink";
 import clsx from "clsx";
+import PopupLayer from "../PopupLayer/PopupLayer";
 const { Header } = Layout;
 const { Text } = Typography;
 interface ItemNavProps {
@@ -52,18 +54,19 @@ const ItemNav: FunctionComponent<ItemNavProps> = (props) => {
 };
 interface HeadermobProps {}
 const Headermob: FunctionComponent<HeadermobProps> = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isShowMenu, setIsShowMenu] = useState(false);
   const [idActive, setIdActive] = useState<string>("");
+  const [isSearching, setIsSeaching] = useState<boolean>(true);
   const showModal = () => {
-    setIsModalVisible(true);
+    setIsShowMenu(true);
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
+  // const handleOk = () => {
+  //   setIsShowMenu(false);
+  // };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setIsShowMenu(false);
   };
   return (
     <nav className={styles["headermob"]}>
@@ -79,13 +82,16 @@ const Headermob: FunctionComponent<HeadermobProps> = () => {
               <Image preview={false} src={LogoDes} />
             </Col>
           </Link>
-          <Col className={styles["header-item"]}>
+          <Col
+            className={styles["header-item"]}
+            onClick={() => setIsSeaching(true)}
+          >
             <SearchOutlined className={styles["icon"]} />
           </Col>
         </Row>
       </Header>
 
-      <Modal
+      {/* <Modal
         title=""
         bodyStyle={{ height: "100vh" }}
         wrapClassName={styles["menu-modal"]}
@@ -96,7 +102,7 @@ const Headermob: FunctionComponent<HeadermobProps> = () => {
         footer={null}
       >
         <MenuLink handleCancel={handleCancel} />
-      </Modal>
+      </Modal> */}
 
       <Row className={styles["nav-container"]}>
         {routes.map((r) => {
@@ -112,6 +118,18 @@ const Headermob: FunctionComponent<HeadermobProps> = () => {
           );
         })}
       </Row>
+      <PopupLayer
+        isActive={isSearching}
+        setIsActive={setIsSeaching}
+        children={<SearchingComponent />}
+        // classContainer={styles["menu-container"]}
+      />
+      <PopupLayer
+        isActive={isShowMenu}
+        setIsActive={setIsShowMenu}
+        children={<MenuLink handleCancel={handleCancel} />}
+        classContainer={styles["menu-container"]}
+      />
     </nav>
   );
 };

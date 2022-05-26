@@ -1,5 +1,5 @@
 import { addArticle, removeArticle } from "../../store/actions/actionCreators";
-import { Dispatch, FunctionComponent, useCallback } from "react";
+import { Dispatch, FunctionComponent, useCallback, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import styles from "./Home.module.scss";
 import AddArticle from "../../components/common/AddArticle/AddArticle";
@@ -9,6 +9,7 @@ import { Button, Row, Typography } from "antd";
 // import { some } from "../../const/keyString";
 import SlickImages from "../../components/common/SlickImages/SlickImages";
 import clsx from "clsx";
+
 const { Title, Text } = Typography;
 const MyApp: React.FC = () => {
   const articles: any = useSelector(
@@ -53,6 +54,7 @@ const Home: FunctionComponent<HomeProps> = (props) => {
   // const onChange = (a, b, c) => {
   //   console.log(a, b, c);
   // };
+
   return (
     <div className={styles["home"]}>
       <Row className={styles["home-item"]}>
