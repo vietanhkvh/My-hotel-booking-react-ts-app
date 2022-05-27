@@ -16,7 +16,10 @@
         margin-right: 0;
       }
     }
-
+    .title-item {
+      color: rgb(42, 42, 46);
+      padding: 0 5px;
+    }
     .button-75 {
       margin-right: 30px;
       &-mobile {
@@ -78,6 +81,17 @@
 
       .button-75 span {
         line-height: 50px;
+      }
+    }
+  }
+  .home-item-hotel {
+    align-items: flex-start;
+    .hotel-card-list {
+      width: 100%;
+      overflow-x: auto;
+      .hotel-inner-card {
+        height: 100%;
+        white-space: nowrap;
       }
     }
   }

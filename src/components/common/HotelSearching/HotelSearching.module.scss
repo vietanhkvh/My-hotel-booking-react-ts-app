@@ -32,7 +32,7 @@
       // background-color: #ff385c;
       height: 33px;
       justify-content: center;
-      transition: all .3s ease-out;
+      transition: all 0.3s ease-out;
       &.actived {
         border-bottom: 2.5px solid #1890ff;
       }
@@ -52,10 +52,10 @@
     .date-picker {
       width: 100%;
       font-size: 16px;
-      div[class='ant-picker-input'] > input {
+      div[class="ant-picker-input"] > input {
         text-align: center;
       }
-      div[class='ant-picker-input ant-picker-input-active'] > input {
+      div[class="ant-picker-input ant-picker-input-active"] > input {
         text-align: center;
       }
     }
@@ -73,6 +73,20 @@
       }
       .ant-popover-inner {
         background: #ffffff;
+        border-radius: 8px;
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .ant-picker-panels {
+      display: flex;
+      flex-direction: column;
+    }
+    .ant-popover {
+      // background-color: aqua;
+      .ant-popover-content {
+        width: 247px;
+        z-index: 1;
         border-radius: 8px;
       }
     }

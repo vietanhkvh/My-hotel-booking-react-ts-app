@@ -13,7 +13,7 @@ const MenuLink: FunctionComponent<MenuLinkProps> = (props) => {
   const { handleCancel } = props;
   return (
     <div className={styles["menulink"]}>
-      <Button icon={<LeftOutlined />} shape="circle" />
+      <Button icon={<LeftOutlined />} shape="circle" onClick={handleCancel} />
       <Menu className={styles["menu-link"]} theme={"light"} mode="vertical">
         {routesMenu.map((i, index) => {
           const key = index + 1;
@@ -22,9 +22,8 @@ const MenuLink: FunctionComponent<MenuLinkProps> = (props) => {
               className={styles["item-link"]}
               key={key}
               icon={<i.icon />}
-              onClick={handleCancel}
             >
-              <Link to={`${i?.path}`}>
+              <Link to={`${i?.path}`} onClick={handleCancel}>
                 <span style={{ textTransform: "capitalize" }}>{i?.title}</span>
               </Link>
             </Menu.Item>

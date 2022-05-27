@@ -8,68 +8,81 @@ import {
   Row,
   Tabs,
   Typography,
-} from 'antd';
+} from "antd";
 import {
   Dispatch,
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from 'react';
+} from "react";
 import {
   createSearchParams,
   useNavigate,
   useSearchParams,
-} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import clsx from 'clsx';
-import styles from './HotelSearching.module.scss';
-import LocationInputSearch from '../LocationInputSearch/LocationInputSearch';
-import Search from '../../../assest/icons/icons8-search.svg';
-import moment from 'moment';
-import PopupNumberGuest from '../PopupNumberGuest/PopupNumberGuest';
+} from "react-router-dom";
+import { useDispatch } from "react-redux";
+import clsx from "clsx";
+import styles from "./HotelSearching.module.scss";
+import LocationInputSearch from "../LocationInputSearch/LocationInputSearch";
+import Search from "../../../assest/icons/icons8-search.svg";
+import moment from "moment";
+import PopupNumberGuest from "../PopupNumberGuest/PopupNumberGuest";
 import {
   DATE_FORMAT,
   DATE_FORMAT_BACK_END,
   some,
   SUCCESS_CODE,
-} from '../../constants';
+} from "../../constants";
 import {
   getSearchingResultLocation,
   getSearchingResultName,
-} from '../../../services/hotel.service';
+} from "../../../services/hotel.service";
 import {
   setHotelSearchingByLocation,
   setHotelSearchingCondition,
-} from '../../../store/actions/constAction';
-import HotelNameInputSearch from '../HotelNameInputSearch/HotelNameInputSearch';
+} from "../../../store/actions/constAction";
+import HotelNameInputSearch from "../HotelNameInputSearch/HotelNameInputSearch";
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
 
-interface HotelSearchingProps {}
+interface HotelSearchingProps {
+  /**
+   * extra class name for container
+   */
+  classes?: {
+    container?: string;
+    item?: string;
+  };
+  /**
+   * is Mobile
+   */
+  isMobile?: boolean;
+}
 
-const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
+const HotelSearching: FunctionComponent<HotelSearchingProps> = (props) => {
+  const { classes, isMobile } = props;
   const dispatch: Dispatch<any> = useDispatch();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const [params] = useState<any>({
-    location: searchParams.get('location'),
-    dateIn: searchParams.get('dateIn'),
-    dateOut: searchParams.get('dateOut'),
-    adults: searchParams.get('adults'),
-    children: searchParams.get('children'),
-    type: searchParams.get('type'),
+    location: searchParams.get("location"),
+    dateIn: searchParams.get("dateIn"),
+    dateOut: searchParams.get("dateOut"),
+    adults: searchParams.get("adults"),
+    children: searchParams.get("children"),
+    type: searchParams.get("type"),
   });
   ////////////////////////////state
   const [adults, setAdults] = useState<number>(1);
   const [children, setChildren] = useState<number>(0);
-  const [location, setLocation] = useState<string>('');
+  const [location, setLocation] = useState<string>("");
   //tab search
-  const [tab, setTab] = useState<string>('location');
+  const [tab, setTab] = useState<string>("location");
   const [strSearch, setStrSearch] = useState<string>();
   //popup
   const [visible, setVisible] = useState<boolean>(false);
@@ -77,16 +90,16 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   const [disSearch, setDisSearch] = useState<boolean>(true);
   //date
   const [dateIn, setDateIn] = useState<any>(moment());
-  const [dateOut, setDateOut] = useState<any>(moment().add('1', 'days'));
+  const [dateOut, setDateOut] = useState<any>(moment().add("1", "days"));
   const [dateDiff, setDateDiff] = useState<number>(1);
   /////////////////////////////event
   const isMany = (num: number) => {
-    return num >= 2 ? 's' : '';
+    return num >= 2 ? "s" : "";
   };
   const disabledDate = (current: any) => {
     // Can not select days before today
     return (
-      moment().add(-1, 'days') >= current || moment().add(45, 'days') <= current
+      moment().add(-1, "days") >= current || moment().add(45, "days") <= current
     );
   };
   const handleVisibleChange = (visible: boolean) => {
@@ -98,9 +111,9 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   };
   const hanldeSetDateDiff = (dateIn: any, dateOut: any, params: any) => {
     if (params?.dateIn)
-      setDateDiff(moment(params?.dateOut).diff(moment(params?.dateIn), 'days'));
+      setDateDiff(moment(params?.dateOut).diff(moment(params?.dateIn), "days"));
     else {
-      const daygap = dateOut?.diff(dateIn, 'days');
+      const daygap = dateOut?.diff(dateIn, "days");
       daygap === undefined ? setDateDiff(0) : setDateDiff(daygap);
     }
   };
@@ -141,7 +154,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
         dateOut: dateOut?.format(DATE_FORMAT_BACK_END),
         guestNum: adults + children / 2,
       };
-      const respond = await (type === 'location'
+      const respond = await (type === "location"
         ? getSearchingResultLocation(payload)
         : getSearchingResultName(payload));
       try {
@@ -159,7 +172,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
           dispatch(setHotelSearchingByLocation(res?.data?.data));
           dispatch(setHotelSearchingCondition(params));
           navigate({
-            pathname: '/searching',
+            pathname: "/searching",
             search: `?${createSearchParams(params)}`,
           });
         }
@@ -180,37 +193,43 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
   }, [dateDiff, dateIn, dateOut, hanldeDisSearch, location, params]);
   return (
     <Row
-      className={styles['hotel-searching']}
-      gutter={28}
-      style={{ margin: '0' }}
+      className={clsx(classes?.container, styles["hotel-searching"])}
+      gutter={isMobile ? 0 : 28}
+      style={{ margin: "0" }}
     >
-      <Col span={8} className={styles['item-container']}>
+      <Col
+        span={isMobile ? 24 : 8}
+        className={clsx(classes?.item, styles["item-container"])}
+      >
         <Tabs
-          defaultActiveKey={params?.type !== '' ? params?.type : 'location'}
+          defaultActiveKey={params?.type !== "" ? params?.type : "location"}
           onChange={callback}
         >
-          <TabPane tab='Location' key='location'>
+          <TabPane tab="Location" key="location">
             <LocationInputSearch
-              placeholder={'City you want to go...'}
+              placeholder={"City you want to go..."}
               handleSetLocation={hanldeSetLocation}
-              location={params?.location !== '' ? params?.location : ''}
+              location={params?.location !== "" ? params?.location : ""}
             />
           </TabPane>
-          <TabPane tab='Hotel' key='hotelName'>
+          <TabPane tab="Hotel" key="hotelName">
             <HotelNameInputSearch
-              placeholder={'Hotel name...'}
+              placeholder={"Hotel name..."}
               handleSetLocation={hanldeSetLocation}
-              location={params?.location !== '' ? params?.location : ''}
+              location={params?.location !== "" ? params?.location : ""}
               setStrSearch={setStrSearch}
             />
           </TabPane>
         </Tabs>
       </Col>
 
-      <Col span={8} className={styles['item-container']}>
-        <Row className={styles['title-wrapper']}>
-          <Text className={styles['title']}>Check In/Out</Text>
-          <Text className={styles['count-date']}>
+      <Col
+        span={isMobile ? 24 : 8}
+        className={clsx(classes?.item, styles["item-container"])}
+      >
+        <Row className={styles["title-wrapper"]}>
+          <Text className={styles["title"]}>Check In/Out</Text>
+          <Text className={styles["count-date"]}>
             {dateDiff} day{isMany(dateDiff)}
           </Text>
         </Row>
@@ -220,35 +239,38 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
             defaultValue={
               params?.dateIn
                 ? [moment(params?.dateIn), moment(params?.dateOut)]
-                : [moment(), moment().add('1', 'days')]
+                : [moment(), moment().add("1", "days")]
             }
             defaultPickerValue={
               params?.dateIn
                 ? [moment(params?.dateIn), moment(params?.dateOut)]
-                : [moment(), moment().add('1', 'days')]
+                : [moment(), moment().add("1", "days")]
             }
             disabledDate={disabledDate}
             bordered={false}
-            picker='date'
+            picker="date"
             format={DATE_FORMAT}
-            className={styles['date-picker']}
-            size='large'
+            className={clsx(
+              styles["date-picker"],
+              isMobile && styles["date-picker-mobile"]
+            )}
+            size={isMobile ? "small" : "large"}
             onChange={(date) => hanldeSetDate(date)}
           />
         </Row>
       </Col>
       <Col
-        span={6}
-        className={styles['item-container']}
-        style={{ border: 'none' }}
+        span={isMobile ? 24 : 6}
+        className={clsx(classes?.item, styles["item-container"])}
+        style={{ border: "none" }}
       >
-        <Row className={styles['title-wrapper']}>
-          <Text className={styles['title']}>Guest</Text>
+        <Row className={styles["title-wrapper"]}>
+          <Text className={styles["title"]}>Guest</Text>
         </Row>
         <Popover
           className={clsx(
-            styles['select-guest'],
-            styles[visible ? 'actived' : '']
+            styles["select-guest"],
+            styles[visible ? "actived" : ""]
           )}
           content={
             <PopupNumberGuest
@@ -258,26 +280,26 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
               handleSetChildren={hanldeSetChildren}
             />
           }
-          trigger='click'
+          trigger="click"
           visible={visible}
           onVisibleChange={handleVisibleChange}
-          placement='bottomRight'
-          style={{ top: '15px' }}
+          placement="bottomRight"
+          style={{ top: "15px" }}
         >
           <Row style={{ marginTop: 5 }}>
-            <Text className={'guest-number'} style={{ fontSize: 16 }}>
+            <Text className={styles["guest-number"]} style={{ fontSize: 16 }}>
               {adults} adult{isMany(adults)}, {children} children
             </Text>
           </Row>
         </Popover>
       </Col>
       <Col
-        span={2}
-        className={styles['item-container']}
-        style={{ border: 'none' }}
+        span={isMobile ? 24 : 2}
+        className={clsx(classes?.item, styles["item-container"])}
+        style={{ border: "none" }}
       >
         <Button
-          className={styles['btn-search']}
+          className={styles["btn-search"]}
           disabled={disSearch ? true : false}
           onClick={() =>
             handleSubmitSearch(
@@ -291,7 +313,7 @@ const HotelSearching: FunctionComponent<HotelSearchingProps> = () => {
             )
           }
         >
-          <Image preview={false} src={Search} width={'35px'} height={'35px'} />
+          <Image preview={false} src={Search} width={"35px"} height={"35px"} />
         </Button>
       </Col>
     </Row>

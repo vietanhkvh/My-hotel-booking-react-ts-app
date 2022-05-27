@@ -1,0 +1,26 @@
+.hotel-card-mobile {
+  padding: 12px;
+  margin: 10px;
+  width: 300px;
+  height: 350px;
+  display: inline-block;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.2);
+  .item-container {
+    width: 100%;
+    margin-bottom: 5px;
+    flex-direction: column;
+    .item {
+      width: 100%;
+      margin-bottom: 5px;
+      .address {
+        color: #222222;
+        font-weight: 600;
+      }
+      .name {
+        color: #717171;
+      }
+    }
+  }
+}

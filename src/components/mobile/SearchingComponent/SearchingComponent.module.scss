@@ -1,2 +1,18 @@
 .searching-component {
+  padding: 14px 10px;
+  .tab {
+    padding: 10px;
+  }
+}
+.hotel-searching-container {
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+
+  //   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 4%), 0 6px 20px rgb(0 0 0 / 20%);
+  border-radius: 15px;
+}
+.hotel-searching-item {
+  margin: 10px 0;
+  border: unset;
 }

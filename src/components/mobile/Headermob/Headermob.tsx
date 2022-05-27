@@ -54,9 +54,9 @@ const ItemNav: FunctionComponent<ItemNavProps> = (props) => {
 };
 interface HeadermobProps {}
 const Headermob: FunctionComponent<HeadermobProps> = () => {
-  const [isShowMenu, setIsShowMenu] = useState(false);
+  const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
   const [idActive, setIdActive] = useState<string>("");
-  const [isSearching, setIsSeaching] = useState<boolean>(true);
+  const [isSearching, setIsSeaching] = useState<boolean>(false);
   const showModal = () => {
     setIsShowMenu(true);
   };
@@ -67,15 +67,14 @@ const Headermob: FunctionComponent<HeadermobProps> = () => {
 
   const handleCancel = () => {
     setIsShowMenu(false);
+    console.log("handleCancel");
   };
   return (
     <nav className={styles["headermob"]}>
       <Header className={styles["header"]}>
         <Row className={styles["header-container"]}>
-          <Col className={styles["header-item"]}>
-            <Row onClick={showModal}>
-              <MenuOutlined className={styles["icon"]} />
-            </Row>
+          <Col className={styles["header-item"]} onClick={showModal}>
+            <MenuOutlined className={styles["icon"]} />
           </Col>
           <Link to={"/"} onClick={() => setIdActive("")}>
             <Col className={styles["logo"]}>
@@ -90,19 +89,6 @@ const Headermob: FunctionComponent<HeadermobProps> = () => {
           </Col>
         </Row>
       </Header>
-
-      {/* <Modal
-        title=""
-        bodyStyle={{ height: "100vh" }}
-        wrapClassName={styles["menu-modal"]}
-        style={{ top: 0 }}
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <MenuLink handleCancel={handleCancel} />
-      </Modal> */}
 
       <Row className={styles["nav-container"]}>
         {routes.map((r) => {
@@ -120,13 +106,10 @@ const Headermob: FunctionComponent<HeadermobProps> = () => {
       </Row>
       <PopupLayer
         isActive={isSearching}
-        setIsActive={setIsSeaching}
-        children={<SearchingComponent />}
-        // classContainer={styles["menu-container"]}
+        children={<SearchingComponent setSearching={setIsSeaching} />}
       />
       <PopupLayer
         isActive={isShowMenu}
-        setIsActive={setIsShowMenu}
         children={<MenuLink handleCancel={handleCancel} />}
         classContainer={styles["menu-container"]}
       />

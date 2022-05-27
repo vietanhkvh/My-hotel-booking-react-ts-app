@@ -13,7 +13,7 @@ interface PopupLayerProps {
   /**
    * set searching
    */
-  setIsActive: (par: boolean) => void;
+  setIsActive?: (par: boolean) => void;
   /**
    * class name for the container
    */
@@ -30,7 +30,7 @@ const PopupLayer: FunctionComponent<PopupLayerProps> = (props) => {
         styles["popup-layer"],
         !isActive && styles["popup-layer-deactive"]
       )}
-      onClick={() => setIsActive(false)}
+      onClick={() => setIsActive && setIsActive(false)}
     >
       {children}
     </div>
