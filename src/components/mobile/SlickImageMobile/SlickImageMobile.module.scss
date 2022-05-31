@@ -1,3 +1,11 @@
 .slick-image-mobile {
-  
+  .slider {
+    // background-color: aqua;
+    .image {
+      border: 8px;
+      img {
+        border-radius: 8px;
+      }
+    }
+  }
 }

@@ -3,8 +3,6 @@ import "./App.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { isMobileAndTabletCheck } from "../utils/helpers";
 import "antd/dist/antd.min.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import MyRoutes from "../routes/MyRoutes";
 import "../styles/globals.scss";
 import { useDispatch } from "react-redux";

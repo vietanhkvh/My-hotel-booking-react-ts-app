@@ -47,9 +47,12 @@ const HotelCardMobile: FunctionComponent<HotelCardMobileProps> = (props) => {
   } = props;
   return (
     <div className={styles["hotel-card-mobile"]}>
-      <Row className={styles["item-container"]}>
-        <SlickImageMobile images={hotel} />
-      </Row>
+      <div className={styles["item-container"]}>
+        <SlickImageMobile
+          images={images}
+          classes={{ container: styles["slick-container"] }}
+        />
+      </div>
       <Row className={styles["item-container"]}>
         <Row gutter={[4, 4]} className={styles["item"]}>
           <Col span={20} className={styles["address"]}>

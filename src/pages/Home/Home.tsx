@@ -5,11 +5,16 @@ import styles from "./Home.module.scss";
 import AddArticle from "../../components/common/AddArticle/AddArticle";
 import Article from "../../components/common/Article/Article";
 import { Button, Row, Typography } from "antd";
-// import { bannerArray } from "../../const/data.const";
-// import { some } from "../../const/keyString";
 import SlickImages from "../../components/common/SlickImages/SlickImages";
 import clsx from "clsx";
 import HotelCardMobile from "../../components/mobile/HotelCardMobile/HotelCardMobile";
+import HorizontalBoxes from "../../components/common/HorizontalBoxes/HorizontalBoxes";
+import {
+  banner,
+  hotel,
+  hotel1,
+  room,
+} from "../../components/common/SlickImages/dataRaw";
 
 const { Title, Text } = Typography;
 const MyApp: React.FC = () => {
@@ -69,25 +74,24 @@ const Home: FunctionComponent<HomeProps> = (props) => {
             styles["title-item"],
             styles["text-mobile"]
           )}
-          level={isMobile ? 5 : undefined}
+          level={isMobile? 5 : 4}
         >
           Hotel
         </Title>
-        {/* <SlickImages images={[]} type="banner" isMobile={isMobile} /> */}
-        <div className={styles["hotel-card-list"]}>
-          <div className={styles["hotel-inner-card"]}>
-            {[...Array(6)].map((i) => (
-              <HotelCardMobile
-                key={i}
-                images={[]}
-                nameHotel={"World Luxury Hotel Awards"}
-                hotelAddress={"Asssss, Bbbbbbbbbb"}
-                price={120}
-                ratingP={5}
-              />
-            ))}
-          </div>
-        </div>
+        <HorizontalBoxes>
+        {[...Array(6)].map((a, i) => {
+          return (
+            <HotelCardMobile
+              key={i}
+              images={i % 2 === 0 ? hotel : hotel1}
+              nameHotel={'World Luxury Hotel Awards'}
+              hotelAddress={'Asssss, Bbbbbbbbbb'}
+              price={120}
+              ratingP={5}
+            />
+          );
+        })}
+        </HorizontalBoxes>
       </Row>
       <Row
         className={clsx(

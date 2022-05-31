@@ -2,6 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
+  scrollbar-width: none;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
@@ -54,5 +55,49 @@ a {
 .menu-pop-over {
   .ant-popover-inner-content {
     padding: 5px;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  body {
+    scrollbar-width: thin !important;
+  }
+
+  body::-webkit-scrollbar,
+  body::-webkit-scrollbar-track {
+    display: block;
+    width: 14px;
+  }
+
+  body::-webkit-scrollbar-track {
+    background: #e1e2e3;
+  }
+
+  body::-webkit-scrollbar-thumb {
+    box-shadow: 0 0 0 4px #e1e2e3 inset, 0 0 0 7px #666 inset;
+    border-radius: 10px;
+    border: none;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  .withScrollbar * {
+    scrollbar-width: thin;
+  }
+
+  .withScrollbar *::-webkit-scrollbar,
+  .withScrollbar *::-webkit-scrollbar-track {
+    display: block;
+    width: 14px;
+  }
+
+  .withScrollbar *::-webkit-scrollbar-track {
+    background: #f0f1f2;
+  }
+
+  .withScrollbar *::-webkit-scrollbar-thumb {
+    box-shadow: 0 0 0 4px #f0f1f2 inset, 0 0 0 7px #ccc inset;
+    border-radius: 10px;
+    border: none;
   }
 }

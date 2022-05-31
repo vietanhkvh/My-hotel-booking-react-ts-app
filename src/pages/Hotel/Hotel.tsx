@@ -1,10 +1,16 @@
 import { FunctionComponent } from "react";
 import styles from "./Hotel.module.scss";
-import { Link, Outlet } from "react-router-dom";
+import {  Outlet } from "react-router-dom";
 import SlickImages from "../../components/common/SlickImages/SlickImages";
-import LocationHotel from "../../components/common/LocationHotel/LocationHotel";
+import SlickImageMobile from "../../components/mobile/SlickImageMobile/SlickImageMobile";
 import { Typography } from "antd";
 import clsx from "clsx";
+import HorizontalBoxes from "../../components/common/HorizontalBoxes/HorizontalBoxes";
+import HotelCardMobile from "../../components/mobile/HotelCardMobile/HotelCardMobile";
+import {
+  hotel,
+  hotel1,
+} from "../../components/common/SlickImages/dataRaw";
 const { Title } = Typography;
 
 interface HotelProps {
@@ -26,11 +32,25 @@ const Hotel: FunctionComponent<HotelProps> = (props) => {
       >
         Hotel
       </Title>
-      {/* {hotelSearchingByLocation?.map((hotel:some) => (
-            <Link to={`/hotel/${hotel.ID_Hotel}`}>{hotel.Hotel_Name}</Link>
-        ))} */}
       <SlickImages images={[]} type="banner" isMobile={isMobile} />
-      {/* <LocationHotel/> */}
+      <HorizontalBoxes>
+        {[...Array(6)].map((a, i) => {
+          return (
+            <HotelCardMobile
+              key={i}
+              images={i % 2 === 0 ? hotel : hotel1}
+              nameHotel={'World Luxury Hotel Awards'}
+              hotelAddress={'Asssss, Bbbbbbbbbb'}
+              price={120}
+              ratingP={5}
+            />
+          );
+        })}
+        </HorizontalBoxes>
+      
+      {/* <div>
+        <SlickImageMobile images={hotel} />
+      </div> */}
       <Outlet />
     </div>
   );

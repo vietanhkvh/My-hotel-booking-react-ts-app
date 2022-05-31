@@ -86,14 +86,15 @@
   }
   .home-item-hotel {
     align-items: flex-start;
-    .hotel-card-list {
-      width: 100%;
-      overflow-x: auto;
-      .hotel-inner-card {
-        height: 100%;
-        white-space: nowrap;
-      }
-    }
+    overflow: hidden;
+    // .hotel-card-list {
+    //   width: 100%;
+    //   overflow-x: auto;
+    //   .hotel-inner-card {
+    //     height: 100%;
+    //     white-space: nowrap;
+    //   }
+    // }
   }
   .function {
     background-repeat: no-repeat;

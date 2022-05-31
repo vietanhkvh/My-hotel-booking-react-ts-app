@@ -1,8 +1,10 @@
 import Restaurant from "../pages/Restaurant/Restaurant";
 import Home from "../pages/Home/Home";
 import { IRoute } from "../interfaces";
-import RestaurantIc from "../assest/icons/restaurant-mob-32.png";
-import HotelIc from "../assest/icons/bed-mob-32.png";
+import RestaurantIc from "../assest/icons/restaurant-mob-64.png";
+import FlightIc from "../assest/icons/airplane-mob-64.png";
+import HotelIc from "../assest/icons/bed-mod-64.png";
+import EventIc from "../assest/icons/event-mob-64.png";
 // import HomeIc from '../assest/icons/home-mob-16.png';
 // import UserIc from '../assest/icons/user-mob-16.png';
 // import PhoneIc from '../assest/icons/phone-mob-16.png';
@@ -24,11 +26,27 @@ export const routes: IRoute[] = [
     active: false,
   },
   {
-    title: "restaurant",
+    title: "eatery",
     path: "/restaurant",
     exact: true,
     component: Restaurant,
     icon: RestaurantIc,
+    active: false,
+  },
+  {
+    title: "flight",
+    path: "/flight",
+    exact: true,
+    component: Restaurant,
+    icon: FlightIc,
+    active: false,
+  },
+  {
+    title: "event",
+    path: "/event",
+    exact: true,
+    component: Restaurant,
+    icon: EventIc,
     active: false,
   },
 ];
