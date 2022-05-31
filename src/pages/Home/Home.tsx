@@ -9,11 +9,11 @@ import SlickImages from "../../components/common/SlickImages/SlickImages";
 import clsx from "clsx";
 import HotelCardMobile from "../../components/mobile/HotelCardMobile/HotelCardMobile";
 import HorizontalBoxes from "../../components/common/HorizontalBoxes/HorizontalBoxes";
+import RestaurantCard from "../../components/common/RestaurantCard/RestaurantCard";
 import {
-  banner,
   hotel,
   hotel1,
-  room,
+  restaurant,
 } from "../../components/common/SlickImages/dataRaw";
 
 const { Title, Text } = Typography;
@@ -86,6 +86,33 @@ const Home: FunctionComponent<HomeProps> = (props) => {
               images={i % 2 === 0 ? hotel : hotel1}
               nameHotel={'World Luxury Hotel Awards'}
               hotelAddress={'Asssss, Bbbbbbbbbb'}
+              price={120}
+              ratingP={5}
+            />
+          );
+        })}
+        </HorizontalBoxes>
+      </Row>
+      <Row className={clsx(styles["home-item"], styles["home-item-hotel"])}>
+        <Title
+          className={clsx(
+            styles["item-container"],
+            styles["text"],
+            styles["title-item"],
+            styles["text-mobile"]
+          )}
+          level={isMobile? 5 : 4}
+        >
+          Restaurant
+        </Title>
+        <HorizontalBoxes>
+        {[...Array(6)].map((a, i) => {
+          return (
+            <RestaurantCard
+              key={i}
+              images={restaurant}
+              resName={'World Luxury Hotel Awards'}
+              resAddress={'Asssss, Bbbbbbbbbb'}
               price={120}
               ratingP={5}
             />

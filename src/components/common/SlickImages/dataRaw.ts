@@ -12,6 +12,13 @@ import Hotel4 from "../../../assest/images/hotel4.jpg";
 import Hotel5 from "../../../assest/images/hotel5.jpg";
 import Hotel6 from "../../../assest/images/hotel6.jpg";
 
+import Res1 from "../../../assest/images/res1.jpg";
+import Res2 from "../../../assest/images/res2.jpg";
+import Res3 from "../../../assest/images/res3.jpg";
+import Res4 from "../../../assest/images/res4.png";
+import Res5 from "../../../assest/images/res5.jpg";
+import Res6 from "../../../assest/images/res6.jpg";
+
 import Banner1 from "../../../assest/images/banner1.jpg";
 import Banner2 from "../../../assest/images/banner2.jpg";
 import Banner3 from "../../../assest/images/banner3.jpg";
@@ -70,6 +77,7 @@ export const hotel = [
     Image: Hotel6,
   },
 ];
+
 export const hotel1 = [
   {
     ID_IMG: 1,
@@ -94,6 +102,32 @@ export const hotel1 = [
   {
     ID_IMG: 6,
     Image: Hotel1,
+  },
+];
+export const restaurant = [
+  {
+    ID_IMG: 1,
+    Image: Res1,
+  },
+  {
+    ID_IMG: 2,
+    Image: Res2,
+  },
+  {
+    ID_IMG: 3,
+    Image: Res3,
+  },
+  {
+    ID_IMG: 4,
+    Image: Res4,
+  },
+  {
+    ID_IMG: 5,
+    Image: Res5,
+  },
+  {
+    ID_IMG: 6,
+    Image: Res6,
   },
 ];
 export const banner = [

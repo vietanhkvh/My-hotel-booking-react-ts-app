@@ -4,7 +4,6 @@ import {  Outlet } from "react-router-dom";
 import SlickImages from "../../components/common/SlickImages/SlickImages";
 import SlickImageMobile from "../../components/mobile/SlickImageMobile/SlickImageMobile";
 import { Typography } from "antd";
-import clsx from "clsx";
 import HorizontalBoxes from "../../components/common/HorizontalBoxes/HorizontalBoxes";
 import HotelCardMobile from "../../components/mobile/HotelCardMobile/HotelCardMobile";
 import {
@@ -21,18 +20,12 @@ const Hotel: FunctionComponent<HotelProps> = (props) => {
   const { isMobile } = props;
   return (
     <div className={styles["hotel"]}>
+      <SlickImages images={[]} type="banner" isMobile={isMobile} />
       <Title
-        className={clsx(
-          styles["item-container"],
-          styles["text"],
-          styles["title-item"],
-          styles["text-mobile"]
-        )}
         level={isMobile ? 5 : 4}
       >
         Hotel
       </Title>
-      <SlickImages images={[]} type="banner" isMobile={isMobile} />
       <HorizontalBoxes>
         {[...Array(6)].map((a, i) => {
           return (

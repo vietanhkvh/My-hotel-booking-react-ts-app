@@ -28,7 +28,6 @@ import { userState } from "@src/store/reducer/userReducer";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import DashBoardHost from "../pages/Host/DashBoardHost/DashBoardHost";
-import { constState } from "@src/store/reducer/constReducer";
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
@@ -67,7 +66,7 @@ const MyRoutes = (props) => {
           <Route path=":hotelId" element={<HotelId />} />
         </Route>
 
-        <Route path={"/restaurant"} element={<Restaurant />} />
+        <Route path={"/restaurant"} element={<Restaurant isMobile={isMobile}/>} />
 
         <Route path={"/searching"} element={<Searching />} />
 
