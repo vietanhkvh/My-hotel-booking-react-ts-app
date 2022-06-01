@@ -28,6 +28,8 @@ import { userState } from "@src/store/reducer/userReducer";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import DashBoardHost from "../pages/Host/DashBoardHost/DashBoardHost";
+import Flight from "../pages/Flight/Flight";
+import FlightMobile from "../pages/mobile/FlightMobile/FlightMobile";
 
 const MyRoutes = (props) => {
   const { isMobile } = props;
@@ -66,7 +68,7 @@ const MyRoutes = (props) => {
           <Route path=":hotelId" element={<HotelId />} />
         </Route>
 
-        <Route path={"/restaurant"} element={<Restaurant isMobile={isMobile}/>} />
+        <Route path={"/restaurant"} element={<Restaurant isMobile={isMobile}/>} />        
 
         <Route path={"/searching"} element={<Searching />} />
 
@@ -241,6 +243,8 @@ const MyRoutes = (props) => {
         );
       })} */}
       </Route>
+      <Route path={"/flight"} element={ isMobile? <Flight isMobile={isMobile}/> : <FlightMobile/>} />
+      <Route path={"/event"} element={<Restaurant isMobile={isMobile}/>} />
       <Route path="book" element={<ConfirmPay />} />
       <Route
         path="book-success"

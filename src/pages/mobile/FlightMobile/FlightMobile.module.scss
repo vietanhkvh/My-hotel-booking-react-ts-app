@@ -1,0 +1,117 @@
+.flight-mobile {
+  height: 100vh;
+  width: 100vw;
+  .header {
+    background-image: url('../../../assest/images/background-flight-mob.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    .btn-back {
+      background: transparent;
+      border: none;
+      width: 20%;
+      height: 40px;
+      margin: 5px 3px;
+      cursor: pointer;
+    }
+    .text {
+      color: #fdfdfd;
+      margin-left: 8%;
+      margin-top: 3px;
+      //   padding-left: px;
+    }
+    .text-large {
+      font-size: 32px;
+    }
+    .text-medium {
+      font-size: 16px;
+    }
+  }
+  .main {
+    position: absolute;
+    top: 28%;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 16px 16px 0px 0px;
+    padding: 0 16px;
+    .inner {
+      margin-top: 18px;
+      width: 100%;
+    }
+    .searching {
+      flex-direction: column;
+      .searching-item {
+        margin-top: 15px;
+        .item {
+          display: flex;
+          flex-direction: column;
+          .icon-search {
+            width: 28px;
+            height: 28px;
+            fill: #fff;
+          }
+          .btn {
+            width: 100%;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            .content-text {
+              font-size: 16px;
+            }
+            .content-text-medium {
+              font-size: 18px;
+            }
+            .content-text-large {
+              font-size: 22px;
+              font-weight: 600;
+            }
+            .white {
+              color: #fff;
+            }
+          }
+          .location {
+            height: 60px;
+            flex-direction: column;
+          }
+          .from {
+            align-items: flex-start;
+          }
+          .to {
+            align-items: flex-end;
+          }
+          .btn-switch {
+            width: 30px;
+          }
+          .btn-search {
+            color: #fff;
+            height: 48px;
+            margin: 8px 0px 8px 0px;
+            font-weight: bold;
+            background-color: #ff3366;
+            border-radius: 8px;
+            justify-content: center;
+            font-weight: 600;
+          }
+          .btn-swap {
+            justify-content: center;
+          }
+        }
+        .left-container {
+          align-items: flex-start;
+        }
+        .switch {
+          justify-content: center;
+          align-items: center;
+        }
+        .right-container {
+          align-items: flex-end;
+        }
+      }
+    }
+  }
+}
