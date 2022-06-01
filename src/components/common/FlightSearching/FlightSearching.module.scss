@@ -1,0 +1,86 @@
+.flight-searching {
+  width: 100%;
+  .inner {
+    margin-top: 18px;
+    width: 100%;
+  }
+  .searching {
+    flex-direction: column;
+    .searching-item {
+      margin-top: 15px;
+      .item {
+        display: flex;
+        flex-direction: column;
+        .icon-search {
+          width: 28px;
+          height: 28px;
+          fill: #fff;
+        }
+        .btn {
+          width: 100%;
+          cursor: pointer;
+          border: none;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          height: 100%;
+          .content-text {
+            font-size: 16px;
+          }
+          .content-text-medium {
+            font-size: 18px;
+          }
+          .content-text-large {
+            font-size: 22px;
+            font-weight: 600;
+          }
+          .white {
+            color: #fff;
+          }
+        }
+        .location {
+          height: 60px;
+          flex-direction: column;
+        }
+        .from {
+          align-items: flex-start;
+        }
+        .to {
+          align-items: flex-end;
+        }
+        .btn-switch {
+          width: 30px;
+        }
+        .btn-search {
+          color: #fff;
+          height: 48px;
+          margin: 8px 0px 8px 0px;
+          font-weight: bold;
+          background-color: #ff3366;
+          border-radius: 8px;
+          justify-content: center;
+          font-weight: 600;
+        }
+        .btn-swap {
+          justify-content: center;
+        }
+      }
+      .left-container {
+        align-items: flex-start;
+      }
+      .switch {
+        justify-content: center;
+        align-items: center;
+      }
+      .right-container {
+        align-items: flex-end;
+      }
+
+      .popup-wrap {
+        display: flex;
+        align-items: flex-end;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+}

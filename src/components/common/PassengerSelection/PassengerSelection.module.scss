@@ -1,0 +1,57 @@
+.passenger-selection {
+  width: 100%;
+  background-color: white;
+  padding: 0 16px 10px 16px;
+  .item-container {
+    width: 100%;
+    .item {
+      padding: 30px 0px;
+      .text-normal {
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 20px;
+      }
+      .note {
+        color: rgb(113, 128, 150);
+      }
+      .btn {
+        border: 0;
+        width: 40px;
+        height: 40px;
+        color: #a0aec0;
+        background-color: #e2e8f0;
+        :active {
+          // background: ;
+          transition: ease-in-out 0.2s;
+        }
+      }
+    }
+    .in-decrease {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  .footer-btn {
+    width: 100%;
+    justify-content: space-evenly;
+
+    .btn-footer {
+      border: 0;
+      height: 40px;
+      border-radius: 4px;
+      width: 48%;
+      color: #1a202c;
+      background-color: #edf2f7;
+      .text {
+        font-size: 16px;
+      }
+      .select {
+        color: #ffffff;
+      }
+    }
+    .selector {
+      background-color: #ff1284;
+    }
+  }
+}

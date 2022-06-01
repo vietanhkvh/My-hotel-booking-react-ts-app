@@ -1,6 +1,6 @@
-import clsx from "clsx";
-import { FunctionComponent, ReactNode } from "react";
-import styles from "./PopupLayer.module.scss";
+import clsx from 'clsx';
+import { FunctionComponent, ReactNode } from 'react';
+import styles from './PopupLayer.module.scss';
 interface PopupLayerProps {
   /**
    * content
@@ -22,19 +22,16 @@ interface PopupLayerProps {
 
 const PopupLayer: FunctionComponent<PopupLayerProps> = (props) => {
   const { children, isActive, setIsActive, classContainer } = props;
-
-  return (
+  return isActive ? (
     <div
-      className={clsx(
-        classContainer,
-        styles["popup-layer"],
-        !isActive && styles["popup-layer-deactive"]
-      )}
-      onClick={() => setIsActive && setIsActive(false)}
+      className={clsx(classContainer, styles['popup-layer'])}
+      onClick={() => {
+        setIsActive && setIsActive(false);
+      }}
     >
       {children}
     </div>
-  );
+  ) : null;
 };
 
 export default PopupLayer;
