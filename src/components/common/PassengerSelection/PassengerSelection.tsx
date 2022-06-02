@@ -13,17 +13,31 @@ interface PassengerSelectionProps {
   /**
    * set Data Array
    */
-  setDataArray: (par: Array<any>) => void;
+  setDataArray: (par: Array<IPassengerOp>) => void;
   /**
    * close popup outer
    */
   setIsPopupPassenger: (par: boolean) => void;
+  /**
+   * count the num of passengers
+   */
+  setPassengerNum: (par: Array<IPassengerOp>) => void;
+  /**
+   * move to next selection
+   */
+  setPopupNextStep?: () => void;
 }
 
 const PassengerSelection: FunctionComponent<PassengerSelectionProps> = (
   props
 ) => {
-  const { array, setDataArray, setIsPopupPassenger } = props;
+  const {
+    array,
+    setDataArray,
+    setIsPopupPassenger,
+    setPassengerNum,
+    setPopupNextStep,
+  } = props;
   ////////////////states
 
   ///////////////events
@@ -37,6 +51,7 @@ const PassengerSelection: FunctionComponent<PassengerSelectionProps> = (
         return a;
       }
     });
+    setPassengerNum(temp);
     setDataArray(temp);
   };
   const handleClickDecrease = (min: number, title: string) => {
@@ -49,7 +64,12 @@ const PassengerSelection: FunctionComponent<PassengerSelectionProps> = (
         return a;
       }
     });
+    setPassengerNum(temp);
     setDataArray(temp);
+  };
+  const handleNextStep = () => {
+    setIsPopupPassenger(false);
+    setPopupNextStep && setPopupNextStep();
   };
   return (
     <Row
@@ -95,7 +115,10 @@ const PassengerSelection: FunctionComponent<PassengerSelectionProps> = (
             Cancel
           </Text>
         </Button>
-        <Button className={clsx(styles['btn-footer'], styles['selector'])}>
+        <Button
+          className={clsx(styles['btn-footer'], styles['selector'])}
+          onClick={handleNextStep}
+        >
           <Text className={clsx(styles['text'], styles['select'])}>Select</Text>
         </Button>
       </Row>

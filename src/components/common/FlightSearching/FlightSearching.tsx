@@ -1,6 +1,6 @@
 import { Button, Col, Row, Typography, Image, Switch } from 'antd';
 import clsx from 'clsx';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import Swap from '../../../assest/icons/swap-flight-32.png';
 import styles from './FlightSearching.module.scss';
 import Passenger from '../../../assest/icons/passenger';
@@ -13,6 +13,8 @@ import PopupLayer from '../../mobile/PopupLayer/PopupLayer';
 import FlightCity from '../../../pages/mobile/FlightCity/FlightCity';
 import Searching from '../../../assest/icons/searching';
 import PassengerSelection from '../PassengerSelection/PassengerSelection';
+import ServiceClassSelection from '../ServiceClassSelection/ServiceClassSelection';
+import { type } from 'os';
 
 const { Text } = Typography;
 export interface IPassengerOp {
@@ -21,6 +23,11 @@ export interface IPassengerOp {
   value: number;
   minVal: number;
   maxVal: number;
+}
+export interface IServiceOp {
+  title: string;
+  detail: string;
+  selected: boolean;
 }
 interface FlightSearchingProps {
   /**
@@ -32,12 +39,35 @@ interface FlightSearchingProps {
 const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
   const { isMoblie } = props;
 
-  const array = [
+  const arrayP = [
     { title: 'Adults', value: 1, minVal: 0, maxVal: 10 },
     { title: 'Child', note: '2-11 years', value: 0, minVal: 0, maxVal: 10 },
     { title: 'Babies', note: '<2 years', value: 0, minVal: 0, maxVal: 10 },
   ];
-  const [arrayData, setDataArray] = useState<Array<IPassengerOp>>(array);
+  const arrayS = [
+    {
+      title: 'Economy',
+      detail: 'Fly economically, meet all basic needs.',
+      selected: true,
+    },
+    {
+      title: 'Economy special',
+      detail: 'Reasonable cost with good meals and ample leg room.',
+      selected: true,
+    },
+    {
+      title: 'Bussiness',
+      detail: 'Fly in class, with check-in counters and private seating areas.',
+      selected: true,
+    },
+    {
+      title: 'First class',
+      detail: 'Top class, with personalized 5-star service.',
+      selected: true,
+    },
+  ];
+  const [passengerSec, setPassengerSec] = useState<Array<IPassengerOp>>(arrayP);
+  const [serviceSec, setServiceSec] = useState<Array<IServiceOp>>(arrayS);
   ////////////////states
   const [isRoundTrip, setIsRoundTrip] = useState<boolean>(false);
 
@@ -45,7 +75,7 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
     city[0]
   );
   const [cityTo, setCityTo] = useState<{ id: string; text: string }>(city[1]);
-
+  const [typeCity, setTypeCity] = useState<string>('from');
   const today = moment();
   const [dateIn, setDateIn] = useState<string>(
     moment().format('ddd, MMMM Do, YYYY')
@@ -55,7 +85,6 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
   );
   const [passengers, setPassengers] = useState<number>(1);
   const [service, setService] = useState<string>('All');
-
   ////display state
   const [isPopupCity, setIsPopupCity] = useState<boolean>(false);
   const [isPopupCalendar, setIsPopupCalendar] = useState<boolean>(false);
@@ -81,6 +110,27 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
     );
   };
 
+  const setServiceStr = (array: Array<IServiceOp>) => {
+    let r = '';
+    let full = '';
+    array.forEach((a) => {
+      full = full + a.title + ', ';
+      if (a.selected) {
+        r = r + a.title + ', ';
+      }
+    });
+    if (full === r) {
+      setService('All');
+    } else setService(r);
+  };
+
+  const setPassengerNum = (array: Array<IPassengerOp>) => {
+    let num = 0;
+    array.forEach((a) => {
+      num += a.value;
+    });
+    setPassengers(num);
+  };
   ///////////////events
   const handleRoundTrip = () => {
     setIsRoundTrip(!isRoundTrip);
@@ -91,14 +141,18 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
       setCityTo(cityFrom);
     }
   };
-  const handleClickCity = () => {
+  const handleClickCity = (type: string) => {
     setIsPopupCity(true);
+    setTypeCity(type);
   };
   const handleClosePopup = () => {
     setIsPopupCity(false);
   };
   const handleClickPassenger = () => {
     setIsPopupPassenger(true);
+  };
+  const handleClickService = () => {
+    setIsPopupService(true);
   };
   return (
     <div className={styles['flight-searching']}>
@@ -115,7 +169,7 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
                 styles['location'],
                 styles['from']
               )}
-              onClick={handleClickCity}
+              onClick={() => handleClickCity('from')}
             >
               <Text
                 className={clsx(
@@ -151,7 +205,7 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
             <Text>To</Text>
             <Button
               className={clsx(styles['btn'], styles['location'], styles['to'])}
-              onClick={handleClickCity}
+              onClick={() => handleClickCity('to')}
             >
               <Text
                 className={clsx(
@@ -175,7 +229,12 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
         </Row>
         <PopupLayer
           isActive={isPopupCity}
-          children={<FlightCity handleClose={handleClosePopup} />}
+          children={
+            <FlightCity
+              handleClose={handleClosePopup}
+              setCity={typeCity === 'from' ? setCityFrom : setCityTo}
+            />
+          }
         />
         <Row className={styles['searching-item']}>
           <Col
@@ -211,8 +270,8 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
               icon={<Passenger />}
               onClick={handleClickPassenger}
             >
-              <Text className={styles['content-text']}>
-                {passengers} Adults
+              <Text className={clsx(styles['content-text'], styles['option'])}>
+                {passengers} Guests
               </Text>
             </Button>
           </Col>
@@ -221,16 +280,24 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
             className={clsx(styles['item'], styles['left-container'])}
           >
             <Text>Service class</Text>
-            <Button className={styles['btn']} icon={<ServiceClass />}>
-              <Text className={styles['content-text']}>{service}</Text>
+            <Button
+              className={styles['btn']}
+              icon={<ServiceClass className={styles['service-ic']} />}
+              onClick={handleClickService}
+            >
+              <Text className={clsx(styles['content-text'], styles['option'])}>
+                {service}
+              </Text>
             </Button>
           </Col>
           <PopupLayer
             children={
               <PassengerSelection
-                array={arrayData}
-                setDataArray={setDataArray}
+                array={passengerSec}
+                setDataArray={setPassengerSec}
                 setIsPopupPassenger={setIsPopupPassenger}
+                setPassengerNum={setPassengerNum}
+                setPopupNextStep={handleClickService}
               />
             }
             isActive={isPopupPassenger}
@@ -239,14 +306,14 @@ const FlightSearching: FunctionComponent<FlightSearchingProps> = (props) => {
           />
           <PopupLayer
             children={
-              <PassengerSelection
-                array={arrayData}
-                setDataArray={setDataArray}
-                setIsPopupPassenger={setIsPopupPassenger}
+              <ServiceClassSelection
+                array={serviceSec}
+                setDataArray={setServiceSec}
+                setServiceStr={setServiceStr}
               />
             }
-            isActive={isPopupPassenger}
-            setIsActive={setIsPopupPassenger}
+            isActive={isPopupService}
+            setIsActive={setIsPopupService}
             classContainer={styles['popup-wrap']}
           />
         </Row>

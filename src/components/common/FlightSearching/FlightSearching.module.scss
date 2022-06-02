@@ -26,6 +26,9 @@
           height: 100%;
           .content-text {
             font-size: 16px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
           }
           .content-text-medium {
             font-size: 18px;
@@ -36,6 +39,11 @@
           }
           .white {
             color: #fff;
+          }
+          .option {
+            width: 100%;
+            padding-left: 10px;
+            text-align: left;
           }
         }
         .location {

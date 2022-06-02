@@ -23,4 +23,28 @@ export const city = [
     id: 'PQC',
     text: 'Phú Quốc',
   },
+  {
+    id: 'CXR',
+    text: 'Nha Trang',
+  },
+  {
+    id: 'VSC',
+    text: 'Côn Đảo',
+  },
+  {
+    id: 'UIH',
+    text: 'Quy Nhơn',
+  },
+  {
+    id: 'HUI',
+    text: 'Huế',
+  },
+  {
+    id: 'VDH',
+    text: 'Đồng Hới',
+  },
+  {
+    id: 'VII',
+    text: 'Thành Phố Vinh',
+  },
 ];

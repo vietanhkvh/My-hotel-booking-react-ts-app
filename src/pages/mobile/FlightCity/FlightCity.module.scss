@@ -1,17 +1,51 @@
 .flight-city {
+  padding: 0 16px;
   .header {
+    margin-top: 10px;
     .item-header {
       width: 100%;
+      margin: 3px;
       .item {
-        height: 50px;
+        height: 45px;
       }
       .btn-close {
         border: 0;
         width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        svg {
+          font-size: 20px;
+        }
       }
       .input {
         border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 0px 8px;
+        svg {
+          font-size: 20px;
+        }
       }
+    }
+  }
+  .content {
+    width: 100%;
+    margin: 16px 0;
+    font-size: 16px;
+    .txt {
+      font-size: 16px;
+    }
+    .title {
+      width: 100%;
+      font-weight: 600;
+      line-height: 20px;
+      margin-bottom: 20px;
+    }
+    .city {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 8px;
+      background-color: #e3ecf4;
     }
   }
 }
