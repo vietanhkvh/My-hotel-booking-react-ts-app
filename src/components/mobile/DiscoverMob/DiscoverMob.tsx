@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react';
 import FlightCardMob from '../FlightCardMob/FlightCardMob';
 import styles from './DiscoverMob.module.scss';
 import Vietjet from '../../../assest/icons/VietjetAir_transpng.png';
-import Bamboo from '../../../assest/icons/bamboo_airway.pngyar';
+import Bamboo from '../../../assest/icons/bamboo_airway.png';
 import { flightInfo } from '../../../const/interface';
 
 const { Title, Text } = Typography;
