@@ -1,19 +1,11 @@
-import { Button, Col, Image, Row, Typography } from 'antd';
-import { FunctionComponent, useState } from 'react';
+import { Button, Image, Row, Typography } from 'antd';
+import { FunctionComponent } from 'react';
 import styles from './FlightMobile.module.scss';
 import LeftArrow from '../../../assest/icons/left-arrow-24.png';
-// import Swap from '../../../assest/icons/swap-flight-32.png';
 import clsx from 'clsx';
-import moment from 'moment';
-import { CalendarOutlined } from '@ant-design/icons';
-// import ServiceClass from '../../../assest/icons/service-class-flight';
-// import Passenger from '../../../assest/icons/passenger';
-// import Searching from '../../../assest/icons/searching';
 import { useNavigate } from 'react-router-dom';
-import { city } from './dataRaw';
-// import PopupLayer from '../../../components/mobile/PopupLayer/PopupLayer';
-// import FlightCity from '../FlightCity/FlightCity';
 import FlightSearching from '../../../components/common/FlightSearching/FlightSearching';
+import DiscoverMob from '../../../components/mobile/DiscoverMob/DiscoverMob';
 const { Text } = Typography;
 interface FlightMobileProps {
   /**
@@ -50,6 +42,7 @@ const FlightMobile: FunctionComponent<FlightMobileProps> = () => {
       </div>
       <Row className={styles['main']}>
         <FlightSearching isMoblie={true} />
+        <DiscoverMob />
       </Row>
     </div>
   );

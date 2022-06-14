@@ -71,6 +71,9 @@
         }
         .btn-swap {
           justify-content: center;
+          width: unset;
+          height: unset;
+          border-radius: 50%;
         }
       }
       .left-container {

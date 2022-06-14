@@ -36,8 +36,8 @@ export interface hotelSearching {
   Rating_Point?: number;
   Review_Number?: number;
   ID_IMG?: number;
-  Imgs?: any;//array images string
-  Image?:any;// one image
+  Imgs?: any; //array images string
+  Image?: any; // one image
 }
 export interface hotelRoom {
   ID_Room?: string;
@@ -148,10 +148,21 @@ export interface cartItem {
   Date_In?: any;
   Date_Out?: any;
 }
-export interface ratingInfor{
-  ID_Rating?:number,
-  Rate_Counting?:number,
-  Rate_Detail?:string,
-  FullName?:string,
-  Date_Out?:any
+export interface ratingInfor {
+  ID_Rating?: number;
+  Rate_Counting?: number;
+  Rate_Detail?: string;
+  FullName?: string;
+  Date_Out?: any;
+}
+export interface flightInfo {
+  airportFrom: string;
+  airportTo: string;
+  depatureDate: string;
+  icon: any;
+  airline: string;
+  discount?: number;
+  firstPrice?: number;
+  price: number;
+  finnalPrice: number;
 }

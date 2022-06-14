@@ -44,7 +44,7 @@ const ServiceClassSelection: FunctionComponent<ServiceClassSelectionProps> = (
       onClick={(e) => e.stopPropagation()}
     >
       {array.map((a) => (
-        <Row className={styles['item-container']}>
+        <Row className={styles['item-container']} key={a.title}>
           <Col span={22} className={styles['item']}>
             <Text
               className={clsx(

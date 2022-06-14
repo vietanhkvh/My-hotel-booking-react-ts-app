@@ -186,13 +186,11 @@ export function isEmail(text) {
     text
   );
 }
-export function ValidateEmail(mail) 
-{
- if (/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
-  {
-    return (true)
+export function ValidateEmail(mail) {
+  if (/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+    return true;
   }
-    return (false)
+  return false;
 }
 export const setLastRegisterValue = (key, value) => {
   const localValue = localStorage.getItem('last-registerValue');
@@ -282,7 +280,7 @@ export const openNotificationWithIcon = (
   notification[type]({
     message: message,
     description: description,
-    style: type==='error'? styleNotiError : styleNotiSuccess,
+    style: type === 'error' ? styleNotiError : styleNotiSuccess,
   });
 };
 notification.config({
@@ -290,13 +288,13 @@ notification.config({
   duration: 6,
   maxCount: 1,
 });
-export const isDisableBtnAdd=(val1:any, editingKey:any )=>{
-  if(val1 !== ''){    
-    if( editingKey === undefined || editingKey === '') return false
-    else return true
+export const isDisableBtnAdd = (val1: any, editingKey: any) => {
+  if (val1 !== '') {
+    if (editingKey === undefined || editingKey === '') return false;
+    else return true;
   }
-  return true
-}
+  return true;
+};
 export const calcGuest = (guestNum?: number) => {
   if (guestNum && guestNum < 2) {
     return guestNum;
@@ -306,8 +304,25 @@ export const calcGuest = (guestNum?: number) => {
 export const calcTotalPrice = (carts: cartItem[]) => {
   let total = 0;
   carts.forEach((c) => {
-    const dateGap = moment(c?.Date_Out).diff(moment(c?.Date_In),'days');
+    const dateGap = moment(c?.Date_Out).diff(moment(c?.Date_In), 'days');
     total += c.Final_Price! * dateGap;
   });
   return total;
+};
+
+export const convertVND = (
+  unitPostion: 'prefix' | 'suxfix' | string,
+  characterSplit: string,
+  fixed: number,
+  unitStr: string,
+  value: number
+) => {
+  return unitPostion === 'prefix'
+    ? unitStr +
+        value
+          .toFixed(fixed)
+          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + characterSplit)
+    : value
+        .toFixed(fixed)
+        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + characterSplit) + unitStr;
 };
